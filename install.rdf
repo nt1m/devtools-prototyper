@@ -16,7 +16,7 @@
 
 		<em:iconURL>chrome://devtools-prototyper/skin/images/icon.png</em:iconURL>
 
-		<em:icon64URL>chrome://devtools-prototyper/skin/images/icon.png</em:iconURL>
+		<em:icon64URL>chrome://devtools-prototyper/skin/images/icon.png</em:icon64URL>
 
 		<em:targetApplication>
 			<Description>
