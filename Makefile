@@ -1,5 +1,5 @@
-PROJECT="devtools-snippets"
-VERSION="0.1"
+PROJECT="devtools-prototyper"
+VERSION="1.0"
 
 CURRENT_DIR=`pwd`
 BUILD_DIR="build"
