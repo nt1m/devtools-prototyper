@@ -1,31 +1,10 @@
-#run-button {
-	position: absolute;
-	z-index: 999;
-	bottom: 15px;
-	right: 15px;
-}
-.dropdown-menu {
-	position: absolute;
-	bottom: 23px;
-	right: 86px;
-	z-index: 999;
-}
-.dropdown-menu > .devtools-menu {
-	top: auto;
-	bottom: 100%;
-	left: auto;
-	right: 0px;
-}
-.fab.small {
-	background-color: #F7F7F7;
-	color: #444;
-}
-.theme-dark .fab.small {
-	color: white;
-	background-color: #343C45;
-}
 .devtools-container {
 	height: 100%;
+}
+iframe {
+	border: none;
+	height: 100%;
+	width: 100%;
 }
 .devtools-main-content {
 	position: relative;
@@ -45,12 +24,37 @@
 	right: 5px;
 }
 .theme-dark .devtools-main-content::after {
-	background: #343C45;
+	background-color: #343C45;
 }
-iframe {
-	border: none;
-	height: 100%;
-	width: 100%;
+
+/* Fabs */
+#run-button {
+	position: absolute;
+	z-index: 999;
+	bottom: 15px;
+	right: 15px;
+}
+#export-button {
+	background-color: #F7F7F7;
+	color: #444;
+}
+#export-button .fab.small {
+	color: white;
+	background-color: #343C45;
+}
+
+/* Reposition the #export-menu */
+.dropdown-menu {
+	position: absolute;
+	bottom: 23px;
+	right: 86px;
+	z-index: 999;
+}
+.dropdown-menu > .devtools-menu {
+	top: auto;
+	bottom: 100%;
+	left: auto;
+	right: 0px;
 }
 .devtools-menu .item input {
 	position: absolute;
@@ -60,29 +64,21 @@ iframe {
 	right: 0;
 	opacity: 0;
 }
-.devtools-toolbar {
-	overflow: visible;
-}
+
+/* Icons */
 .devtools-icon {
 	overflow: hidden;
-}
-.theme-light .devtools-toolbarbutton .devtools-icon.options,
-.theme-light .item:not(.selected) .devtools-icon.preview::after {
-	filter: url("chrome://browser/skin/devtools/filters.svg#invert");
 }
 .devtools-icon.run::after {
 	background-image: url("images/run.svg");
 }
-.fab .devtools-icon.run::after,
-.theme-dark .devtools-icon.run::after,
-li.selected .devtools-icon.run::after {
+#run-button .devtools-icon.run::after {
 	background-image: url("images/run.svg#white");
 }
 .devtools-icon.save::after {
 	background-image: url("images/save.svg");
 }
-.fab:not(.small) .devtools-icon.save::after,
-.theme-dark .devtools-icon.save::after,
-li.selected .devtools-icon.save::after {
+#export-button .devtools-icon.save::after,
+.theme-dark .devtools-icon.save::after {
 	background-image: url("images/save.svg#white");
 }
