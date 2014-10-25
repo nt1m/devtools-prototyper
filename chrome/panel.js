@@ -171,21 +171,21 @@ PrototyperPanel.prototype = {
 			break;
 			case "gist":
 				var data = {
-                    "files": {},
-                    "description": "Prototype created with Firefox DevTools Prototyper",
-                    "public": true
-                };
-                data["files"][filename] = {
-                    "content": this.getBuiltCode()
-                };
+					"files": {},
+					"description": "Prototype created with Firefox DevTools Prototyper",
+					"public": true
+				};
+				data["files"][filename] = {
+					"content": this.getBuiltCode()
+				};
 
- 				var xhr = new this.win.XMLHttpRequest();
-  				xhr.open("POST", "https://api.github.com/gists");
- 				xhr.addEventListener("load", function() {
- 					var response = JSON.parse(xhr.responseText);
- 					_.win.open(response["html_url"]);
- 				});
- 				xhr.send(JSON.stringify(data));
+				var xhr = new this.win.XMLHttpRequest();
+				xhr.open("POST", "https://api.github.com/gists");
+				xhr.addEventListener("load", function() {
+					var response = JSON.parse(xhr.responseText);
+					_.win.open(response["html_url"]);
+				});
+				xhr.send(JSON.stringify(data));
 			break;
 		}
 	},

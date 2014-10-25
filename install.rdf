@@ -1,44 +1,30 @@
 <?xml version="1.0"?>
-
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+		 xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+	<Description about="urn:mozilla:install-manifest">
+		<em:id>devtools-prototyper@tim-addons.com</em:id>
 
-  <Description about="urn:mozilla:install-manifest">
+		<em:version>1.0</em:version>
 
-    <!-- The id of the extension. -->
-    <em:id>devtools-prototyper@tim-addons.com</em:id>
+		<em:name>DevTools Prototyper</em:name>
 
-    <!-- A version string identifying the version of the add-on. -->
-    <em:version>1.0</em:version>
+		<em:description>Quickly prototype webpages using this handy add-on.</em:description>
 
-    <!-- The name of the add-on; intended for display in the UI. -->
-    <em:name>DevTools Prototyper</em:name>
+		<em:creator>Tim Nguyen</em:creator>
 
-    <!-- A short description to display in the user interface. -->
-    <em:description>Quickly prototype webpages using this handy add-on.</em:description>
+		<em:homepageURL>http://twitter.com/therealntim</em:homepageURL>
 
-    <!-- The name of the developer to display in the user interface. -->
-    <em:creator>Tim Nguyen</em:creator>
+		<em:targetApplication>
+			<Description>
+				<!-- Mozilla Firefox -->
+				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:minVersion>29.0a1</em:minVersion>
+				<em:maxVersion>36.0a1</em:maxVersion>
+			</Description>
+		</em:targetApplication>
 
-    <!-- A link to the add-on home page to display in the user interface. -->
-    <em:homepageURL>http://twitter.com/therealntim</em:homepageURL>
-
-    <!-- Target Application this extension can install into,
-         with minimum and maximum supported versions. -->
-    <em:targetApplication>
-      <Description>
-        <!-- Mozilla Firefox -->
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>29.0a1</em:minVersion>
-        <em:maxVersion>36.0a1</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-
-    <!-- An integer value representing the type of add-on. -->
-    <em:type>2</em:type> <!-- Extensions -->
-
-    <!-- Tells the application whether the extension is boot-strappable. -->
-    <em:bootstrap>true</em:bootstrap>
-
-  </Description>
+		<em:type>2</em:type>
+		
+		<em:bootstrap>true</em:bootstrap>
+	</Description>
 </RDF>
