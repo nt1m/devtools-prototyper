@@ -186,11 +186,11 @@ html, body {
 	cursor: pointer;
 	background-color: var(--highlight-color);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26),
-								0px 2px 10px 0px rgba(0, 0, 0, 0.16);
+				0px 2px 10px 0px rgba(0, 0, 0, 0.16);
 }
 .fab:active {
 	box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2),
-							0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+				0px 6px 20px 0px rgba(0, 0, 0, 0.19);
 }
 .fab::after {
 	content:"";
