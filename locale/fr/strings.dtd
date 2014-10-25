@@ -1,0 +1,7 @@
+<!ENTITY prototyperUI.runButton.tooltip "Exécuter le code">
+<!ENTITY prototyperUI.exportButton.tooltip "Exporter le prototype">
+
+<!ENTITY prototyperUI.saveLocally.label "Sauvegarder localement">
+<!ENTITY prototyperUI.JSFiddle.label "JSFiddle">
+<!ENTITY prototyperUI.publicGist.label "Gist public">
+
