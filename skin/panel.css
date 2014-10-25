@@ -38,9 +38,9 @@ iframe {
 	background-color: #F7F7F7;
 	color: #444;
 }
-#export-button .fab.small {
-	color: white;
+.theme-dark #export-button {
 	background-color: #343C45;
+	color: white;
 }
 
 /* Reposition the #export-menu */
