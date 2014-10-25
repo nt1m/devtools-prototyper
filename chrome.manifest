@@ -1,0 +1,3 @@
+content devtools-prototyper chrome/
+locale  devtools-prototyper en-US locale/en-US/
+skin    devtools-prototyper classic/1.0 skin/

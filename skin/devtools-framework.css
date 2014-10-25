@@ -1,0 +1,322 @@
+/* Variables */
+/*:root:not(.theme-dark):not(.theme-light) {
+  --highlight-color: #4C9ED9;
+  --border-color: rgba(0,0,0,0.3);
+  --dark-accessible-background: rgba(0,0,0,0.15);
+  --accessible-background: rgba(255,255,255,0.2);
+  --content-background: rgba(255,255,255,0.1);
+}*/
+
+:root.theme-dark {
+  --border-color: black;
+  --highlight-color: #1d4f73;
+  background-color: #14171a;
+}
+
+:root.theme-light {
+  --border-color: #aaa;
+  --highlight-color: #4C9ED9;
+  background-color: #fcfcfc;
+}
+
+::-moz-selection {
+  background-color: #FFF !important;
+  color: var(--highlight-color) !important;
+}
+
+::selection {
+  background-color: #FFF !important;
+  color: var(--highlight-color) !important;
+}
+
+/* Layout */
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font: message-box;
+  color: #18191A;
+  background: none !important;
+}
+
+.devtools-container {
+  display: flex;
+}
+
+.devtools-main-content {
+  flex: 1;
+  height: 100%;
+  background-color: var(--content-color);
+}
+
+.devtools-main-content:not(:first-child) {
+  border-left: 1px solid var(--border-color);
+}
+
+.devtools-sidebar {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.devtools-sidebar.left {
+  -moz-border-end: 1px solid var(--border-color);
+}
+
+.devtools-sidebar.right {
+  -moz-border-start: 1px solid var(--border-color);
+}
+
+@media (max-width: 500px) {
+  .devtools-container {flex-direction: column;}
+  .devtools-sidebar {
+    height: 30%;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+  }
+
+  .devtools-sidebar.left {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .devtools-sidebar.right {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .devtools-main-content {
+    height: auto;
+    width: 100%;
+  }
+}
+
+/* Lists */
+.devtools-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.devtools-list .item {
+  display: block;
+  transition: all 0.04s;
+  padding: 2px;
+  padding-right: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  -moz-margin-end: -1px;
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.devtools-list .item:hover,
+.devtools-list .item:focus {
+  background-color: rgba(122,122,122,0.1);
+}
+
+.devtools-list li.selected .item,
+.devtools-list .item.selected {
+  border-bottom-color: transparent;
+  background-color: var(--highlight-color);
+  color: #FFF;
+}
+
+.theme-dark .devtools-list .item.selected {
+  background-image: url(chrome://browser/skin/devtools/itemArrow-dark-ltr.svg);
+}
+
+.theme-light .devtools-list .item.selected {
+  background-image: url(chrome://browser/skin/devtools/itemArrow-ltr.svg);
+}
+
+.devtools-list .item .header {
+  font-size: 14px;
+}
+
+/* Inputs */
+.devtools-textinput,
+.devtools-searchinput {
+  max-height: 23px !important;
+  width: 188px;
+  height: auto !important;
+  font: inherit;
+  float: right;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.devtools-searchinput::-moz-placeholder {
+  font-style: italic;
+}
+
+/* Toolbar */
+.devtools-toolbar {
+  padding: 2px 3px;
+  overflow: auto;
+  height: auto !important;
+  padding-top: 3px !important;
+  min-height: 26px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Toolbar button */
+.devtools-toolbarbutton,
+.devtools-toolbarbutton[label] {
+  padding: 2px 8px !important;
+  margin: 0 1px !important;
+  font: message-box;
+  min-width: 0;
+}
+
+.devtools-toolbarbutton.icon {
+  padding: 0 3px !important;
+  margin-top: 1px !important;
+}
+.fab {
+  position: relative;
+  border: none;
+  text-transform: uppercase;
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
+  box-sizing:border-box;
+  color: #FFF;
+  padding: 15px 10px;
+  font-size: 24px;
+  overflow: hidden;
+  transition: all 0.1s;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--highlight-color);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26),
+                0px 2px 10px 0px rgba(0, 0, 0, 0.16);
+}
+.fab:active {
+  box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2),
+              0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+}
+.fab::after {
+  content:"";
+  position: absolute;
+  left: 50%;
+  background-color: rgba(204,204,204, 0.29);
+  width: 0px;
+  height: 0px;
+  top: 50%;
+  border-radius: 100%;
+  transition: all 0.2s;
+  text-align: center;
+}
+.fab:active::after {
+  width: 100% !important;
+  left:0;
+  top: 0 !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+.fab.small {
+  width: 40px;
+  height: 40px;
+  line-height: 23px;
+  padding: 8px;
+}
+/*.dropdown-menu .devtools-toolbarbutton:not([checked]):focus {
+  background: var(--highlight-color) !important;
+}*/
+
+/* Menus */
+.devtools-menu {
+  -moz-appearance: menupopup;
+  -moz-user-select: none;
+  font: menu;
+  margin: 0;
+  box-shadow: inset 0 0 0 1px #f0f0f0,
+            2px 2px 3px rgba(25, 25, 25, 0.6);
+  min-width: 200px;
+  z-index: 999;
+}
+
+.devtools-menu li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.devtools-menu .item {
+  padding: 2px 0;
+  -moz-padding-start: 32px;
+  -moz-padding-end: 50px;
+  text-decoration: none;
+  color: menuText;
+  list-style: none;
+  cursor: default;
+  display: block;
+  position: relative;
+}
+
+.devtools-menu .item:not(.disabled):hover {
+  background-color: -moz-menuhover;
+  color: -moz-menuhovertext;
+}
+
+.devtools-menu .item.disabled {
+  color: GrayText;
+}
+
+.devtools-menu .separator {
+  height: 1px;
+  -moz-appearance: menuseparator;
+}
+
+.dropdown-menu {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/*.dropdown-menu .devtools-menu:hover,
+.devtools-toolbarbutton:focus + .devtools-menu {
+  display: block;
+}*/
+
+.dropdown-menu .devtools-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+}
+
+/* Icons */
+/* Note : Icons have a white fill, make sure to use them on a dark background */
+.devtools-icon {
+  overflow: auto;
+  display: inline-block;
+  height: calc(1em + 1px);
+}
+
+.devtools-icon::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-size: cover;
+}
+
+.devtools-icon.options::after {
+  background-image: url("chrome://browser/skin/devtools/tool-options.svg");
+}
+
+.devtools-icon.stopwatch::after {
+  background-image: url("chrome://browser/skin/devtools/profiler-stopwatch.svg");
+}
+
+[checked] .devtools-icon.stopwatch::after {
+  background-image: url("chrome://browser/skin/devtools/profiler-stopwatch-checked.svg");
+}
