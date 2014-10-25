@@ -1,6 +1,3 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
 "use strict";
 
 const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
@@ -20,9 +17,9 @@ XPCOMUtils.defineLazyGetter(this, "toolDefinition", () => ({
 	id: "prototyper",
 	icon: "chrome://devtools-prototyper/skin/images/icon.svg",
 	invertIconForLightTheme: true,
-	url: "chrome://devtools-prototyper/content/panel.html",
-	label: "Prototyper",
-	tooltip: "Quickly create prototypes using this panel.",
+	url: "chrome://devtools-prototyper/content/panel.xhtml",
+	label: toolStrings.GetStringFromName("prototyper.label"),
+	tooltip: toolStrings.GetStringFromName("prototyper.tooltip"),
 
 	isTargetSupported: function(target) {
 		return true;

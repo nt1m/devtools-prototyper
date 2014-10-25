@@ -75,10 +75,9 @@ iframe {
 #run-button .devtools-icon.run::after {
 	background-image: url("images/run.svg#white");
 }
-.devtools-icon.save::after {
+#export-button .devtools-icon.save::after {
 	background-image: url("images/save.svg");
 }
-#export-button .devtools-icon.save::after,
-.theme-dark .devtools-icon.save::after {
+.theme-dark #export-button .devtools-icon.save::after {
 	background-image: url("images/save.svg#white");
 }

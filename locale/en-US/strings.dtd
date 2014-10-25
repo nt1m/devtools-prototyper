@@ -1,5 +1,7 @@
-<!-- This Source Code Form is subject to the terms of the Mozilla Public
-   - License, v. 2.0. If a copy of the MPL was not distributed with this
-   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!ENTITY prototyperUI.runButton.tooltip "Run code">
+<!ENTITY prototyperUI.exportButton.tooltip "Export prototype">
 
-<!ENTITY MyAddonUI.label "My new awesome Firefox add-on!">
+<!ENTITY prototyperUI.saveLocally.label "Save locally">
+<!ENTITY prototyperUI.JSFiddle.label "JSFiddle">
+<!ENTITY prototyperUI.publicGist.label "Public Gist">
+
