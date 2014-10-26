@@ -197,11 +197,16 @@ PrototyperPanel.prototype = {
 			}
 			else {
 				Services.prefs.setCharPref(prefname, "");
+				this.enablePrefSync(pref);
 			}
 			return Services.prefs.getCharPref(prefname);
 		},
 		set: function(pref, value) {
 			Services.prefs.setCharPref(prefPrefix + pref, value)
+		},
+		enablePrefSync: function(pref) {
+			var syncPrefPrefix = "services.sync.prefs.sync.";
+			Services.prefs.setBoolPref(syncPrefPrefix + prefPrefix + pref, true)
 		}
 	}
 };
