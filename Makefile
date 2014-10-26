@@ -1,5 +1,5 @@
 PROJECT="devtools-prototyper"
-VERSION="1.3"
+VERSION="1.4"
 
 CURRENT_DIR=`pwd`
 BUILD_DIR="build"

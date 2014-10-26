@@ -3,5 +3,6 @@
 
 <!ENTITY prototyperUI.saveLocally.label "Save locally">
 <!ENTITY prototyperUI.JSFiddle.label "JSFiddle">
+<!ENTITY prototyperUI.codepen.label "CodePen">
 <!ENTITY prototyperUI.publicGist.label "Public Gist">
 

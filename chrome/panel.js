@@ -144,6 +144,7 @@ PrototyperPanel.prototype = {
 	},
 	exportPrototype: function(service, node) {
 		var filename = "prototype.html";
+		var description = "Prototype created with Firefox DevTools Prototyper";
 		var _ = this;
 		switch(service) {
 			case "local":
@@ -151,28 +152,45 @@ PrototyperPanel.prototype = {
 				node.href = this.getBlobURL();
 			break;
 			case "jsfiddle":
-				var posturl = "http://jsfiddle.net/api/post/library/pure/";
-				var form = this.doc.createElement("form");
-				form.action = posturl;
-				form.method = "post";
-				form.target = "_blank";
+				var requestOptions = {
+					"url": "http://jsfiddle.net/api/post/library/pure/",
+					"method": "post",
+					"elements": []
+				};
 				var txtarea;
 				for(var lang in this.editors) {
 					txtarea = this.doc.createElement("textarea");
 					txtarea.name = lang;
 					txtarea.value = this.editors[lang].getText();
-					form.appendChild(txtarea);
+					requestOptions.elements.push(txtarea);
 					txtarea = null;
 				}
-				form.style.display = "none";
-				this.doc.body.appendChild(form);
-				form.submit();
-				form.remove();
+				this.sendFormData(requestOptions);
+			break;
+			case "codepen":
+				var requestOptions = {
+					"url": "http://codepen.io/pen/define",
+					"method": "post",
+					"elements": []
+				};
+				var editors = this.editors;
+				var data = {
+					"description": description,
+					"html": editors["html"].getText(),
+					"css": editors["css"].getText(),
+					"js": editors["js"].getText()
+				}
+				var input = this.doc.createElement("input");
+				input.type = "hidden";
+				input.name = "data";
+				input.value = JSON.stringify(data);
+				requestOptions.elements.push(input);
+				this.sendFormData(requestOptions);
 			break;
 			case "gist":
 				var data = {
 					"files": {},
-					"description": "Prototype created with Firefox DevTools Prototyper",
+					"description": description,
 					"public": true
 				};
 				data["files"][filename] = {
@@ -188,6 +206,32 @@ PrototyperPanel.prototype = {
 				xhr.send(JSON.stringify(data));
 			break;
 		}
+	},
+	/*
+		sendFormData() :
+		@args = {
+			url: string
+			method: string
+			elements: array or nodelist (elements to append to the form)
+		}
+	*/
+	sendFormData: function(args) {
+		if(!args.url) {
+			return;
+		}
+		var posturl = args.url;
+		var method = args.method || "post";
+		var form = this.doc.createElement("form");
+		form.action = posturl;
+		form.method = method.toLowerCase();
+		form.target = "_blank";
+		for (var el of args.elements) {
+			form.appendChild(el);
+		}
+		form.style.display = "none";
+		this.doc.body.appendChild(form);
+		form.submit();
+		form.remove();
 	},
 	storage: {
 		get: function(pref) {
