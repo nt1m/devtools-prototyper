@@ -65,12 +65,18 @@ PrototyperPanel.prototype = {
 			"Ctrl-S": this.showExportMenu
 		};
 		var keys = mac ? mackeys : winkeys;
+
 		var config = {
 			lineNumbers: true,
 			readOnly: false,
 			autoCloseBrackets: "{}()[]",
 			extraKeys: keys
 		};
+
+		if (lang == "html") {
+			// This only works after bug 1089428
+			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"]
+		}
 
 		var sourceEditor = this.editors[lang] = new Editor(config);
 		var _ = this;
