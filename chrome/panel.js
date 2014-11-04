@@ -21,6 +21,7 @@ function PrototyperPanel(win, toolbox) {
 	this.loadSavedCode = this.loadSavedCode.bind(this);
 	this.exportPrototype = this.exportPrototype.bind(this);
 	this.showExportMenu = this.showExportMenu.bind(this);
+	this.hideExportMenu = this.hideExportMenu.bind(this);
 
 	this.initUI();
 	this.initExportMenu();
@@ -94,12 +95,14 @@ PrototyperPanel.prototype = {
 	},
 	initExportMenu: function() {
 		var _ = this;
-		this.doc.body.addEventListener("click", function() {
-			_.exportButton.removeAttribute("open");
-			_.exportMenu.style.display = "none";
-		});
+		this.doc.body.addEventListener("click", this.hideExportMenu);
 		this.exportButton.addEventListener("click", function(e) {
-			_.showExportMenu();
+			if(!_.exportMenu.classList.contains("shown")) {
+				_.showExportMenu();
+			}
+			else {
+				_.hideExportMenu();
+			}
 			e.stopPropagation();
 		});
 		for(var el of this.exportMenu.querySelectorAll(".item")) {
@@ -110,7 +113,11 @@ PrototyperPanel.prototype = {
 	},
 	showExportMenu: function() {
 		this.exportButton.setAttribute("open","true");
-		this.exportMenu.style.display = "block";
+		this.exportMenu.classList.add("shown");
+	},
+	hideExportMenu: function() {
+		this.exportButton.removeAttribute("open");
+		this.exportMenu.classList.remove("shown");
 	},
 	loadSavedCode: function() {
 		for (var editor in this.editors) {
@@ -118,7 +125,6 @@ PrototyperPanel.prototype = {
 		}
 	},
 	saveCode: function(lang) {
-		this.win.console.log(this.editors[lang].getText());
 		this.storage.set(lang, this.editors[lang].getText())
 	},
 	getBuiltCode: function() {
