@@ -74,11 +74,6 @@ PrototyperPanel.prototype = {
 			extraKeys: keys
 		};
 
-		if (lang == "html") {
-			// This only works after bug 1089428
-			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"]
-		}
-
 		var sourceEditor = this.editors[lang] = new Editor(config);
 		var _ = this;
 		sourceEditor.appendTo(this.editorEls[lang]).then(() => {
