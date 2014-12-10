@@ -132,6 +132,7 @@ PrototyperPanel.prototype = {
 			"<!DOCTYPE html>\n",
 			"<html>\n",
 			"<head>\n",
+			"<meta charset='utf-8'/>",
 			"<script>\n",
 			this.editors["js"].getText(),
 			"\n</script>\n",
