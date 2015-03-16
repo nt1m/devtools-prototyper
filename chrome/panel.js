@@ -6,9 +6,11 @@ const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).dev
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
 Cu.import("resource://gre/modules/Services.jsm");
+Cu.import('resource://gre/modules/devtools/Console.jsm');
 
 // Constants
 const prefPrefix = "extensions.devtools-prototyper.";
+const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
 this.EXPORTED_SYMBOLS = ["PrototyperPanel"];
 
@@ -35,10 +37,11 @@ PrototyperPanel.prototype = {
 
 	// Init/Loading functions
 	initUI: function() {
+		console.log("initUI");
 		this.editorEls = {
 			"html": this.doc.querySelector("#html-editor"),
-			"css": this.doc.querySelector("#css-editor"),
-			"js": this.doc.querySelector("#js-editor")
+			"css" : this.doc.querySelector("#css-editor"),
+			"js"  : this.doc.querySelector("#js-editor")
 		};
 		this.runButton = this.doc.querySelector("#run-button");
 		this.exportButton = this.doc.querySelector("#export-button");
@@ -48,26 +51,31 @@ PrototyperPanel.prototype = {
 		this.initEditors();
 	},
 	initEditors: function() {
-		this.editors = {}
-		for (var lang in this.editorEls) {
-			this.createEditor(lang);
+		this.editors = {};
+		let promises = [];
+		for (let lang in this.editorEls) {
+			promises.push(this.createEditor(lang));
 		}
+		Promise.all(promises).then(() => {
+			this.editors.html.focus();
+			this.loadSavedCode();
+		});
 	},
 	createEditor: function(lang) {
-		var mac = this.win.navigator.platform.toLowerCase().indexOf("mac") > -1;
-		var mackeys = {
+		let mac = this.win.navigator.platform.toLowerCase().indexOf("mac") > -1;
+		let mackeys = {
 			"Cmd-Enter": this.runCode,
 			"Cmd-R": this.runCode,
 			"Cmd-S": this.showExportMenu
 		};
-		var winkeys = {
+		let winkeys = {
 			"Ctrl-Enter": this.runCode,
 			"Ctrl-R": this.runCode,
 			"Ctrl-S": this.showExportMenu
 		};
-		var keys = mac ? mackeys : winkeys;
+		let keys = mac ? mackeys : winkeys;
 
-		var config = {
+		let config = {
 			lineNumbers: true,
 			readOnly: false,
 			autoCloseBrackets: "{}()[]",
@@ -76,38 +84,32 @@ PrototyperPanel.prototype = {
 
 		if (lang == "html") {
 			// This only works after bug 1089428
-			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"]
+			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
 		}
 
-		var sourceEditor = this.editors[lang] = new Editor(config);
-		var _ = this;
-		sourceEditor.appendTo(this.editorEls[lang]).then(() => {
+		let sourceEditor = this.editors[lang] = new Editor(config);
+		return sourceEditor.appendTo(this.editorEls[lang]).then(() => {
 			sourceEditor.on("change", () => {
-				_.saveCode(lang)
+				this.saveCode(lang);
 			});
 			sourceEditor.setMode(Editor.modes[lang].name);
-			// TODO : Move this somewhere else ?
-			if(lang == "js") {
-				this.editors.html.focus();
-				this.loadSavedCode();
-			}
 		});
 	},
 	initExportMenu: function() {
-		var _ = this;
 		this.doc.body.addEventListener("click", this.hideExportMenu);
-		this.exportButton.addEventListener("click", function(e) {
-			if(!_.exportMenu.classList.contains("shown")) {
-				_.showExportMenu();
+		this.exportButton.addEventListener("click", e => {
+			if(!this.exportMenu.classList.contains("shown")) {
+				this.showExportMenu();
 			}
 			else {
-				_.hideExportMenu();
+			  this.hideExportMenu();
 			}
 			e.stopPropagation();
 		});
-		for(var el of this.exportMenu.querySelectorAll(".item")) {
-			el.addEventListener("click", function() {
-				_.exportPrototype(this.dataset.service, this);
+		for(let el of this.exportMenu.querySelectorAll(".item")) {
+			el.addEventListener("click", e => {
+				console.log("service: ", e.target.dataset.service);
+				this.exportPrototype(e.target.dataset.service, e.target);
 			});
 		}
 	},
@@ -120,12 +122,14 @@ PrototyperPanel.prototype = {
 		this.exportMenu.classList.remove("shown");
 	},
 	loadSavedCode: function() {
-		for (var editor in this.editors) {
-			this.editors[editor].setText(this.storage.get(editor))
+		console.log(this.editors);
+		for (let lang in this.editors) {
+			console.log(lang);
+			// this.editors[lang].setText(this.storage.get(lang));
 		}
 	},
 	saveCode: function(lang) {
-		this.storage.set(lang, this.editors[lang].getText())
+		this.storage.set(lang, this.editors[lang].getText());
 	},
 	getBuiltCode: function() {
 		return [
@@ -134,14 +138,14 @@ PrototyperPanel.prototype = {
 			"<head>\n",
 			"<meta charset='utf-8'/>",
 			"<script>\n",
-			this.editors["js"].getText(),
+			this.editors.js.getText(),
 			"\n</script>\n",
 			"<style>\n",
-			this.editors["css"].getText(),
+			this.editors.css.getText(),
 			"\n</style>\n",
 			"</head>\n",
 			"<body>",
-			this.editors["html"].getText(),
+			this.editors.html.getText(),
 			"</body>",
 			"</html>"
 		].join("");
@@ -150,50 +154,53 @@ PrototyperPanel.prototype = {
 		this.toolbox.target.activeTab.navigateTo(this.getBlobURL());
 	},
 	getBlobURL: function() {
-		var data = this.getBuiltCode();
-		var blob = new this.win.Blob([data], {type:"text/html"});
-		var url = this.win.URL.createObjectURL(blob);
+		let data = this.getBuiltCode();
+		let blob = new this.win.Blob([data], { type: "text/html" });
+		let url = this.win.URL.createObjectURL(blob);
 		return url;
 	},
 	exportPrototype: function(service, node) {
-		var filename = "prototype.html";
-		var description = "Prototype created with Firefox DevTools Prototyper";
-		var _ = this;
+		let filename = "prototype.html",
+			  description = "Prototype created with Firefox DevTools Prototyper";
+
+		let requestOptions = {url: "", elements: [], method: ""},
+				data = {};
+
 		switch(service) {
 			case "local":
 				node.download = filename;
 				node.href = this.getBlobURL();
 			break;
 			case "jsfiddle":
-				var requestOptions = {
+				requestOptions = {
 					"url": "http://jsfiddle.net/api/post/library/pure/",
 					"method": "post",
 					"elements": []
 				};
-				var txtarea;
-				for(var lang in this.editors) {
+				let txtarea;
+				for(let [lang, editor] of this.editors.entries()) {
 					txtarea = this.doc.createElement("textarea");
 					txtarea.name = lang;
-					txtarea.value = this.editors[lang].getText();
+					txtarea.value = editor.getText();
 					requestOptions.elements.push(txtarea);
 					txtarea = null;
 				}
 				this.sendFormData(requestOptions);
 			break;
 			case "codepen":
-				var requestOptions = {
+				requestOptions = {
 					"url": "http://codepen.io/pen/define",
 					"method": "post",
 					"elements": []
 				};
-				var editors = this.editors;
-				var data = {
+				let {js, html, css} = this.editors;
+				data = {
 					"description": description,
-					"html": editors["html"].getText(),
-					"css": editors["css"].getText(),
-					"js": editors["js"].getText()
-				}
-				var input = this.doc.createElement("input");
+					"html": html.getText(),
+					"css": css.getText(),
+					"js": js.getText()
+				};
+				let input = this.doc.createElement("input");
 				input.type = "hidden";
 				input.name = "data";
 				input.value = JSON.stringify(data);
@@ -201,20 +208,20 @@ PrototyperPanel.prototype = {
 				this.sendFormData(requestOptions);
 			break;
 			case "gist":
-				var data = {
+				data = {
 					"files": {},
 					"description": description,
 					"public": true
 				};
-				data["files"][filename] = {
+				data.files[filename] = {
 					"content": this.getBuiltCode()
 				};
 
-				var xhr = new this.win.XMLHttpRequest();
+				let xhr = new this.win.XMLHttpRequest();
 				xhr.open("POST", "https://api.github.com/gists");
-				xhr.addEventListener("load", function() {
-					var response = JSON.parse(xhr.responseText);
-					_.win.open(response["html_url"]);
+				xhr.addEventListener("load", () => {
+					let response = JSON.parse(xhr.responseText);
+					this.win.open(response.html_url);
 				});
 				xhr.send(JSON.stringify(data));
 			break;
@@ -228,19 +235,21 @@ PrototyperPanel.prototype = {
 			elements: array or nodelist (elements to append to the form)
 		}
 	*/
-	sendFormData: function(args) {
-		if(!args.url) {
+	sendFormData: function({url, method, elements}) {
+		if(!url) {
 			return;
 		}
-		var posturl = args.url;
-		var method = args.method || "post";
-		var form = this.doc.createElement("form");
-		form.action = posturl;
+		method = method || "post";
+		let form = this.doc.createElement("form");
+
+		form.action = url;
 		form.method = method.toLowerCase();
 		form.target = "_blank";
-		for (var el of args.elements) {
+
+		for (let el of elements) {
 			form.appendChild(el);
 		}
+
 		form.style.display = "none";
 		this.doc.body.appendChild(form);
 		form.submit();
@@ -248,22 +257,18 @@ PrototyperPanel.prototype = {
 	},
 	storage: {
 		get: function(pref) {
-			var prefname = prefPrefix + pref;
-			if(Services.prefs.getPrefType(prefname)) {
-				Services.prefs.getCharPref(prefname);
-			}
-			else {
+			let prefname = prefPrefix + pref;
+			if(!Services.prefs.getPrefType(prefname)) {
 				Services.prefs.setCharPref(prefname, "");
 				this.enablePrefSync(pref);
 			}
 			return Services.prefs.getCharPref(prefname);
 		},
 		set: function(pref, value) {
-			Services.prefs.setCharPref(prefPrefix + pref, value)
+			Services.prefs.setCharPref(prefPrefix + pref, value);
 		},
 		enablePrefSync: function(pref) {
-			var syncPrefPrefix = "services.sync.prefs.sync.";
-			Services.prefs.setBoolPref(syncPrefPrefix + prefPrefix + pref, true)
+			Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
 		}
 	}
 };
