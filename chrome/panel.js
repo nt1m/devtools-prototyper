@@ -5,7 +5,6 @@ const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
 const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
-const beautify = devtools.require("devtools/beautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
 
