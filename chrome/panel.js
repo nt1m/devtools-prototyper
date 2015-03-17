@@ -6,7 +6,7 @@ const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).dev
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
 Cu.import("resource://gre/modules/Services.jsm");
-Cu.import('resource://gre/modules/devtools/Console.jsm');
+Cu.import("resource://gre/modules/devtools/Console.jsm");
 
 // Constants
 const prefPrefix = "extensions.devtools-prototyper.";
@@ -37,7 +37,6 @@ PrototyperPanel.prototype = {
 
 	// Init/Loading functions
 	initUI: function() {
-		console.log("initUI");
 		this.editorEls = {
 			"html": this.doc.querySelector("#html-editor"),
 			"css" : this.doc.querySelector("#css-editor"),
@@ -108,7 +107,6 @@ PrototyperPanel.prototype = {
 		});
 		for(let el of this.exportMenu.querySelectorAll(".item")) {
 			el.addEventListener("click", e => {
-				console.log("service: ", e.target.dataset.service);
 				this.exportPrototype(e.target.dataset.service, e.target);
 			});
 		}
@@ -122,10 +120,8 @@ PrototyperPanel.prototype = {
 		this.exportMenu.classList.remove("shown");
 	},
 	loadSavedCode: function() {
-		console.log(this.editors);
 		for (let lang in this.editors) {
-			console.log(lang);
-			// this.editors[lang].setText(this.storage.get(lang));
+			this.editors[lang].setText(this.storage.get(lang));
 		}
 	},
 	saveCode: function(lang) {

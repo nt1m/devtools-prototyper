@@ -10,13 +10,7 @@
 	<script type="application/javascript;version=1.8" src="chrome://browser/content/devtools/theme-switching.js"></script>
 </head>
 <body class="theme-body">
-	<button class="fab" id="run-button" title="&prototyperUI.runButton.tooltip;">
-		<i class="devtools-icon run"></i>
-	</button>
 	<div class="dropdown-menu">
-		<button class="fab small" id="export-button" title="&prototyperUI.exportButton.tooltip;">
-			<i class="devtools-icon save"></i>
-		</button>
 		<div class="devtools-menu" id="export-menu">
 			<a class="item" href="#" data-service="local">&prototyperUI.saveLocally.label;</a>
 			<a class="item" href="#" data-service="jsfiddle">&prototyperUI.JSFiddle.label;</a>
@@ -25,6 +19,14 @@
 		</div>
 	</div>
 	<div class="devtools-container">
+		<div id="sidebar">
+			<button id="run-button">
+				<i class="devtools-icon run"></i>
+			</button>
+			<button id="export-button">
+				<i class="devtools-icon save"></i>
+			</button>
+		</div>
 		<div id="html-editor" class="devtools-main-content" data-lang="HTML"></div>
 		<div id="css-editor" class="devtools-main-content" data-lang="CSS"></div>
 		<div id="js-editor" class="devtools-main-content" data-lang="JS"></div>
