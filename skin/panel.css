@@ -62,10 +62,6 @@ iframe {
 	display: block;
 }
 
-#sidebar button i::after {
-	background-size: 15px 15px;
-	background-position: center center;
-}
 
 .theme-dark #sidebar button {
 	background-color: transparent;
@@ -87,6 +83,10 @@ iframe {
 .devtools-icon {
 	overflow: hidden;
 }
+.devtools-icon::after {
+	background-size: 15px 15px;
+	background-position: center center;
+}
 .devtools-icon.run::after {
 	background-image: url("images/run.svg");
 }
@@ -98,4 +98,13 @@ iframe {
 }
 .theme-dark .devtools-icon.save::after {
 	background-image: url("images/save.svg#white");
+}
+.devtools-icon.code::after {
+	background-image: url("chrome://browser/skin/devtools/debugger-prettyprint@2x.png");
+	background-position: center left;
+	background-size: 23px 15px;
+	filter: invert(1);
+}
+.theme-dark .devtools-icon.code::after {
+	filter: none;
 }

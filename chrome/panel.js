@@ -5,6 +5,7 @@ const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
 const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
+const beautify = devtools("devtools/jsbeautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
 
@@ -45,8 +46,10 @@ PrototyperPanel.prototype = {
 		this.runButton = this.doc.querySelector("#run-button");
 		this.exportButton = this.doc.querySelector("#export-button");
 		this.exportMenu = this.doc.querySelector("#export-menu");
+		this.beautifyButton = this.doc.querySelector("#beautify-button");
 
 		this.runButton.addEventListener("click", this.runCode);
+		this.beautifyButton.addEventListener("click", this.beautify.bind(this));
 		this.initEditors();
 	},
 	initEditors: function() {
@@ -154,6 +157,12 @@ PrototyperPanel.prototype = {
 		let blob = new this.win.Blob([data], { type: "text/html" });
 		let url = this.win.URL.createObjectURL(blob);
 		return url;
+	},
+	beautify: function() {
+		for(let lang in this.editors) {
+			let pretty = beautify[lang](this.editors[lang].getText());
+			this.editors[lang].setText(pretty);
+		}
 	},
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
