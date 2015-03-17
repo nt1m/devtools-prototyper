@@ -166,10 +166,10 @@ PrototyperPanel.prototype = {
 	},
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
-			  description = "Prototype created with Firefox DevTools Prototyper";
+		    description = "Prototype created with Firefox DevTools Prototyper";
 
 		let requestOptions = {url: "", elements: [], method: ""},
-				data = {};
+		    data = {};
 
 		switch(service) {
 			case "local":

@@ -1,23 +1,11 @@
-:root.theme-dark {
-	--border-color: black;
-	--highlight-color: #1d4f73;
-	background-color: #14171a;
-}
-
-:root.theme-light {
-	--border-color: #aaa;
-	--highlight-color: #4C9ED9;
-	background-color: #fcfcfc;
-}
-
 ::-moz-selection {
 	background-color: #FFF !important;
-	color: var(--highlight-color) !important;
+	color: var(--theme-selection-background) !important;
 }
 
 ::selection {
 	background-color: #FFF !important;
-	color: var(--highlight-color) !important;
+	color: var(--theme-selection-background) !important;
 }
 
 /* Layout */
@@ -39,11 +27,11 @@ html, body {
 .devtools-main-content {
 	flex: 1;
 	height: 100%;
-	background-color: var(--content-color);
+	background-color: var(--theme-body-color);
 }
 
 .devtools-main-content:not(:first-child) {
-	border-left: 1px solid var(--border-color);
+	border-left: 1px solid var(--theme-splitter-color);
 }
 
 .devtools-sidebar {
@@ -54,11 +42,11 @@ html, body {
 }
 
 .devtools-sidebar.left {
-	-moz-border-end: 1px solid var(--border-color);
+	-moz-border-end: 1px solid var(--theme-splitter-color);
 }
 
 .devtools-sidebar.right {
-	-moz-border-start: 1px solid var(--border-color);
+	-moz-border-start: 1px solid var(--theme-splitter-color);
 }
 
 @media (max-width: 500px) {
@@ -71,11 +59,11 @@ html, body {
 	}
 
 	.devtools-sidebar.left {
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--theme-splitter-color);
 	}
 
 	.devtools-sidebar.right {
-		border-top: 1px solid var(--border-color);
+		border-top: 1px solid var(--theme-splitter-color);
 	}
 
 	.devtools-main-content {
@@ -114,8 +102,8 @@ html, body {
 .devtools-list li.selected .item,
 .devtools-list .item.selected {
 	border-bottom-color: transparent;
-	background-color: var(--highlight-color);
-	color: #FFF;
+	background-color: var(--theme-selection-background);
+	color: var(--theme-selection-color);
 }
 
 .theme-dark .devtools-list .item.selected {
@@ -153,7 +141,7 @@ html, body {
 	height: auto !important;
 	padding-top: 3px !important;
 	min-height: 26px;
-	border-bottom: 1px solid var(--border-color);
+	border-bottom: 1px solid var(--theme-splitter-color);
 }
 
 /* Toolbar button */
@@ -184,7 +172,7 @@ html, body {
 	transition: all 0.1s;
 	text-align: center;
 	cursor: pointer;
-	background-color: var(--highlight-color);
+	background-color: var(--theme-selection-background);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26),
 				0px 2px 10px 0px rgba(0, 0, 0, 0.16);
 }
@@ -225,15 +213,11 @@ html, body {
 	margin: 0;
 	z-index: 999;
 	transition: max-height 0.4s, min-width 0.4s, opacity 0.4s;
-	background-color: #343C45;
+	background-color: var(--theme-toolbar-background);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26),
 				0px 2px 10px 0px rgba(0, 0, 0, 0.16);
 	border-radius: 2px;
 	overflow: hidden;
-}
-
-.theme-light .devtools-menu {
-	background-color: #F7F7F7;
 }
 
 .devtools-menu:not(.shown) {
@@ -275,8 +259,8 @@ html, body {
 }
 
 .devtools-menu .item:not(.disabled):hover {
-	background-color: var(--highlight-color);
-	color: #FFF;
+	background-color: var(--theme-selection-background);
+	color: var(--theme-selection-color);
 }
 
 .devtools-menu .item.disabled {

@@ -13,7 +13,7 @@ iframe {
 	content: attr(data-lang);
 	z-index: 99;
 	border: 1px solid rgba(0,0,0,0.3);
-	background-color: #F7F7F7;
+	background-color: var(--theme-toolbar-background);
 	background-clip: padding-box;
 	padding: 5px;
 	display: inline-block;
@@ -27,23 +27,14 @@ iframe {
 .devtools-main-content:hover::after {
 	opacity: 0;
 }
-.theme-dark .devtools-main-content::after {
-	background-color: #343C45;
-}
 
 /* Reposition the #export-menu */
 .dropdown-menu {
 	position: absolute;
 	left: 36px;
-	top: 45px;
+	top: 36px;
 	z-index: 999;
 }
-/*.dropdown-menu > .devtools-menu {
-	top: auto;
-	bottom: calc(100% + 10px);
-	left: auto;
-	right: 0px;
-}*/
 .devtools-menu .item input {
 	display: none;
 }
@@ -60,37 +51,33 @@ iframe {
 	height: 35px;
 	border: none;
 	display: block;
-}
-
-
-.theme-dark #sidebar button {
 	background-color: transparent;
-}
-
-.theme-dark #sidebar button:hover {
-	background-color: #5A6674;
+	padding: 0;
+	font-size: 16px;
 }
 
 #sidebar button:hover {
-	background-color: #E1E1E1;
+	background-color: rgba(150, 150, 150, 0.15);
 }
 
-#sidebar button .run::after {
-	background-size: 16px 16px;
+#sidebar button:hover:active {
+	background-color: rgba(150, 150, 150, 0.3);
+}
+
+#run-button {
+	background-color: var(--theme-selection-background) !important;
 }
 
 /* Icons */
 .devtools-icon {
 	overflow: hidden;
+	vertical-align: middle;
 }
 .devtools-icon::after {
-	background-size: 15px 15px;
+	background-size: 16px 16px;
 	background-position: center center;
 }
 .devtools-icon.run::after {
-	background-image: url("images/run.svg");
-}
-.theme-dark .devtools-icon.run::after {
 	background-image: url("images/run.svg#white");
 }
 .devtools-icon.save::after {
@@ -100,11 +87,17 @@ iframe {
 	background-image: url("images/save.svg#white");
 }
 .devtools-icon.code::after {
-	background-image: url("chrome://browser/skin/devtools/debugger-prettyprint@2x.png");
+	background-image: url("chrome://browser/skin/devtools/debugger-prettyprint.png");
 	background-position: center left;
-	background-size: 23px 15px;
+	background-size: 32px 16px;
 	filter: invert(1);
 }
 .theme-dark .devtools-icon.code::after {
 	filter: none;
+}
+
+@media (min-resolution: 2dppx) {
+	.devtools-icon.code::after {
+		background-image: url("chrome://browser/skin/devtools/debugger-prettyprint@2x.png");
+	}
 }
