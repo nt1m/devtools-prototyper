@@ -68,6 +68,7 @@ iframe {
 
 #sidebar button.active.active.active {
 	background: var(--theme-selection-background);
+	color: white;
 }
 
 #sidebar button:hover {
@@ -93,6 +94,9 @@ iframe {
 	background-position: center center;
 }
 .devtools-icon.run::after {
+	background-image: url("images/run.svg");
+}
+.theme-dark .devtools-icon.run::after {
 	background-image: url("images/run.svg#white");
 }
 .devtools-icon.save::after {
