@@ -232,8 +232,8 @@ html, body {
 }
 
 .devtools-menu.shown {
-	min-width: 200px;
-	max-height: 110px;
+	min-width: 210px;
+	max-height: 175px;
 }
 
 .devtools-menu li {
