@@ -9,6 +9,9 @@ iframe {
 .devtools-main-content {
 	position: relative;
 }
+.devtools-main-content.hide {
+	display: none;
+}
 .devtools-main-content::after {
 	content: attr(data-lang);
 	z-index: 99;
@@ -44,6 +47,8 @@ iframe {
 	height: 100%;
 	float: left;
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 #sidebar button {
@@ -53,7 +58,17 @@ iframe {
 	display: block;
 	background-color: transparent;
 	padding: 0;
-	font-size: 16px;
+	font-size: 10px;
+	cursor: pointer;
+}
+
+.theme-dark #sidebar button {
+	color: white;
+}
+
+#sidebar button.active.active.active {
+	background: var(--theme-selection-background);
+	color: white;
 }
 
 #sidebar button:hover {
@@ -64,20 +79,24 @@ iframe {
 	background-color: rgba(150, 150, 150, 0.3);
 }
 
-#run-button {
-	background-color: var(--theme-selection-background) !important;
+#sidebar .spacer {
+	flex-grow: 1;
 }
 
 /* Icons */
 .devtools-icon {
 	overflow: hidden;
 	vertical-align: middle;
+	font-size: 16px;
 }
 .devtools-icon::after {
 	background-size: 16px 16px;
 	background-position: center center;
 }
 .devtools-icon.run::after {
+	background-image: url("images/run.svg");
+}
+.theme-dark .devtools-icon.run::after {
 	background-image: url("images/run.svg#white");
 }
 .devtools-icon.save::after {

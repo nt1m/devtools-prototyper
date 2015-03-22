@@ -39,14 +39,19 @@ PrototyperPanel.prototype = {
 	// Init/Loading functions
 	initUI: function() {
 		this.editorEls = {
-			"html": this.doc.querySelector("#html-editor"),
-			"css" : this.doc.querySelector("#css-editor"),
-			"js"  : this.doc.querySelector("#js-editor")
+			"html": this.doc.getElementById("html-editor"),
+			"css" : this.doc.getElementById("css-editor"),
+			"js"  : this.doc.getElementById("js-editor")
 		};
-		this.runButton = this.doc.querySelector("#run-button");
-		this.exportButton = this.doc.querySelector("#export-button");
-		this.exportMenu = this.doc.querySelector("#export-menu");
-		this.beautifyButton = this.doc.querySelector("#beautify-button");
+		this.runButton = this.doc.getElementById("run-button");
+		this.exportButton = this.doc.getElementById("export-button");
+		this.exportMenu = this.doc.getElementById("export-menu");
+		this.beautifyButton = this.doc.getElementById("beautify-button");
+		this.toggleButtons = {
+			js  : this.doc.getElementById("toggle-js"),
+			css : this.doc.getElementById("toggle-css"),
+			html: this.doc.getElementById("toggle-html")
+		};
 
 		this.runButton.addEventListener("click", this.runCode);
 		this.beautifyButton.addEventListener("click", this.beautify.bind(this));
@@ -90,6 +95,12 @@ PrototyperPanel.prototype = {
 		}
 
 		let sourceEditor = this.editors[lang] = new Editor(config);
+
+		this.toggleButtons[lang].addEventListener("click", e => {
+			this.editorEls[lang].classList.toggle("hide");
+			e.target.classList.toggle("active");
+		});
+
 		return sourceEditor.appendTo(this.editorEls[lang]).then(() => {
 			sourceEditor.on("change", () => {
 				this.saveCode(lang);
@@ -131,23 +142,24 @@ PrototyperPanel.prototype = {
 		this.storage.set(lang, this.editors[lang].getText());
 	},
 	getBuiltCode: function() {
-		return [
-			"<!DOCTYPE html>\n",
-			"<html>\n",
-			"<head>\n",
-			"<meta charset='utf-8'/>",
-			"<script>\n",
-			this.editors.js.getText(),
-			"\n</script>\n",
-			"<style>\n",
-			this.editors.css.getText(),
-			"\n</style>\n",
-			"</head>\n",
-			"<body>",
-			this.editors.html.getText(),
-			"</body>",
-			"</html>"
-		].join("");
+		return `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="UTF-8" />
+					<title>Prototype</title>
+					<script type="application/javascript;version=1.8">
+						${this.editors.js.getText()}
+					</script>
+
+					<style>
+						${this.editors.css.getText()}
+					</style>
+				</head>
+				<body>
+					${this.editors.html.getText()}
+				</body>
+			</html>`;
 	},
 	runCode: function() {
 		this.toolbox.target.activeTab.navigateTo(this.getBlobURL());
