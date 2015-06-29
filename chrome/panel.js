@@ -142,24 +142,22 @@ PrototyperPanel.prototype = {
 		this.storage.set(lang, this.editors[lang].getText());
 	},
 	getBuiltCode: function() {
-		return `
-			<!DOCTYPE html>
-			<html>
-				<head>
-					<meta charset="UTF-8" />
-					<title>Prototype</title>
-					<script type="application/javascript;version=1.8">
-						${this.editors.js.getText()}
-					</script>
-
-					<style>
-						${this.editors.css.getText()}
-					</style>
-				</head>
-				<body>
-					${this.editors.html.getText()}
-				</body>
-			</html>`;
+		return `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Prototype</title>
+	<script type="application/javascript;version=1.8">
+		${this.editors.js.getText()}
+	</script>
+	<style>
+		${this.editors.css.getText()}
+	</style>
+</head>
+<body>
+	${this.editors.html.getText()}
+</body>
+</html>`;
 	},
 	runCode: function() {
 		this.toolbox.target.activeTab.navigateTo(this.getBlobURL());
