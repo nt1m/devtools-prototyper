@@ -32,7 +32,7 @@ iframe {
 }
 
 .devtools-main-content {
-	background-color: var(--theme-toolbar-background);
+	background-color: var(--theme-body-background);
 }
 
 /* Settings Panel */
@@ -42,6 +42,8 @@ iframe {
 
 #settings .title {
 	font-size: 16px;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
 }
 
 #settings label {
