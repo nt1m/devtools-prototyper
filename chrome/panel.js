@@ -1,6 +1,5 @@
 "use strict";
 
-// Import stuff
 const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
 const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
@@ -8,10 +7,8 @@ const Editor  = devtools("devtools/sourceeditor/editor");
 const beautify = devtools("devtools/jsbeautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
-
 const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
 
-// Constants
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
@@ -57,9 +54,10 @@ PrototyperPanel.prototype = {
 		};
 		// defaults
 		this.settings = {
-			emmet: true
+			"emmet-enabled": true,
+			// Autocomplete unimplemented.
+			"autocomplete-enabled": false
 		};
-
 		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
 			if (!settings) {
 				asyncStorage.setItem("devtools-prototyper-settings", this.settings);
@@ -68,7 +66,7 @@ PrototyperPanel.prototype = {
 			this.settings = settings;
 
 			for (let key in settings) {
-			  let el = this.settingsPanel.querySelector(`#${key}`);
+				let el = this.settingsPanel.querySelector(`#${key}`);
 				putValue(el, settings[key]);
 			}
 
@@ -114,12 +112,11 @@ PrototyperPanel.prototype = {
 			extraKeys: keys
 		};
 
-		if (this.settings.emmet && (lang == "html" || lang == "css")) {
-			// This only works after bug 1089428
+		if (this.settings["emmet-enabled"] && (lang == "html" || lang == "css")) {
 			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
 		}
 
-		this.editorEls[lang].innerHTML = '';
+		this.editorEls[lang].innerHTML = "";
 
 		let sourceEditor = this.editors[lang] = new Editor(config);
 

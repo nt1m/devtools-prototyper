@@ -42,6 +42,7 @@ iframe {
 
 #settings .title {
 	font-size: 16px;
+	font-weight: normal;
 	margin-block-start: 1em;
 	margin-block-end: 1em;
 }
@@ -145,7 +146,7 @@ iframe {
 	filter: brightness(0.8);
 }
 
-@media (min-resolution: 2dppx) {
+@media (min-resolution: 1.1dppx) {
 	.devtools-icon.code::after {
 		background-image: url("chrome://browser/skin/devtools/debugger-prettyprint@2x.png");
 	}
