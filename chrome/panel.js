@@ -9,6 +9,8 @@ const beautify = devtools("devtools/jsbeautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
 
+const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
+
 // Constants
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
@@ -19,7 +21,7 @@ function PrototyperPanel(win, toolbox) {
 	this.win = win;
 	this.doc = this.win.document;
 	this.toolbox = toolbox;
-	
+
 	this.runCode = this.runCode.bind(this);
 	this.loadSavedCode = this.loadSavedCode.bind(this);
 	this.exportPrototype = this.exportPrototype.bind(this);
@@ -47,15 +49,38 @@ PrototyperPanel.prototype = {
 		this.exportButton = this.doc.getElementById("export-button");
 		this.exportMenu = this.doc.getElementById("export-menu");
 		this.beautifyButton = this.doc.getElementById("beautify-button");
+		this.settingsButton = this.doc.getElementById("settings-button");
 		this.toggleButtons = {
 			js  : this.doc.getElementById("toggle-js"),
 			css : this.doc.getElementById("toggle-css"),
 			html: this.doc.getElementById("toggle-html")
 		};
+		// defaults
+		this.settings = {
+			emmet: true
+		};
+
+		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
+			if (!settings) {
+				asyncStorage.setItem("devtools-prototyper-settings", this.settings);
+				settings = this.settings;
+			}
+			this.settings = settings;
+
+			for (let key in settings) {
+			  let el = this.settingsPanel.querySelector(`#${key}`);
+				putValue(el, settings[key]);
+			}
+
+			this.initEditors();
+		});
+
+		this.settingsPanel = this.doc.getElementById("settings");
 
 		this.runButton.addEventListener("click", this.runCode);
 		this.beautifyButton.addEventListener("click", this.beautify.bind(this));
-		this.initEditors();
+		this.settingsButton.addEventListener("click", this.toggleSettings.bind(this));
+		this.settingsPanel.addEventListener("change", this.updateSettings.bind(this));
 	},
 	initEditors: function() {
 		this.editors = {};
@@ -89,10 +114,12 @@ PrototyperPanel.prototype = {
 			extraKeys: keys
 		};
 
-		if (lang == "html") {
+		if (this.settings.emmet && (lang == "html" || lang == "css")) {
 			// This only works after bug 1089428
 			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
 		}
+
+		this.editorEls[lang].innerHTML = '';
 
 		let sourceEditor = this.editors[lang] = new Editor(config);
 
@@ -173,6 +200,40 @@ PrototyperPanel.prototype = {
 			let pretty = beautify[lang](this.editors[lang].getText());
 			this.editors[lang].setText(pretty);
 		}
+	},
+	toggleSettings: function() {
+		if (this.settingsShown) this.hideSettings();
+		else this.showSettings();
+	},
+	showSettings: function() {
+		this.settingsShown = true;
+
+		let editors = [];
+		this.enabledEditors = [];
+		for (let key in this.editorEls) {
+			let editor = this.editorEls[key];
+			if (!editor.classList.contains("hide")) {
+				this.enabledEditors.push(editor);
+			}
+			editor.classList.add("hide");
+		}
+
+		this.settingsPanel.classList.remove("hide");
+	},
+	hideSettings: function() {
+		this.settingsShown = false;
+
+		this.enabledEditors.forEach(editor => editor.classList.remove("hide"));
+		this.initEditors();
+
+		this.settingsPanel.classList.add("hide");
+	},
+	updateSettings: function(e) {
+		var id = e.target.id;
+
+		this.settings[id] = getValue(e.target);
+
+		asyncStorage.setItem("devtools-prototyper-settings", this.settings);
 	},
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
@@ -287,3 +348,13 @@ PrototyperPanel.prototype = {
 		}
 	}
 };
+
+function getValue(el) {
+	if (typeof el.checked !== undefined) return el.checked;
+	return el.value;
+}
+
+function putValue(el, value) {
+	if (typeof el.checked !== undefined) el.checked = value;
+	el.value = value;
+}
