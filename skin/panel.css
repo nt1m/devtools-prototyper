@@ -31,6 +31,23 @@ iframe {
 	opacity: 0;
 }
 
+.devtools-main-content {
+	background-color: var(--theme-toolbar-background);
+}
+
+/* Settings Panel */
+#settings {
+	padding: 10px 30px;
+}
+
+#settings .title {
+	font-size: 16px;
+}
+
+#settings label {
+	font-size: 11px;
+}
+
 /* Reposition the #export-menu */
 .dropdown-menu {
 	position: absolute;
@@ -101,6 +118,7 @@ iframe {
 }
 .devtools-icon.save::after {
 	background-image: url("images/save.svg");
+	filter: contrast(0.5);
 }
 .theme-dark .devtools-icon.save::after {
 	background-image: url("images/save.svg#white");
@@ -113,6 +131,16 @@ iframe {
 }
 .theme-dark .devtools-icon.code::after {
 	filter: none;
+}
+
+.devtools-icon.settings::after {
+	background-image: url(chrome://browser/skin/devtools/tool-options.svg);
+	background-size: 16px 16px;
+	filter: invert(1) brightness(0.8);
+}
+
+.theme-dark .devtools-icon.settings::after {
+	filter: brightness(0.8);
 }
 
 @media (min-resolution: 2dppx) {

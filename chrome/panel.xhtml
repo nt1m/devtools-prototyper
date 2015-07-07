@@ -29,6 +29,10 @@
 			<button id="beautify-button">
 				<i class="devtools-icon code"></i>
 			</button>
+			<button id="settings-button">
+				<i class="devtools-icon settings"></i>
+			</button>
+
 			<i class='spacer'></i>
 			<button id="toggle-html" class="active">HTML</button>
 			<button id="toggle-css" class="active">CSS</button>
@@ -37,6 +41,14 @@
 		<div id="html-editor" class="devtools-main-content" data-lang="HTML"></div>
 		<div id="css-editor" class="devtools-main-content" data-lang="CSS"></div>
 		<div id="js-editor" class="devtools-main-content" data-lang="JS"></div>
+
+		<div id="settings" class="devtools-main-content hide">
+			<form>
+				<p class='title'>Settings</p>
+				<label for='emmet'>Enable Emmet</label>
+				<input type='checkbox' id='emmet' checked=''></input>
+			</form>
+		</div>
 	</div>
 </body>
 </html>
