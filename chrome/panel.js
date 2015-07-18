@@ -1,6 +1,7 @@
 "use strict";
 
-const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
+const {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
+//const {BlobFront} = require("blob-actor.js");
 const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
@@ -8,6 +9,7 @@ const beautify = devtools("devtools/jsbeautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
 const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
+const {ActorRegistryFront} = devtools("devtools/server/actors/actor-registry");
 
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
@@ -18,6 +20,8 @@ function PrototyperPanel(win, toolbox) {
 	this.win = win;
 	this.doc = this.win.document;
 	this.toolbox = toolbox;
+	this.target = this.toolbox.target;
+	console.log(this.target.client, this.target.form);
 
 	this.runCode = this.runCode.bind(this);
 	this.loadSavedCode = this.loadSavedCode.bind(this);
@@ -38,9 +42,9 @@ PrototyperPanel.prototype = {
 	// Init/Loading functions
 	initUI: function() {
 		this.editorEls = {
-			"html": this.doc.getElementById("html-editor"),
-			"css" : this.doc.getElementById("css-editor"),
-			"js"  : this.doc.getElementById("js-editor")
+			html: this.doc.getElementById("html-editor"),
+			css: this.doc.getElementById("css-editor"),
+			js : this.doc.getElementById("js-editor")
 		};
 		this.runButton = this.doc.getElementById("run-button");
 		this.exportButton = this.doc.getElementById("export-button");
@@ -48,15 +52,13 @@ PrototyperPanel.prototype = {
 		this.beautifyButton = this.doc.getElementById("beautify-button");
 		this.settingsButton = this.doc.getElementById("settings-button");
 		this.toggleButtons = {
-			js  : this.doc.getElementById("toggle-js"),
+			html: this.doc.getElementById("toggle-html"),
 			css : this.doc.getElementById("toggle-css"),
-			html: this.doc.getElementById("toggle-html")
+			js  : this.doc.getElementById("toggle-js")
 		};
 		// defaults
 		this.settings = {
-			"emmet-enabled": true,
-			// Autocomplete unimplemented.
-			"autocomplete-enabled": false
+			"emmet-enabled": true
 		};
 		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
 			if (!settings) {
@@ -67,6 +69,10 @@ PrototyperPanel.prototype = {
 
 			for (let key in settings) {
 				let el = this.settingsPanel.querySelector(`#${key}`);
+				if (!el) {
+					delete settings[key];
+					continue;
+				}
 				putValue(el, settings[key]);
 			}
 
@@ -343,6 +349,51 @@ PrototyperPanel.prototype = {
 		enablePrefSync: function(pref) {
 			Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
 		}
+	},
+	// WIP not working yet.
+	registerActor: function(target, response) {
+		// The actor is registered as 'tab' actor (an instance created for
+		// every browser tab).
+		let options = {
+			prefix: "blobactor",
+			constructor: "BlobActor",
+			type: { tab: true }
+		};
+
+		let actorModuleUrl = "chrome://devtools-prototyper/content/blob-actor.js";
+
+		let registry = target.client.getActor(response["actorRegistryActor"]);
+		if (!registry) {
+			registry = ActorRegistryFront(target.client, response);
+		}
+
+		registry.registerActor(actorModuleUrl, options).then(BlobActorClass => {
+			console.log("My actor registered");
+
+			this.BlobActorClass = BlobActorClass;
+
+			this.onActorRegistered();
+
+			this.attachActor(target, target.form);
+//			target.client.listTabs(({ tabs, selected }) => {
+//				
+//			});
+		});
+	},	
+	attachActor: function(target, form) {
+		let myActor = MyActorFront(target.client, form);
+		myActor.attach().then(() => {
+			console.log("My actor attached");
+
+			this.content.postMessage("attached");
+
+			// Finally, execute remote method on the actor!
+			myActor.hello().then(response => {
+				console.log("Response from the actor: " + response.msg, response);
+
+				this.content.postMessage(response.msg);
+			});
+		});
 	}
 };
 
