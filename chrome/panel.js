@@ -257,7 +257,8 @@ PrototyperPanel.prototype = {
 					"elements": []
 				};
 				let txtarea;
-				for(let [lang, editor] of this.editors.entries()) {
+				for (let lang in this.editors) {
+                    let editor = this.editors[lang];
 					txtarea = this.doc.createElement("textarea");
 					txtarea.name = lang;
 					txtarea.value = editor.getText();
