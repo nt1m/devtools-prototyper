@@ -1,8 +1,13 @@
-<!ENTITY prototyperUI.runButton.tooltip "Run code">
-<!ENTITY prototyperUI.exportButton.tooltip "Export prototype">
+<!ENTITY prototyperUI.run.tooltip "Run code">
+<!ENTITY prototyperUI.export.tooltip "Export prototype">
+<!ENTITY prototyperUI.beautify.tooltip "Prettify code">
+<!ENTITY prototyperUI.libraries.tooltip "Inject librairies">
+<!ENTITY prototyperUI.settings.tooltip "Settings">
 
 <!ENTITY prototyperUI.saveLocally.label "Save locally">
 <!ENTITY prototyperUI.JSFiddle.label "JSFiddle">
 <!ENTITY prototyperUI.codepen.label "CodePen">
 <!ENTITY prototyperUI.publicGist.label "Public Gist">
 
+<!ENTITY prototyperUI.libs.results "Results (powered by cdnjs)">
+<!ENTITY prototyperUI.libs.injected "Injected libraries">

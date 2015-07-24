@@ -10,6 +10,9 @@ Cu.import("resource://gre/modules/devtools/Console.jsm");
 Cu.import("resource://gre/modules/Task.jsm");
 const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
 
+const { ViewHelpers } = Cu.import("resource:///modules/devtools/ViewHelpers.jsm", {});
+const L10N = new ViewHelpers.L10N("chrome://devtools-prototyper/locale/strings.properties");
+
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
@@ -27,13 +30,16 @@ function PrototyperPanel(win, toolbox) {
 	this.runCode = this.runCode.bind(this);
 	this.loadSavedCode = this.loadSavedCode.bind(this);
 	this.exportPrototype = this.exportPrototype.bind(this);
-	this.showExportMenu = this.showExportMenu.bind(this);
-	this.hideExportMenu = this.hideExportMenu.bind(this);
-	this._onCSSEditorMouseMove = this._onCSSEditorMouseMove.bind(this);
+	this.showMenu = this.showMenu.bind(this);
+	this.hideMenu = this.hideMenu.bind(this);
+	//this._onCSSEditorMouseMove = this._onCSSEditorMouseMove.bind(this);
+	this.libraries.init = this.libraries.init.bind(this);
 
-	this.initHighlighter();
+	// The highlighter stuff doesn't work yet
+	//this.initHighlighter();
 	this.initUI();
-	this.initExportMenu();
+	this.initMenus();
+	this.libraries.init();
 }
 
 PrototyperPanel.prototype = {
@@ -60,7 +66,7 @@ PrototyperPanel.prototype = {
 		// defaults
 		this.settings = {
 			"emmet-enabled": true,
-			"es6-enabled": false
+			"es6-enabled": true
 		};
 		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
 			if (!settings) {
@@ -122,12 +128,12 @@ PrototyperPanel.prototype = {
 		let mackeys = {
 			"Cmd-Enter": this.runCode,
 			"Cmd-R": this.runCode,
-			"Cmd-S": this.showExportMenu
+			"Cmd-S": () => this.showMenu(this.exportButton)
 		};
 		let winkeys = {
 			"Ctrl-Enter": this.runCode,
 			"Ctrl-R": this.runCode,
-			"Ctrl-S": this.showExportMenu
+			"Ctrl-S": () => this.showMenu(this.exportButton)
 		};
 		let keys = mac ? mackeys : winkeys;
 
@@ -136,16 +142,16 @@ PrototyperPanel.prototype = {
 			readOnly: false,
 			autoCloseBrackets: "{}()[]",
 			extraKeys: keys,
-			autocomplete: true
+			//autocomplete: true
 		};
 
 		if (this.settings["emmet-enabled"] && (lang == "html" || lang == "css")) {
 			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
 		}
 		
-		if (lang == "css") {
-			this.editorEls[lang].addEventListener("mousemove", this._onCSSEditorMouseMove);
-		}
+//		if (lang == "css") {
+//			this.editorEls[lang].addEventListener("mousemove", this._onCSSEditorMouseMove);
+//		}
 
 		this.editorEls[lang].innerHTML = "";
 
@@ -163,38 +169,77 @@ PrototyperPanel.prototype = {
 			sourceEditor.setMode(Editor.modes[lang].name);
 		});
 	},
-	initExportMenu: function() {
-		this.doc.body.addEventListener("click", this.hideExportMenu);
-		this.exportButton.addEventListener("click", e => {
-			if(!this.exportMenu.classList.contains("shown")) {
-				this.showExportMenu();
-			}
-			else {
-			  this.hideExportMenu();
-			}
-			e.stopPropagation();
-		});
-		for(let el of this.exportMenu.querySelectorAll(".item")) {
+	initMenus: function() {
+		let attachButtonToMenu = (button) => {
+			let menu = this.doc.getElementById(button.dataset.menu);
+			this.doc.body.addEventListener("click", () => this.hideMenu(button));
+			button.addEventListener("click", e => {
+				if (!menu.classList.contains("shown")) {
+					this.showMenu(button);
+					e.stopPropagation();
+				}
+				else {
+					this.hideMenu(button);
+				}
+			});
+			menu.addEventListener("click", e => e.stopPropagation());
+		}
+		for (let button of this.doc.querySelectorAll("[data-menu]")) {
+			attachButtonToMenu(button);
+		}
+		/* Export Menu */
+		for (let el of this.exportMenu.querySelectorAll(".item")) {
 			el.addEventListener("click", e => {
 				this.exportPrototype(e.target.dataset.service, e.target);
+				this.hideMenu(this.exportButton);
+				e.stopPropagation();
 			});
 		}
 	},
-	showExportMenu: function() {
-		this.exportButton.setAttribute("open","true");
-		this.exportMenu.classList.add("shown");
+	showMenu: function(button) {
+		let menu = this.doc.getElementById(button.dataset.menu);
+		button.setAttribute("open","true");
+		menu.classList.add("shown");
 	},
-	hideExportMenu: function() {
-		this.exportButton.removeAttribute("open");
-		this.exportMenu.classList.remove("shown");
+	hideMenu: function(button) {
+		let menu = this.doc.getElementById(button.dataset.menu);
+		button.removeAttribute("open");
+		menu.classList.remove("shown");
+
+		/* Libraries menu */
+		this.libraries.resultsEl.textContent = "";
+		this.libraries.filterEl.value = "";
+		this.doc.getElementById("libraries-menu").classList.remove("results");
 	},
 	loadSavedCode: function() {
 		for (let lang in this.editors) {
 			this.editors[lang].setText(this.storage.get(lang));
 		}
+		let savedLibs;
+		try {
+			savedLibs = JSON.parse(this.storage.get("libs"));
+		}
+		catch(e) {
+			console.warn(prefPrefix + "libs should be an array");
+			this.storage.set("libs", "[]");
+			savedLibs = [];
+		}
+		for (let lib of savedLibs) {
+			this.libraries.add(lib);
+		}	
 	},
 	saveCode: function(lang) {
 		this.storage.set(lang, this.editors[lang].getText());
+	},
+	getLibraryHTML: function() {
+		var str = "";
+		let i = 0;
+		for (let lib of this.libraries.current) {
+			if (i !== 0) str += "	";
+			str += `<script src="${lib}"></script>\n`;
+			i++;
+		}
+		return str;
 	},
 	getBuiltCode: function() {
 		return `<!DOCTYPE html>
@@ -208,7 +253,8 @@ PrototyperPanel.prototype = {
 </head>
 <body>
 	${this.editors.html.getText().replace(/\n/g, "\n\t")}
-	<script type="${this.settings["es6-enabled"] ? "application/javascript;version=1.8" : "text/javascript"}">
+	${this.getLibraryHTML()}
+	<script type="${this.settings["es6-enabled"] ? "text/javascript;version=1.8" : "text/javascript"}">
 		${this.editors.js.getText().replace(/\n/g, "\n\t\t")}
 	</script>
 </body>
@@ -406,6 +452,119 @@ PrototyperPanel.prototype = {
 			region: "border"
 		});
 	}),
+	libraries: {
+		init: function() {
+			this.libraries.filterEl = this.doc.getElementById("libs-filter");
+			this.libraries.injectedLibsEl = this.doc.getElementById("injected-libs");
+			this.libraries.resultsEl = this.doc.getElementById("libraries-search-results");
+			for (let fn in this.libraries) {
+				if (typeof this.libraries[fn] == "function") {
+					this.libraries[fn] = this.libraries[fn].bind(this);
+				}
+			}
+			this.libraries.filterEl.addEventListener("input", () => this.libraries.find(this.libraries.filterEl.value));
+		},
+		current: [],
+		find: function(query) {
+			if (query.replace(/ /g, "") == "") {
+				this.doc.getElementById("libraries-menu").classList.remove("results");
+				return;
+			}
+			this.doc.getElementById("libraries-menu").classList.add("results");
+			this.libraries.resultsEl.textContent = "";
+			let URL = "http://api.cdnjs.com/libraries?search=" + query;
+			let xhr = new this.win.XMLHttpRequest();
+			xhr.open("GET", URL);
+			xhr.addEventListener("readystatechange", () => {
+				if (xhr.readyState == 4) {
+					let response = JSON.parse(xhr.responseText);
+					response.query = query;
+					this.libraries.displayLibs(response);
+				}
+			});
+			xhr.send();
+		},
+		saveLibs: function() {
+			this.storage.set("libs", JSON.stringify(this.libraries.current));
+		},
+		displayLibs: function(response) {
+			if (response.query != this.libraries.filterEl.value ||
+			    response.results.length == 0 || !response.results) {
+				this.libraries.resultsEl.textContent = L10N.getStr("prototyper.libs.noresultsfound");
+				return;
+			}
+			let addResultItem = (item) => {
+				let url = item.latest;
+				let itemEl = this.doc.createElement("li");
+				itemEl.className = "item";
+
+				let textCont = this.doc.createElement("div");
+				itemEl.appendChild(textCont);
+
+				let nameDisp = this.doc.createElement("span");
+				nameDisp.className = "item-name";
+				nameDisp.textContent = item.name;
+				textCont.appendChild(nameDisp);
+
+				let urlDisp = this.doc.createElement("span");
+				urlDisp.className = "item-url";
+				urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
+				textCont.appendChild(urlDisp);
+
+				let statusIcon = this.doc.createElement("a");
+				statusIcon.href = "#";
+				statusIcon.className = "devtools-icon lib-status-icon";
+				statusIcon.classList.add((this.libraries.isAdded(item.latest) ? "checked" : "add"));
+				statusIcon.addEventListener("click", () => {
+					if (!this.libraries.isAdded(url)) {
+						this.libraries.add(url);
+						this.libraries.saveLibs();
+						this.libraries.resultsEl.textContent = "";
+						this.doc.getElementById("libraries-menu").classList.remove("results");
+					}
+				});
+				itemEl.appendChild(statusIcon);
+				this.libraries.resultsEl.appendChild(itemEl);
+			};
+			for (let i = response.results.length - 1;i >= 0; i--) {
+				let result = response.results[i];
+				addResultItem(result);
+			}
+		},
+		add: function(url) {
+			this.libraries.current.push(url);
+			let el = this.doc.createElement("li");
+			el.className = "item";
+
+			let urlDisp = this.doc.createElement("a");
+			urlDisp.className = "item-name";
+			urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
+			urlDisp.title = url;
+			urlDisp.href = url;
+			urlDisp.target = "_blank";
+			el.appendChild(urlDisp);
+
+			let statusIcon = this.doc.createElement("a");
+			statusIcon.href = "#";
+			statusIcon.className = "devtools-icon lib-status-icon remove";
+			statusIcon.addEventListener("click", (e) => {
+				this.libraries.remove(url);
+				el.remove();
+				e.preventDefault();
+			});
+			el.appendChild(statusIcon);
+
+			this.libraries.injectedLibsEl.appendChild(el);
+		},
+		remove: function(url) {
+			let index = this.libraries.current.indexOf(url);
+			this.libraries.current.splice(index, 1);
+			this.libraries.saveLibs();
+		},
+		isAdded: function(url) {
+			return this.libraries.current.indexOf(url) > -1;
+		}
+	},
 	storage: {
 		get: function(pref) {
 			let prefname = prefPrefix + pref;

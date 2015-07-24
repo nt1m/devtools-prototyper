@@ -103,6 +103,73 @@ iframe {
 	flex-grow: 1;
 }
 
+#libraries-menu {
+	position: absolute;
+	width: 250px;
+}
+#libraries-menu.shown {
+	display: flex;
+	flex-direction: column;
+	top: 0px;
+	bottom: 0px;
+	max-height: 100vh;
+	height: 100vh;
+	left: 36px;
+}
+#libraries-menu:not(.results) b:first-of-type,
+#libraries-menu:not(.results) #libraries-search-results,
+#libraries-menu:not(.results) .separator {
+	display: none;
+}
+#libraries-menu > b {
+	padding: 5px 0;
+	padding-inline-start: 10px;
+	font-weight: 500;
+}
+#libraries-menu .devtools-toolbar {
+	padding: 0 5px;
+}
+#libraries-search-results,
+#injected-libs {
+	flex: 1;
+	text-align: center;
+}
+#libs-filter {
+	width: 100%;
+}
+.item-name,
+.item-url {
+	display: block;
+	max-width: 100%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.item-name {
+	font-weight: 500;
+}
+#libraries-search-results {
+	overflow: auto;
+}
+#libraries-search-results .item,
+#injected-libs .item {
+	display: flex;
+	padding: 10px !important;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	text-align: start;
+}
+#injected-libs .item-name {
+	text-decoration: underline;
+	font-weight: 400;
+}
+#injected-libs .item-name,
+#libraries-search-results .item > div {
+	flex: 1;
+	min-width: 0;
+}
+
 /* Icons */
 .devtools-icon {
 	overflow: hidden;
@@ -116,15 +183,22 @@ iframe {
 .devtools-icon.run::after {
 	background-image: url("images/run.svg");
 }
-.theme-dark .devtools-icon.run::after {
-	background-image: url("images/run.svg#white");
-}
 .devtools-icon.save::after {
 	background-image: url("images/save.svg");
-	filter: contrast(0.5);
 }
-.theme-dark .devtools-icon.save::after {
-	background-image: url("images/save.svg#white");
+.devtools-icon.add::after {
+	background-image: url("chrome://browser/skin/devtools/add.svg");
+}
+.devtools-icon.remove::after {
+	background-image: url("images/remove.svg");
+}
+.devtools-icon.checked::after {
+	background-image: url("images/checked.svg");
+}
+.devtools-icon.save::after,
+.devtools-icon.libraries::after,
+.devtools-icon.remove::after {
+	filter: contrast(0.5);
 }
 .devtools-icon.code::after {
 	background-image: url("chrome://browser/skin/devtools/debugger-prettyprint.png");

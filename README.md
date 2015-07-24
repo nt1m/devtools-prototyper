@@ -7,7 +7,7 @@ This is an add-on that adds JSFiddle style prototyping to Firefox DevTools.
 AMO : https://addons.mozilla.org/en-US/firefox/addon/devtools-prototyper/
 
 ## Compatibility
-Only tested with Firefox 33 and Firefox 36.
+Only tested with Firefox 33 and Firefox 36+.
 
 ## How to contribute ?
 Pull requests :)

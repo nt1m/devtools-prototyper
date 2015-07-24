@@ -1,11 +1,4 @@
 <?xml version="1.0" standalone="no"?>
-<svg viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
-	<style>
-	#white:not(:target),
-	#white:target + #shape {
-		display: none;
-	}
-	</style>
-	<polygon points="4,3 4,13 12,8 4,3" fill="white" id="white"/>
-	<polygon points="4,3 4,13 12,8 4,3" fill="#444" id="shape"/>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+	<polygon points="4,3 4,13 12,8 4,3" fill="#fff"/>
 </svg>

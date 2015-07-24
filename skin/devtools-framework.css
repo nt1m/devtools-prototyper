@@ -130,10 +130,6 @@ html, body {
 	box-sizing: border-box;
 }
 
-.devtools-searchinput::-moz-placeholder {
-	font-style: italic;
-}
-
 /* Toolbar */
 .devtools-toolbar {
 	padding: 2px 3px;
@@ -225,6 +221,7 @@ html, body {
 	max-height: 0;
 	min-width: 0;
 	opacity: 0;
+	pointer-events: none;
 }
 
 .devtools-menu:not(.shown) .item {
@@ -269,7 +266,7 @@ html, body {
 
 .devtools-menu .separator {
 	height: 1px;
-	-moz-appearance: menuseparator;
+	background: var(--theme-splitter-color);
 }
 
 .dropdown-menu {
@@ -290,6 +287,7 @@ html, body {
 	overflow: auto;
 	display: inline-block;
 	height: calc(1em + 1px);
+	width: 1em;
 }
 
 .devtools-icon::after {
@@ -300,8 +298,16 @@ html, body {
 	background-size: cover;
 }
 
+.light-theme .devtools-icon::after {
+	filter: invert(1);
+}
+
 .devtools-icon.options::after {
 	background-image: url("chrome://browser/skin/devtools/tool-options.svg");
+}
+
+.devtools-icon.libraries::after {
+	background-image: url(images/librairies.svg);
 }
 
 .devtools-icon.stopwatch::after {
@@ -309,5 +315,6 @@ html, body {
 }
 
 [checked] .devtools-icon.stopwatch::after {
+	filter: none;
 	background-image: url("chrome://browser/skin/devtools/profiler-stopwatch-checked.svg");
 }

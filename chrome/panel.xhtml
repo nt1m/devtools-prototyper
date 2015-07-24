@@ -18,18 +18,32 @@
 			<a class="item" href="#" data-service="gist">&prototyperUI.publicGist.label;</a>
 		</div>
 	</div>
+	<div class="devtools-menu" id="libraries-menu">
+		<div class="devtools-toolbar">
+			<input type="search" class="devtools-searchinput" id="libs-filter" placeholder="Find libraries"/>
+		</div>
+		<b>&prototyperUI.libs.results;</b>
+		<div id="libraries-search-results"></div>
+		<div class="separator"></div>
+		<b>&prototyperUI.libs.injected;</b>
+		<div id="injected-libs"></div>
+	</div>
 	<div class="devtools-container">
 		<div id="sidebar">
-			<button id="run-button">
+			<button id="run-button" title="&prototyperUI.run.tooltip;">
 				<i class="devtools-icon run"></i>
 			</button>
-			<button id="export-button">
+			<button id="export-button" data-menu="export-menu" title="&prototyperUI.export.tooltip;">
 				<i class="devtools-icon save"></i>
 			</button>
-			<button id="beautify-button">
+			<button id="beautify-button" title="&prototyperUI.beautify.tooltip;">
 				<i class="devtools-icon code"></i>
 			</button>
-			<button id="settings-button">
+			<button id="libraries-button" data-menu="libraries-menu" title="&prototyperUI.libraries.tooltip;">
+				<i class="devtools-icon libraries"></i>
+				<i class="badge"></i>
+			</button>
+			<button id="settings-button" title="&prototyperUI.settings.tooltip;">
 				<i class="devtools-icon settings"></i>
 			</button>
 
@@ -51,7 +65,7 @@
 				</div>
 				<div class="setting">
 					<input type="checkbox" id="es6-enabled"></input>
-					<label for="es6-enabled">Enable ES6 (logging will show in the browser console)</label>
+					<label for="es6-enabled">Enable ES6</label>
 				</div>
 			</form>
 		</div>
