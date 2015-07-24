@@ -12,6 +12,7 @@ const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
 
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
+const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
 
 this.EXPORTED_SYMBOLS = ["PrototyperPanel"];
 
@@ -28,17 +29,17 @@ function PrototyperPanel(win, toolbox) {
 	this.exportPrototype = this.exportPrototype.bind(this);
 	this.showExportMenu = this.showExportMenu.bind(this);
 	this.hideExportMenu = this.hideExportMenu.bind(this);
+	this._onCSSEditorMouseMove = this._onCSSEditorMouseMove.bind(this);
 
+	this.initHighlighter();
 	this.initUI();
 	this.initExportMenu();
 }
 
 PrototyperPanel.prototype = {
-	// Destroy function
 	destroy: function() {
 		this.win = this.doc = this.toolbox = this.mm = null;
 	},
-
 	// Init/Loading functions
 	initUI: function() {
 		this.editorEls = {
@@ -58,7 +59,8 @@ PrototyperPanel.prototype = {
 		};
 		// defaults
 		this.settings = {
-			"emmet-enabled": true
+			"emmet-enabled": true,
+			"es6-enabled": false
 		};
 		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
 			if (!settings) {
@@ -86,6 +88,24 @@ PrototyperPanel.prototype = {
 		this.settingsButton.addEventListener("click", this.toggleSettings.bind(this));
 		this.settingsPanel.addEventListener("change", this.updateSettings.bind(this));
 	},
+	initHighlighter: Task.async(function* () {
+		yield this.toolbox.initInspector();
+		this.walker = this.toolbox.walker;
+
+		let hUtils = this.toolbox.highlighterUtils;
+		if (hUtils.supportsCustomHighlighters()) {
+			try {
+				this.highlighter =
+					yield hUtils.getHighlighterByType("SelectorHighlighter");
+			} catch (e) {
+				// The selectorHighlighter can't always be instantiated, for example
+				// it doesn't work with XUL windows (until bug 1094959 gets fixed);
+				// or the selectorHighlighter doesn't exist on the backend.
+				console.warn("The selectorHighlighter couldn't be instantiated, " +
+					"elements matching hovered selectors will not be highlighted");
+			}
+		}
+	}),
 	initEditors: function() {
 		this.editors = {};
 		let promises = [];
@@ -115,11 +135,16 @@ PrototyperPanel.prototype = {
 			lineNumbers: true,
 			readOnly: false,
 			autoCloseBrackets: "{}()[]",
-			extraKeys: keys
+			extraKeys: keys,
+			autocomplete: true
 		};
 
 		if (this.settings["emmet-enabled"] && (lang == "html" || lang == "css")) {
 			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
+		}
+		
+		if (lang == "css") {
+			this.editorEls[lang].addEventListener("mousemove", this._onCSSEditorMouseMove);
 		}
 
 		this.editorEls[lang].innerHTML = "";
@@ -175,17 +200,17 @@ PrototyperPanel.prototype = {
 		return `<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="UTF-8"/>
 	<title>Prototype</title>
-	<script type="application/javascript;version=1.8">
-		${this.editors.js.getText()}
-	</script>
 	<style>
-		${this.editors.css.getText()}
+		${this.editors.css.getText().replace(/\n/g, "\n\t\t")}
 	</style>
 </head>
 <body>
-	${this.editors.html.getText()}
+	${this.editors.html.getText().replace(/\n/g, "\n\t")}
+	<script type="${this.settings["es6-enabled"] ? "application/javascript;version=1.8" : "text/javascript"}">
+		${this.editors.js.getText().replace(/\n/g, "\n\t\t")}
+	</script>
 </body>
 </html>`;
 	},
@@ -214,7 +239,6 @@ PrototyperPanel.prototype = {
 	showSettings: function() {
 		this.settingsShown = true;
 
-		let editors = [];
 		this.enabledEditors = [];
 		for (let key in this.editorEls) {
 			let editor = this.editorEls[key];
@@ -236,9 +260,7 @@ PrototyperPanel.prototype = {
 	},
 	updateSettings: function(e) {
 		var id = e.target.id;
-
 		this.settings[id] = getValue(e.target);
-
 		asyncStorage.setItem("devtools-prototyper-settings", this.settings);
 	},
 	exportPrototype: function(service, node) {
@@ -338,6 +360,52 @@ PrototyperPanel.prototype = {
 		form.submit();
 		form.remove();
 	},
+	/**
+	 * Handle mousemove events, calling _highlightSelectorAt after a delay only
+	 * and reseting the delay everytime.
+	 */
+	_onCSSEditorMouseMove: function(e) {
+		this.highlighter.hide();
+
+		if (this.mouseMoveTimeout) {
+			this.win.clearTimeout(this.mouseMoveTimeout);
+			this.mouseMoveTimeout = null;
+		}
+
+		this.mouseMoveTimeout = this.win.setTimeout(() => {
+			this._highlightSelectorAt(e.clientX, e.clientY);
+		}, SELECTOR_HIGHLIGHT_TIMEOUT);
+	},
+
+	/**
+	 * Highlight nodes matching the selector found at coordinates x,y in the
+	 * editor, if any.
+	 *
+	 * @param {Number} x
+	 * @param {Number} y
+	 */
+	_highlightSelectorAt: Task.async(function*(x, y) {
+		// Need to catch parsing exceptions as long as bug 1051900 isn't fixed
+		let info;
+		try {
+			let pos = this.editors["css"].getPositionFromCoords({left: x, top: y});
+			info = this.editors["css"].getInfoAt(pos);
+		} catch (e) {
+			console.warn(e);
+		}
+		if (!info || info.state !== "selector") {
+			return;
+		}
+
+		let stylesheetactorID = this.target.form.styleSheetsActor;
+		let node = yield this.walker.getStyleSheetOwnerNode(stylesheetactorID);
+		yield this.highlighter.show(node, {
+			selector: info.selector,
+			hideInfoBar: true,
+			showOnly: "border",
+			region: "border"
+		});
+	}),
 	storage: {
 		get: function(pref) {
 			let prefname = prefPrefix + pref;
