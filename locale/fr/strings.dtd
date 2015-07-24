@@ -11,3 +11,5 @@
 
 <!ENTITY prototyperUI.libs.results "Résultats (par cdnjs)">
 <!ENTITY prototyperUI.libs.injected "Librairies injectées">
+<!ENTITY prototyperUI.libs.noneFound "Aucune librairie trouvée.">
+<!ENTITY prototyperUI.libs.noneInjected "Vous n'avez pas encore injecté une librairie. Utilisez la boite de recherche pour commencer.">

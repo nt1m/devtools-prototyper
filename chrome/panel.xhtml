@@ -23,10 +23,10 @@
 			<input type="search" class="devtools-searchinput" id="libs-filter" placeholder="Find libraries"/>
 		</div>
 		<b>&prototyperUI.libs.results;</b>
-		<div id="libraries-search-results"></div>
+		<div id="libraries-search-results" data-placeholder="&prototyperUI.libs.noneFound;"></div>
 		<div class="separator"></div>
 		<b>&prototyperUI.libs.injected;</b>
-		<div id="injected-libs"></div>
+		<div id="injected-libs" data-placeholder="&prototyperUI.libs.noneInjected;"></div>
 	</div>
 	<div class="devtools-container">
 		<div id="sidebar">
@@ -41,7 +41,7 @@
 			</button>
 			<button id="libraries-button" data-menu="libraries-menu" title="&prototyperUI.libraries.tooltip;">
 				<i class="devtools-icon libraries"></i>
-				<i class="badge"></i>
+				<span class="badge"></span>
 			</button>
 			<button id="settings-button" title="&prototyperUI.settings.tooltip;">
 				<i class="devtools-icon settings"></i>

@@ -454,6 +454,7 @@ PrototyperPanel.prototype = {
 	}),
 	libraries: {
 		init: function() {
+			this.libraries.badgeEl = this.doc.querySelector("#libraries-button > .badge");
 			this.libraries.filterEl = this.doc.getElementById("libs-filter");
 			this.libraries.injectedLibsEl = this.doc.getElementById("injected-libs");
 			this.libraries.resultsEl = this.doc.getElementById("libraries-search-results");
@@ -490,7 +491,7 @@ PrototyperPanel.prototype = {
 		displayLibs: function(response) {
 			if (response.query != this.libraries.filterEl.value ||
 			    response.results.length == 0 || !response.results) {
-				this.libraries.resultsEl.textContent = L10N.getStr("prototyper.libs.noresultsfound");
+				this.libraries.resultsEl.textContent = "";
 				return;
 			}
 			let addResultItem = (item) => {
@@ -531,6 +532,11 @@ PrototyperPanel.prototype = {
 				addResultItem(result);
 			}
 		},
+		updateBadge: function() {
+			let length = this.libraries.current.length;
+			let val =  length > 0 ? length : "";
+			this.libraries.badgeEl.textContent = val;
+		},
 		add: function(url) {
 			this.libraries.current.push(url);
 			let el = this.doc.createElement("li");
@@ -555,11 +561,13 @@ PrototyperPanel.prototype = {
 			el.appendChild(statusIcon);
 
 			this.libraries.injectedLibsEl.appendChild(el);
+			this.libraries.updateBadge();
 		},
 		remove: function(url) {
 			let index = this.libraries.current.indexOf(url);
 			this.libraries.current.splice(index, 1);
 			this.libraries.saveLibs();
+			this.libraries.updateBadge();
 		},
 		isAdded: function(url) {
 			return this.libraries.current.indexOf(url) > -1;

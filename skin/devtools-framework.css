@@ -298,7 +298,7 @@ html, body {
 	background-size: cover;
 }
 
-.light-theme .devtools-icon::after {
+.theme-light .devtools-icon::after {
 	filter: invert(1);
 }
 
@@ -308,6 +308,11 @@ html, body {
 
 .devtools-icon.libraries::after {
 	background-image: url(images/librairies.svg);
+}
+
+[open] .devtools-icon.libraries::after {
+	filter: none;
+	background-image: url(images/librairies.svg#checked);
 }
 
 .devtools-icon.stopwatch::after {
