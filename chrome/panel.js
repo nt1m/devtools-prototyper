@@ -1,15 +1,14 @@
 "use strict";
 
 const {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
-//const {BlobFront} = require("blob-actor.js");
 const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
 const Editor  = devtools("devtools/sourceeditor/editor");
 const beautify = devtools("devtools/jsbeautify");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/devtools/Console.jsm");
+Cu.import("resource://gre/modules/Task.jsm");
 const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
-const {ActorRegistryFront} = devtools("devtools/server/actors/actor-registry");
 
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
@@ -21,7 +20,8 @@ function PrototyperPanel(win, toolbox) {
 	this.doc = this.win.document;
 	this.toolbox = toolbox;
 	this.target = this.toolbox.target;
-	console.log(this.target.client, this.target.form);
+	this.mm = toolbox.target.tab.linkedBrowser.messageManager;
+	this.mm.loadFrameScript("chrome://devtools-prototyper/content/frame-script.js", false);
 
 	this.runCode = this.runCode.bind(this);
 	this.loadSavedCode = this.loadSavedCode.bind(this);
@@ -190,12 +190,15 @@ PrototyperPanel.prototype = {
 </html>`;
 	},
 	runCode: function() {
-		this.toolbox.target.activeTab.navigateTo(this.getBlobURL());
+		this.mm.sendAsyncMessage("Prototyper::RunCode", {
+			code: this.getBuiltCode()
+		});
 	},
 	getBlobURL: function() {
 		let data = this.getBuiltCode();
-		let blob = new this.win.Blob([data], { type: "text/html" });
-		let url = this.win.URL.createObjectURL(blob);
+		let win = this.win;
+		let blob = new win.Blob([data], { type: "text/html" });
+		let url = win.URL.createObjectURL(blob);
 		return url;
 	},
 	beautify: function() {
@@ -258,7 +261,7 @@ PrototyperPanel.prototype = {
 				};
 				let txtarea;
 				for (let lang in this.editors) {
-                    let editor = this.editors[lang];
+					let editor = this.editors[lang];
 					txtarea = this.doc.createElement("textarea");
 					txtarea.name = lang;
 					txtarea.value = editor.getText();
@@ -350,51 +353,6 @@ PrototyperPanel.prototype = {
 		enablePrefSync: function(pref) {
 			Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
 		}
-	},
-	// WIP not working yet.
-	registerActor: function(target, response) {
-		// The actor is registered as 'tab' actor (an instance created for
-		// every browser tab).
-		let options = {
-			prefix: "blobactor",
-			constructor: "BlobActor",
-			type: { tab: true }
-		};
-
-		let actorModuleUrl = "chrome://devtools-prototyper/content/blob-actor.js";
-
-		let registry = target.client.getActor(response["actorRegistryActor"]);
-		if (!registry) {
-			registry = ActorRegistryFront(target.client, response);
-		}
-
-		registry.registerActor(actorModuleUrl, options).then(BlobActorClass => {
-			console.log("My actor registered");
-
-			this.BlobActorClass = BlobActorClass;
-
-			this.onActorRegistered();
-
-			this.attachActor(target, target.form);
-//			target.client.listTabs(({ tabs, selected }) => {
-//				
-//			});
-		});
-	},	
-	attachActor: function(target, form) {
-		let myActor = MyActorFront(target.client, form);
-		myActor.attach().then(() => {
-			console.log("My actor attached");
-
-			this.content.postMessage("attached");
-
-			// Finally, execute remote method on the actor!
-			myActor.hello().then(response => {
-				console.log("Response from the actor: " + response.msg, response);
-
-				this.content.postMessage(response.msg);
-			});
-		});
 	}
 };
 
