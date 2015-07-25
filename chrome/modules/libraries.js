@@ -21,7 +21,7 @@ LibrariesWidget.prototype = {
 			savedLibs = JSON.parse(Storage.get("libs"));
 		}
 		catch(e) {
-			console.warn(prefPrefix + "libs should be an array");
+			console.warn("extensions.devtools-prototyper.libs should be an array");
 			Storage.set("libs", "[]");
 			savedLibs = [];
 		}
@@ -38,7 +38,7 @@ LibrariesWidget.prototype = {
 		}, this.doc);
 
 		let urlDisp = Element("a", {
-			className: "item-name",
+			class: "item-name",
 			content: url.replace("https://cdnjs.cloudflare.com/ajax/libs/", ""),
 			title: url,
 			href: url,
