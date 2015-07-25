@@ -176,18 +176,15 @@ PrototyperPanel.prototype = {
 		// select elements with id attributes ending in '-menu', except the the target menu
 		let others = this.doc.querySelectorAll(`[id$="-menu"]:not(#${button.dataset.menu})`);
 		for (let other of others) {
-			other.classList.remove("shown");
+
 			let btn = this.doc.querySelector(`[data-menu="${other.id}"]`);
-			btn.removeAttribute("open");
+			this.hideMenu(btn);
 		}
 	},
 	hideMenu: function(button) {
 		let menu = this.doc.getElementById(button.dataset.menu);
 		button.removeAttribute("open");
 		menu.classList.remove("shown");
-
-		/* Libraries menu */
-		this.LibrariesWidget.hideResultsContainer();
 	},
 
 	loadSavedCode: function() {
