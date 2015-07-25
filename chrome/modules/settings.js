@@ -15,7 +15,7 @@ SettingsWidget.prototype = {
 	},
 	init: function() {
 		if (!Storage.get("settings")) {
-			Storage.set("settings", "[]");
+			Storage.set("settings", JSON.stringify(this.settings));
 		}
 		let settings = JSON.parse(Storage.get("settings"));
 		this.settings = settings;
@@ -51,11 +51,12 @@ SettingsWidget.prototype = {
 		return !this.panel.classList.contains("hide");
 	},
 	updateSettings: function(e) {
+		console.log(e.target.checked);
 		let el = e.target;
 		let id = el.id;
-		this.settings[id] = typeof el.checked !== undefined ? 
+		this.settings[id] = (typeof el.checked !== "undefined") ? 
 		                    el.checked : el.value;
 		Storage.set("settings", JSON.stringify(this.settings));
-	},
+	}
 }
 exports.SettingsWidget = SettingsWidget;

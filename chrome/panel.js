@@ -67,7 +67,7 @@ PrototyperPanel.prototype = {
 		}
 
 		this.SettingsWidget = new SettingsWidget(this.doc.getElementById("settings"), this);
-		console.log(this.SettingsWidget);
+
 		this.initEditors();
 
 		this.runButton.addEventListener("click", this.runCode);
