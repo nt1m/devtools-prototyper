@@ -69,6 +69,10 @@ iframe {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+
+	z-index: 2;
+
+	background: var(--theme-sidebar-background);
 }
 
 #sidebar button {
@@ -121,18 +125,20 @@ iframe {
 }
 
 #libraries-menu {
-	position: absolute;
 	width: 250px;
 	background: var(--theme-sidebar-background);
+
+	margin-left: -250px;
+
+	transition: margin-left 0.5s ease;
 }
 #libraries-menu.shown {
 	display: flex;
 	flex-direction: column;
-	top: 0px;
-	bottom: 0px;
-	max-height: 100vh;
 	height: 100vh;
 	left: 36px;
+
+	margin-left: 0;
 }
 #libraries-menu:not(.results) b:first-of-type,
 #libraries-menu:not(.results) #libraries-search-results,
