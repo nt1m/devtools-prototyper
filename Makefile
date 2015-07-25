@@ -11,7 +11,7 @@ DIST_PATH="${CURRENT_DIR}/${BUILD_DIR}/${DIST_NAME}"
 latest:
 	@echo "Building latest '${DIST_PATH}'..."
 	@mkdir -p ${BUILD_DIR}
-	@zip -r ${DIST_PATH} * -x "${BUILD_DIR}/*" -x "Makefile" -x ".git/*" -x "README.md"
+	@zip -r ${DIST_PATH} * -x "${BUILD_DIR}/*" -x "Makefile" -x ".git/*" -x "README.md" -x ".jshintrc" -x ".gitignore" -x "*.DS_Store"
 
 head:
 	@echo "Building '${DIST_PATH}'..."

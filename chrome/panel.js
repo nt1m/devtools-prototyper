@@ -204,7 +204,8 @@ PrototyperPanel.prototype = {
 <html>
 <head>
 	<meta charset="UTF-8"/>
-	<title>Prototype</title>
+	<meta name="description" content="${this.settings["prototype-description"]}"/>
+	<title>${this.settings["prototype-title"]}</title>
 	<style>
 		${this.editors.css.getText().replace(/\n/g, "\n\t\t")}
 	</style>
@@ -233,15 +234,15 @@ PrototyperPanel.prototype = {
 
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
-		    description = "Prototype created with Firefox DevTools Prototyper";
+		    description = `Prototype created using Firefox DevTools Prototyper\n${this.settings["prototype-description"]}`;
 
 		let requestOptions = {url: "", elements: [], method: ""},
 		    data = {};
 
 		switch(service) {
 			case "local":
-				let data = this.getBuiltCode();
-				let blob = new this.win.Blob([data], { type: "text/html" });
+				let code = this.getBuiltCode();
+				let blob = new this.win.Blob([code], { type: "text/html" });
 				let url = this.win.URL.createObjectURL(blob);
 				node.download = filename;
 				node.href = url;
@@ -255,11 +256,11 @@ PrototyperPanel.prototype = {
 				let txtarea;
 				for (let lang in this.editors) {
 					let editor = this.editors[lang];
-					txtarea = this.doc.createElement("textarea");
-					txtarea.name = lang;
-					txtarea.value = editor.getText();
+					txtarea = Element("textarea", {
+						name: lang,
+						value: editor.getText()
+					}, this.doc);
 					requestOptions.elements.push(txtarea);
-					txtarea = null;
 				}
 				this.sendFormData(requestOptions);
 			break;
@@ -269,17 +270,18 @@ PrototyperPanel.prototype = {
 					"method": "post",
 					"elements": []
 				};
-				let {js, html, css} = this.editors;
+				let {html, css, js} = this.editors;
 				data = {
 					"description": description,
 					"html": html.getText(),
 					"css": css.getText(),
 					"js": js.getText()
 				};
-				let input = this.doc.createElement("input");
-				input.type = "hidden";
-				input.name = "data";
-				input.value = JSON.stringify(data);
+				let input = Element("input", {
+					type: "hidden",
+					name: "data",
+					value: JSON.stringify(data)
+				}, this.doc);
 				requestOptions.elements.push(input);
 				this.sendFormData(requestOptions);
 			break;
@@ -316,18 +318,18 @@ PrototyperPanel.prototype = {
 			return;
 		}
 		method = method || "post";
-		let form = this.doc.createElement("form");
-
-		form.action = url;
-		form.method = method.toLowerCase();
-		form.target = "_blank";
+		let form = Element("form", {
+			action: url,
+			method: method.toLowerCase(),
+			target: "_blank",
+			container: this.doc.body,
+			style: "display: none"
+		}, this.doc);
 
 		for (let el of elements) {
 			form.appendChild(el);
 		}
 
-		form.style.display = "none";
-		this.doc.body.appendChild(form);
 		form.submit();
 		form.remove();
 	}

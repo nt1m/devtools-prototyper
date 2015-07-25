@@ -10,6 +10,8 @@ function SettingsWidget(panel, view) {
 }
 SettingsWidget.prototype = {
 	settings: {
+		"prototype-title": "Prototype",
+		"prototype-description": "Prototype created using Firefox DevTools Prototyper.",
 		"emmet-enabled": true,
 		"es6-enabled": true
 	},
@@ -25,7 +27,7 @@ SettingsWidget.prototype = {
 				delete settings[key];
 				continue;
 			}
-			if (typeof el.checked !== "undefined") {
+			if (el.type == "checkbox" || el.type == "radio") {
 				el.checked = settings[key];
 			}
 			el.value = settings[key];
@@ -54,7 +56,7 @@ SettingsWidget.prototype = {
 		console.log(e.target.checked);
 		let el = e.target;
 		let id = el.id;
-		this.settings[id] = (typeof el.checked !== "undefined") ? 
+		this.settings[id] = (el.type == "checkbox" || el.type == "radio") ? 
 		                    el.checked : el.value;
 		Storage.set("settings", JSON.stringify(this.settings));
 	}

@@ -20,8 +20,8 @@ let Storage = {
 		Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
 	}
 }
-function Element(tagName, attributes) {
-	var element = this.doc.createElement(tagName);
+function Element(tagName, attributes, doc = document) {
+	let element = doc.createElement(tagName);
 	for (var attr in attributes) {
 		if (attr == "style" || attr == "css") {
 			element.style = attributes[attr]

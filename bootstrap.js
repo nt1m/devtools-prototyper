@@ -23,7 +23,6 @@ XPCOMUtils.defineLazyGetter(this, "toolDefinition", () => ({
 
 	isTargetSupported: function(target) {
 		return true;
-		// target.isLocalTab
 	},
 
 	build: function(iframeWindow, toolbox) {

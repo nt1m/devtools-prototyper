@@ -13,3 +13,11 @@
 <!ENTITY prototyperUI.libs.injected "Librairies injectées">
 <!ENTITY prototyperUI.libs.noneFound "Aucune librairie trouvée.">
 <!ENTITY prototyperUI.libs.noneInjected "Vous n'avez pas encore injecté une librairie. Utilisez la boite de recherche pour commencer.">
+
+<!ENTITY prototyperUI.prototypeSettings "Options du prototype">
+<!ENTITY prototyperUI.prototypeSettings.title "Titre">
+<!ENTITY prototyperUI.prototypeSettings.description "Description">
+
+<!ENTITY prototyperUI.settings "Options">
+<!ENTITY prototyperUI.settings.enableEmmet "Activer Emmet">
+<!ENTITY prototyperUI.settings.enableES6 "Activer EcmaScript 6">

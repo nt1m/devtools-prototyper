@@ -58,15 +58,28 @@
 		<div id="js-editor" class="devtools-main-content" data-lang="JS"></div>
 
 		<div id="settings" class="devtools-main-content hide">
-			<form>
-				<h1 class="title">Settings</h1>
-				<div class="setting">
-					<input type="checkbox" id="emmet-enabled"></input>
-					<label for="emmet-enabled">Enable Emmet</label>
+			<form onsubmit="event.preventDefault()">
+				<div class="column">
+					<h1 class="title">&prototyperUI.prototypeSettings;</h1>
+					<div class="setting">
+						<label for="prototype-title">&prototyperUI.prototypeSettings.title;</label>
+						<input type="text" id="prototype-title" class="devtools-textinput"/>
+					</div>
+					<div class="setting">
+						<label for="prototype-title">&prototyperUI.prototypeSettings.description;</label>
+						<textarea id="prototype-description" class="devtools-textinput"></textarea>
+					</div>
 				</div>
-				<div class="setting">
-					<input type="checkbox" id="es6-enabled"></input>
-					<label for="es6-enabled">Enable ES6</label>
+				<div class="column">
+					<h1 class="title">&prototyperUI.settings;</h1>
+					<div class="setting">
+						<input type="checkbox" id="emmet-enabled"></input>
+						<label for="emmet-enabled">&prototyperUI.settings.enableEmmet;</label>
+					</div>
+					<div class="setting">
+						<input type="checkbox" id="es6-enabled"></input>
+						<label for="es6-enabled">&prototyperUI.settings.enableES6;</label>
+					</div>
 				</div>
 			</form>
 		</div>

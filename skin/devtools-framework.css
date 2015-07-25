@@ -121,6 +121,7 @@ html, body {
 /* Inputs */
 .devtools-textinput,
 .devtools-searchinput {
+	-moz-appearance: none !important;
 	max-height: 23px !important;
 	width: 188px;
 	height: auto !important;
@@ -128,6 +129,11 @@ html, body {
 	float: right;
 	max-width: 100%;
 	box-sizing: border-box;
+}
+textarea.devtools-textinput {
+	border-radius: 2px;
+	resize: vertical;
+	max-height: none !important;
 }
 
 /* Toolbar */

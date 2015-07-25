@@ -32,28 +32,31 @@ LibrariesWidget.prototype = {
 	injected: [],
 	add: function(url) {
 		this.injected.push(url);
-		let el = this.doc.createElement("li");
-		el.className = "item";
+		let el = Element("li", {
+			class: "item",
+			container: this.injectedLibsEl
+		}, this.doc);
 
-		let urlDisp = this.doc.createElement("a");
-		urlDisp.className = "item-name";
-		urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
-		urlDisp.title = url;
-		urlDisp.href = url;
-		urlDisp.target = "_blank";
-		el.appendChild(urlDisp);
+		let urlDisp = Element("a", {
+			className: "item-name",
+			content: url.replace("https://cdnjs.cloudflare.com/ajax/libs/", ""),
+			title: url,
+			href: url,
+			target: "_blank",
+			container: el
+		}, this.doc);
 
-		let statusIcon = this.doc.createElement("a");
-		statusIcon.href = "#";
-		statusIcon.className = "devtools-icon lib-status-icon remove";
-		statusIcon.addEventListener("click", (e) => {
-			this.remove(url);
-			el.remove();
-			e.preventDefault();
-		});
-		el.appendChild(statusIcon);
+		let statusIcon = Element("a", {
+			href: "#",
+			class: "devtools-icon lib-status-icon remove",
+			onclick: (e) => {
+				this.remove(url);
+				el.remove();
+				e.preventDefault();
+			},
+			container: el
+		}, this.doc);
 
-		this.injectedLibsEl.appendChild(el);
 		this.updateBadge();
 	},
 	remove: function(url) {
@@ -121,36 +124,41 @@ LibrariesWidget.prototype = {
 		}
 		let addResultItem = (item) => {
 			let url = item.latest;
-			let itemEl = this.doc.createElement("li");
-			itemEl.className = "item";
+			let itemEl = Element("li", {
+				class: "item",
+				container: this.resultsEl
+			}, this.doc);
 
-			let textCont = this.doc.createElement("div");
-			itemEl.appendChild(textCont);
+			let textCont = Element("div", {
+				container: itemEl
+			}, this.doc);
 
-			let nameDisp = this.doc.createElement("span");
-			nameDisp.className = "item-name";
-			nameDisp.textContent = item.name;
-			textCont.appendChild(nameDisp);
+			let nameDisp = Element("span", {
+				class: "item-name",
+				content: item.name,
+				container: textCont
+			}, this.doc);
 
-			let urlDisp = this.doc.createElement("span");
-			urlDisp.className = "item-url";
-			urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
-			textCont.appendChild(urlDisp);
+			let urlDisp = Element("span", {
+				class: "item-url",
+				content: url.replace("https://cdnjs.cloudflare.com/ajax/libs/", ""),
+				container: textCont
+			}, this.doc);
 
-			let statusIcon = this.doc.createElement("a");
-			statusIcon.href = "#";
-			statusIcon.className = "devtools-icon lib-status-icon";
+			let statusIcon = Element("a", {
+				href: "#",
+				class: "devtools-icon lib-status-icon",
+				onclick: () => {
+					if (!this.isInjected(url)) {
+						this.add(url);
+						this.save();
+						this.resultsEl.textContent = "";
+						this.doc.getElementById("libraries-menu").classList.remove("results");
+					}
+				},
+				container: itemEl
+			}, this.doc);
 			statusIcon.classList.add((this.isInjected(item.latest) ? "checked" : "add"));
-			statusIcon.addEventListener("click", () => {
-				if (!this.isInjected(url)) {
-					this.add(url);
-					this.save();
-					this.resultsEl.textContent = "";
-					this.doc.getElementById("libraries-menu").classList.remove("results");
-				}
-			});
-			itemEl.appendChild(statusIcon);
-			this.resultsEl.appendChild(itemEl);
 		};
 		for (let i = response.results.length - 1;i >= 0; i--) {
 			let result = response.results[i];
