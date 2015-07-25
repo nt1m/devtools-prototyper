@@ -1,21 +1,19 @@
 "use strict";
-
 const {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
-const devtools = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
+const require = Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools.require;
+const basePath = "chrome://devtools-prototyper";
+
 const {Promise: promise} = Cu.import("resource://gre/modules/Promise.jsm", {});
-const Editor  = devtools("devtools/sourceeditor/editor");
-const beautify = devtools("devtools/jsbeautify");
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/devtools/Console.jsm");
-Cu.import("resource://gre/modules/Task.jsm");
-const asyncStorage = devtools("devtools/toolkit/shared/async-storage");
+const {console} = Cu.import("resource://gre/modules/devtools/Console.jsm", {});
+const {ViewHelpers} = Cu.import("resource:///modules/devtools/ViewHelpers.jsm", {});
 
-const { ViewHelpers } = Cu.import("resource:///modules/devtools/ViewHelpers.jsm", {});
-const L10N = new ViewHelpers.L10N("chrome://devtools-prototyper/locale/strings.properties");
+const L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 
-const prefPrefix = "extensions.devtools-prototyper.";
-const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
-const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
+const Editor  = require("devtools/sourceeditor/editor");
+const beautify = require("devtools/jsbeautify");
+const {Storage, Element} = require(`${basePath}/content/modules/helpers.js`);
+const {SettingsWidget} = require(`${basePath}/content/modules/settings.js`);
+const {LibrariesWidget} = require(`${basePath}/content/modules/libraries.js`);
 
 this.EXPORTED_SYMBOLS = ["PrototyperPanel"];
 
@@ -25,21 +23,17 @@ function PrototyperPanel(win, toolbox) {
 	this.toolbox = toolbox;
 	this.target = this.toolbox.target;
 	this.mm = toolbox.target.tab.linkedBrowser.messageManager;
-	this.mm.loadFrameScript("chrome://devtools-prototyper/content/frame-script.js", false);
+	this.mm.loadFrameScript(`${basePath}/content/frame-script.js`, false);
 
 	this.runCode = this.runCode.bind(this);
 	this.loadSavedCode = this.loadSavedCode.bind(this);
 	this.exportPrototype = this.exportPrototype.bind(this);
 	this.showMenu = this.showMenu.bind(this);
 	this.hideMenu = this.hideMenu.bind(this);
-	//this._onCSSEditorMouseMove = this._onCSSEditorMouseMove.bind(this);
-	this.libraries.init = this.libraries.init.bind(this);
 
-	// The highlighter stuff doesn't work yet
-	//this.initHighlighter();
 	this.initUI();
 	this.initMenus();
-	this.libraries.init();
+	this.LibrariesWidget = new LibrariesWidget(this.doc);
 }
 
 PrototyperPanel.prototype = {
@@ -72,55 +66,17 @@ PrototyperPanel.prototype = {
 			});
 		}
 
-		// defaults
-		this.settings = {
-			"emmet-enabled": true,
-			"es6-enabled": true
-		};
-		asyncStorage.getItem("devtools-prototyper-settings").then(settings => {
-			if (!settings) {
-				asyncStorage.setItem("devtools-prototyper-settings", this.settings);
-				settings = this.settings;
-			}
-			this.settings = settings;
-
-			for (let key in settings) {
-				let el = this.settingsPanel.querySelector(`#${key}`);
-				if (!el) {
-					delete settings[key];
-					continue;
-				}
-				putValue(el, settings[key]);
-			}
-
-			this.initEditors();
-		});
-
-		this.settingsPanel = this.doc.getElementById("settings");
+		this.SettingsWidget = new SettingsWidget(this.doc.getElementById("settings"), this);
+		console.log(this.SettingsWidget);
+		this.initEditors();
 
 		this.runButton.addEventListener("click", this.runCode);
 		this.beautifyButton.addEventListener("click", this.beautify.bind(this));
-		this.settingsButton.addEventListener("click", this.toggleSettings.bind(this));
-		this.settingsPanel.addEventListener("change", this.updateSettings.bind(this));
+		this.settingsButton.addEventListener("click", this.SettingsWidget.togglePanel);
 	},
-	initHighlighter: Task.async(function* () {
-		yield this.toolbox.initInspector();
-		this.walker = this.toolbox.walker;
-
-		let hUtils = this.toolbox.highlighterUtils;
-		if (hUtils.supportsCustomHighlighters()) {
-			try {
-				this.highlighter =
-					yield hUtils.getHighlighterByType("SelectorHighlighter");
-			} catch (e) {
-				// The selectorHighlighter can't always be instantiated, for example
-				// it doesn't work with XUL windows (until bug 1094959 gets fixed);
-				// or the selectorHighlighter doesn't exist on the backend.
-				console.warn("The selectorHighlighter couldn't be instantiated, " +
-					"elements matching hovered selectors will not be highlighted");
-			}
-		}
-	}),
+	get settings() {
+		return this.SettingsWidget.settings;
+	},
 	initEditors: function() {
 		this.editors = {};
 		let promises = [];
@@ -150,16 +106,12 @@ PrototyperPanel.prototype = {
 			lineNumbers: true,
 			readOnly: false,
 			autoCloseBrackets: "{}()[]",
-			extraKeys: keys,
-			//autocomplete: true
+			extraKeys: keys
 		};
 
 		if (this.settings["emmet-enabled"] && (lang == "html" || lang == "css")) {
-			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
+			config.externalScripts = [`${basePath}/content/lib/emmet.min.js`];
 		}
-//		if (lang == "css") {
-//			this.editorEls[lang].addEventListener("mousemove", this._onCSSEditorMouseMove);
-//		}
 
 		this.editorEls[lang].innerHTML = "";
 
@@ -178,6 +130,16 @@ PrototyperPanel.prototype = {
 			});
 			sourceEditor.setMode(Editor.modes[lang].name);
 		});
+	},
+	hideAllEditors: function() {
+		this.enabledEditors = [];
+		for (let key in this.editorEls) {
+			let editor = this.editorEls[key];
+			if (!editor.classList.contains("hide")) {
+				this.enabledEditors.push(editor);
+			}
+			editor.classList.add("hide");
+		}
 	},
 	initMenus: function() {
 		let attachButtonToMenu = (button) => {
@@ -225,40 +187,18 @@ PrototyperPanel.prototype = {
 		menu.classList.remove("shown");
 
 		/* Libraries menu */
-		this.libraries.resultsEl.textContent = "";
-		this.libraries.filterEl.value = "";
-		this.doc.getElementById("libraries-menu").classList.remove("results");
+		this.LibrariesWidget.hideResultsContainer();
 	},
+
 	loadSavedCode: function() {
 		for (let lang in this.editors) {
-			this.editors[lang].setText(this.storage.get(lang));
-		}
-		let savedLibs;
-		try {
-			savedLibs = JSON.parse(this.storage.get("libs"));
-		}
-		catch(e) {
-			console.warn(prefPrefix + "libs should be an array");
-			this.storage.set("libs", "[]");
-			savedLibs = [];
-		}
-		for (let lib of savedLibs) {
-			this.libraries.add(lib);
+			this.editors[lang].setText(Storage.get(lang));
 		}
 	},
 	saveCode: function(lang) {
-		this.storage.set(lang, this.editors[lang].getText());
+		Storage.set(lang, this.editors[lang].getText());
 	},
-	getLibraryHTML: function() {
-		var str = "";
-		let i = 0;
-		for (let lib of this.libraries.current) {
-			if (i !== 0) str += "	";
-			str += `<script src="${lib}"></script>\n`;
-			i++;
-		}
-		return str;
-	},
+
 	getBuiltCode: function() {
 		return `<!DOCTYPE html>
 <html>
@@ -271,7 +211,7 @@ PrototyperPanel.prototype = {
 </head>
 <body>
 	${this.editors.html.getText().replace(/\n/g, "\n\t")}
-	${this.getLibraryHTML()}
+	${this.LibrariesWidget.getHTML()}
 	<script type="${this.settings["es6-enabled"] ? "text/javascript;version=1.8" : "text/javascript"}">
 		${this.editors.js.getText().replace(/\n/g, "\n\t\t")}
 	</script>
@@ -283,50 +223,14 @@ PrototyperPanel.prototype = {
 			code: this.getBuiltCode()
 		});
 	},
-	getBlobURL: function() {
-		let data = this.getBuiltCode();
-		let win = this.win;
-		let blob = new win.Blob([data], { type: "text/html" });
-		let url = win.URL.createObjectURL(blob);
-		return url;
-	},
+
 	beautify: function() {
 		for(let lang in this.editors) {
 			let pretty = beautify[lang](this.editors[lang].getText());
 			this.editors[lang].setText(pretty);
 		}
 	},
-	toggleSettings: function() {
-		if (this.settingsShown) this.hideSettings();
-		else this.showSettings();
-	},
-	showSettings: function() {
-		this.settingsShown = true;
 
-		this.enabledEditors = [];
-		for (let key in this.editorEls) {
-			let editor = this.editorEls[key];
-			if (!editor.classList.contains("hide")) {
-				this.enabledEditors.push(editor);
-			}
-			editor.classList.add("hide");
-		}
-
-		this.settingsPanel.classList.remove("hide");
-	},
-	hideSettings: function() {
-		this.settingsShown = false;
-
-		this.enabledEditors.forEach(editor => editor.classList.remove("hide"));
-		this.initEditors();
-
-		this.settingsPanel.classList.add("hide");
-	},
-	updateSettings: function(e) {
-		var id = e.target.id;
-		this.settings[id] = getValue(e.target);
-		asyncStorage.setItem("devtools-prototyper-settings", this.settings);
-	},
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
 		    description = "Prototype created with Firefox DevTools Prototyper";
@@ -336,8 +240,11 @@ PrototyperPanel.prototype = {
 
 		switch(service) {
 			case "local":
+				let data = this.getBuiltCode();
+				let blob = new this.win.Blob([data], { type: "text/html" });
+				let url = this.win.URL.createObjectURL(blob);
 				node.download = filename;
-				node.href = this.getBlobURL();
+				node.href = url;
 			break;
 			case "jsfiddle":
 				requestOptions = {
@@ -423,198 +330,7 @@ PrototyperPanel.prototype = {
 		this.doc.body.appendChild(form);
 		form.submit();
 		form.remove();
-	},
-	/**
-	 * Handle mousemove events, calling _highlightSelectorAt after a delay only
-	 * and reseting the delay everytime.
-	 */
-	_onCSSEditorMouseMove: function(e) {
-		this.highlighter.hide();
-
-		if (this.mouseMoveTimeout) {
-			this.win.clearTimeout(this.mouseMoveTimeout);
-			this.mouseMoveTimeout = null;
-		}
-
-		this.mouseMoveTimeout = this.win.setTimeout(() => {
-			this._highlightSelectorAt(e.clientX, e.clientY);
-		}, SELECTOR_HIGHLIGHT_TIMEOUT);
-	},
-
-	/**
-	 * Highlight nodes matching the selector found at coordinates x,y in the
-	 * editor, if any.
-	 *
-	 * @param {Number} x
-	 * @param {Number} y
-	 */
-	_highlightSelectorAt: Task.async(function*(x, y) {
-		// Need to catch parsing exceptions as long as bug 1051900 isn't fixed
-		let info;
-		try {
-			let pos = this.editors["css"].getPositionFromCoords({left: x, top: y});
-			info = this.editors["css"].getInfoAt(pos);
-		} catch (e) {
-			console.warn(e);
-		}
-		if (!info || info.state !== "selector") {
-			return;
-		}
-
-		let stylesheetactorID = this.target.form.styleSheetsActor;
-		let node = yield this.walker.getStyleSheetOwnerNode(stylesheetactorID);
-		yield this.highlighter.show(node, {
-			selector: info.selector,
-			hideInfoBar: true,
-			showOnly: "border",
-			region: "border"
-		});
-	}),
-	libraries: {
-		init: function() {
-			this.libraries.badgeEl = this.doc.querySelector("#libraries-button > .badge");
-			this.libraries.filterEl = this.doc.getElementById("libs-filter");
-			this.libraries.injectedLibsEl = this.doc.getElementById("injected-libs");
-			this.libraries.resultsEl = this.doc.getElementById("libraries-search-results");
-			for (let fn in this.libraries) {
-				if (typeof this.libraries[fn] == "function") {
-					this.libraries[fn] = this.libraries[fn].bind(this);
-				}
-			}
-			this.libraries.filterEl.addEventListener("input", () => this.libraries.find(this.libraries.filterEl.value));
-		},
-		current: [],
-		find: function(query) {
-			if (query.replace(/ /g, "") == "") {
-				this.doc.getElementById("libraries-menu").classList.remove("results");
-				return;
-			}
-			this.doc.getElementById("libraries-menu").classList.add("results");
-			this.libraries.resultsEl.textContent = "";
-			let URL = "http://api.cdnjs.com/libraries?search=" + query;
-			let xhr = new this.win.XMLHttpRequest();
-			xhr.open("GET", URL);
-			xhr.addEventListener("readystatechange", () => {
-				if (xhr.readyState == 4) {
-					let response = JSON.parse(xhr.responseText);
-					response.query = query;
-					this.libraries.displayLibs(response);
-				}
-			});
-			xhr.send();
-		},
-		saveLibs: function() {
-			this.storage.set("libs", JSON.stringify(this.libraries.current));
-		},
-		displayLibs: function(response) {
-			if (response.query != this.libraries.filterEl.value ||
-			    response.results.length == 0 || !response.results) {
-				this.libraries.resultsEl.textContent = "";
-				return;
-			}
-			let addResultItem = (item) => {
-				let url = item.latest;
-				let itemEl = this.doc.createElement("li");
-				itemEl.className = "item";
-
-				let textCont = this.doc.createElement("div");
-				itemEl.appendChild(textCont);
-
-				let nameDisp = this.doc.createElement("span");
-				nameDisp.className = "item-name";
-				nameDisp.textContent = item.name;
-				textCont.appendChild(nameDisp);
-
-				let urlDisp = this.doc.createElement("span");
-				urlDisp.className = "item-url";
-				urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
-				textCont.appendChild(urlDisp);
-
-				let statusIcon = this.doc.createElement("a");
-				statusIcon.href = "#";
-				statusIcon.className = "devtools-icon lib-status-icon";
-				statusIcon.classList.add((this.libraries.isAdded(item.latest) ? "checked" : "add"));
-				statusIcon.addEventListener("click", () => {
-					if (!this.libraries.isAdded(url)) {
-						this.libraries.add(url);
-						this.libraries.saveLibs();
-						this.libraries.resultsEl.textContent = "";
-						this.doc.getElementById("libraries-menu").classList.remove("results");
-					}
-				});
-				itemEl.appendChild(statusIcon);
-				this.libraries.resultsEl.appendChild(itemEl);
-			};
-			for (let i = response.results.length - 1;i >= 0; i--) {
-				let result = response.results[i];
-				addResultItem(result);
-			}
-		},
-		updateBadge: function() {
-			let length = this.libraries.current.length;
-			let val =  length > 0 ? length : "";
-			this.libraries.badgeEl.textContent = val;
-		},
-		add: function(url) {
-			this.libraries.current.push(url);
-			let el = this.doc.createElement("li");
-			el.className = "item";
-
-			let urlDisp = this.doc.createElement("a");
-			urlDisp.className = "item-name";
-			urlDisp.textContent = url.replace("https://cdnjs.cloudflare.com/ajax/libs/", "");
-			urlDisp.title = url;
-			urlDisp.href = url;
-			urlDisp.target = "_blank";
-			el.appendChild(urlDisp);
-
-			let statusIcon = this.doc.createElement("a");
-			statusIcon.href = "#";
-			statusIcon.className = "devtools-icon lib-status-icon remove";
-			statusIcon.addEventListener("click", (e) => {
-				this.libraries.remove(url);
-				el.remove();
-				e.preventDefault();
-			});
-			el.appendChild(statusIcon);
-
-			this.libraries.injectedLibsEl.appendChild(el);
-			this.libraries.updateBadge();
-		},
-		remove: function(url) {
-			let index = this.libraries.current.indexOf(url);
-			this.libraries.current.splice(index, 1);
-			this.libraries.saveLibs();
-			this.libraries.updateBadge();
-		},
-		isAdded: function(url) {
-			return this.libraries.current.indexOf(url) > -1;
-		}
-	},
-	storage: {
-		get: function(pref) {
-			let prefname = prefPrefix + pref;
-			if(!Services.prefs.getPrefType(prefname)) {
-				Services.prefs.setCharPref(prefname, "");
-				this.enablePrefSync(pref);
-			}
-			return Services.prefs.getCharPref(prefname);
-		},
-		set: function(pref, value) {
-			Services.prefs.setCharPref(prefPrefix + pref, value);
-		},
-		enablePrefSync: function(pref) {
-			Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
-		}
 	}
-};
-
-function getValue(el) {
-	if (typeof el.checked !== undefined) return el.checked;
-	return el.value;
 }
 
-function putValue(el, value) {
-	if (typeof el.checked !== undefined) el.checked = value;
-	el.value = value;
-}
+
