@@ -18,16 +18,6 @@
 			<a class="item" href="#" data-service="gist">&prototyperUI.publicGist.label;</a>
 		</div>
 	</div>
-	<div class="devtools-menu" id="libraries-menu">
-		<div class="devtools-toolbar">
-			<input type="search" class="devtools-searchinput" id="libs-filter" placeholder="Find libraries"/>
-		</div>
-		<b>&prototyperUI.libs.results;</b>
-		<div id="libraries-search-results" data-placeholder="&prototyperUI.libs.noneFound;"></div>
-		<div class="separator"></div>
-		<b>&prototyperUI.libs.injected;</b>
-		<div id="injected-libs" data-placeholder="&prototyperUI.libs.noneInjected;"></div>
-	</div>
 	<div class="devtools-container">
 		<div id="sidebar">
 			<button id="run-button" title="&prototyperUI.run.tooltip;">
@@ -52,6 +42,17 @@
 			<button id="toggle-css" class="active">CSS</button>
 			<button id="toggle-js" class="active">JS</button>
 		</div>
+		<div id="libraries-menu">
+			<div class="devtools-toolbar">
+				<input type="search" class="devtools-searchinput" id="libs-filter" placeholder="Find libraries"/>
+			</div>
+			<b>&prototyperUI.libs.results;</b>
+			<div id="libraries-search-results" data-placeholder="&prototyperUI.libs.noneFound;"></div>
+			<div class="separator"></div>
+			<b>&prototyperUI.libs.injected;</b>
+			<div id="injected-libs" data-placeholder="&prototyperUI.libs.noneInjected;"></div>
+		</div>
+
 		<div id="html-editor" class="devtools-main-content" data-lang="HTML"></div>
 		<div id="css-editor" class="devtools-main-content" data-lang="CSS"></div>
 		<div id="js-editor" class="devtools-main-content" data-lang="JS"></div>

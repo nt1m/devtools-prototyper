@@ -63,6 +63,15 @@ PrototyperPanel.prototype = {
 			css : this.doc.getElementById("toggle-css"),
 			js  : this.doc.getElementById("toggle-js")
 		};
+
+		for (let lang in this.editorEls) {
+			let editor = this.editorEls[lang];
+			this.toggleButtons[lang].addEventListener("click", e => {
+				editor.classList.toggle("hide");
+				e.target.classList.toggle("active");
+			});
+		}
+
 		// defaults
 		this.settings = {
 			"emmet-enabled": true,
@@ -148,21 +157,22 @@ PrototyperPanel.prototype = {
 		if (this.settings["emmet-enabled"] && (lang == "html" || lang == "css")) {
 			config.externalScripts = ["chrome://devtools-prototyper/content/emmet.min.js"];
 		}
-		
 //		if (lang == "css") {
 //			this.editorEls[lang].addEventListener("mousemove", this._onCSSEditorMouseMove);
 //		}
 
 		this.editorEls[lang].innerHTML = "";
 
+		// It seems, iframes inside hidden elements don't get their
+		// contentWindow filled or something like that, this is a workaround
+		// which makes sure the iframe container is visible while we are creating it
+		const isHidden = this.editorEls[lang].classList.contains("hide");
+		if (isHidden) this.editorEls[lang].classList.remove("hide");
+
 		let sourceEditor = this.editors[lang] = new Editor(config);
 
-		this.toggleButtons[lang].addEventListener("click", e => {
-			this.editorEls[lang].classList.toggle("hide");
-			e.target.classList.toggle("active");
-		});
-
 		return sourceEditor.appendTo(this.editorEls[lang]).then(() => {
+			if (isHidden) this.editorEls[lang].classList.add("hide");
 			sourceEditor.on("change", () => {
 				this.saveCode(lang);
 			});
@@ -200,6 +210,14 @@ PrototyperPanel.prototype = {
 		let menu = this.doc.getElementById(button.dataset.menu);
 		button.setAttribute("open","true");
 		menu.classList.add("shown");
+
+		// select elements with id attributes ending in '-menu', except the the target menu
+		let others = this.doc.querySelectorAll(`[id$="-menu"]:not(#${button.dataset.menu})`);
+		for (let other of others) {
+			other.classList.remove("shown");
+			let btn = this.doc.querySelector(`[data-menu="${other.id}"]`);
+			btn.removeAttribute("open");
+		}
 	},
 	hideMenu: function(button) {
 		let menu = this.doc.getElementById(button.dataset.menu);
@@ -226,7 +244,7 @@ PrototyperPanel.prototype = {
 		}
 		for (let lib of savedLibs) {
 			this.libraries.add(lib);
-		}	
+		}
 	},
 	saveCode: function(lang) {
 		this.storage.set(lang, this.editors[lang].getText());
