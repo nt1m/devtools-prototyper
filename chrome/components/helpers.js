@@ -43,13 +43,5 @@ function Element(tagName, attributes, doc = document) {
 	}
 	return element;
 }
-function getObjectLength(obj) {
-    let size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-}
 exports.Element = Element;
 exports.Storage = Storage;
-exports.getObjectLength = getObjectLength;
