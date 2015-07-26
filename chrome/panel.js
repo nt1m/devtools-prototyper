@@ -11,7 +11,7 @@ const L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 
 const Editor  = require("devtools/sourceeditor/editor");
 const beautify = require("devtools/jsbeautify");
-const {Storage, Element} = require(`${basePath}/content/modules/helpers.js`);
+const {Storage, Element, getObjectLength} = require(`${basePath}/content/modules/helpers.js`);
 const {SettingsWidget} = require(`${basePath}/content/modules/settings.js`);
 const {LibrariesWidget} = require(`${basePath}/content/modules/libraries.js`);
 
@@ -248,25 +248,42 @@ PrototyperPanel.prototype = {
 				requestOptions = {
 					"url": "http://jsfiddle.net/api/post/library/pure/",
 					"method": "post",
-					"elements": []
+					"params": {
+						html: this.editors.html.getText(),
+						css: this.editors.css.getText(),
+						js: this.editors.js.getText(),
+						title: this.settings["prototype-title"],
+						description
+					}
 				};
-				let txtarea;
-				for (let lang in this.editors) {
-					let editor = this.editors[lang];
-					txtarea = Element("textarea", {
-						name: lang,
-						value: editor.getText()
-					}, this.doc);
-					requestOptions.elements.push(txtarea);
-				}
-				this.sendFormData(requestOptions);
+//				// Send code
+//				let txtarea;
+//				for (let lang in this.editors) {
+//					let editor = this.editors[lang];
+//					txtarea = Element("textarea", {
+//						name: lang,
+//						value: editor.getText()
+//					}, this.doc);
+//					requestOptions.elements.push(txtarea);
+//				}
+//
+//				// Send title
+//				let titleInput = Element("input", {
+//					name: "title",
+//					value: this.settings["prototype-title"]
+//				}, this.doc);
+//				requestOptions.elements.push(titleInput);
+//
+//				// Send description
+//				txtarea = Element("textarea", {
+//					name: "description",
+//					value: description
+//				}, this.doc);
+//				requestOptions.elements.push(txtarea);
+//
+//				this.sendFormData(requestOptions);
 			break;
 			case "codepen":
-				requestOptions = {
-					"url": "http://codepen.io/pen/define",
-					"method": "post",
-					"elements": []
-				};
 				let {html, css, js} = this.editors;
 				data = {
 					"description": description,
@@ -274,13 +291,23 @@ PrototyperPanel.prototype = {
 					"css": css.getText(),
 					"js": js.getText()
 				};
-				let input = Element("input", {
-					type: "hidden",
-					name: "data",
-					value: JSON.stringify(data)
-				}, this.doc);
-				requestOptions.elements.push(input);
-				this.sendFormData(requestOptions);
+				requestOptions = {
+					"url": "http://codepen.io/pen/define",
+					"method": "post",
+					"params": {
+						data: JSON.stringify(data),
+						title: this.settings["prototype-title"],
+						description
+					}
+				};
+
+//				let dataInput = Element("input", {
+//					type: "hidden",
+//					name: "data",
+//					value: JSON.stringify(data)
+//				}, this.doc);
+//				requestOptions.elements.push(dataInput);
+//				this.sendFormData(requestOptions);
 			break;
 			case "gist":
 				data = {
@@ -307,28 +334,58 @@ PrototyperPanel.prototype = {
 		@args = {
 			url: string
 			method: string
-			elements: array or nodelist (elements to append to the form)
+			params: object of params {name: value}
 		}
 	*/
-	sendFormData: function({url, method, elements}) {
-		if(!url) {
+	sendFormData: function({url, method, params}) {
+		if (!url) {
 			return;
 		}
-		method = method || "post";
-		let form = Element("form", {
-			action: url,
-			method: method.toLowerCase(),
-			target: "_blank",
-			container: this.doc.body,
-			style: "display: none"
-		}, this.doc);
+		let xhr = new this.win.XMLHttpRequest();
+		let paramsStr = "";
+		let i = 0;
 
-		for (let el of elements) {
-			form.appendChild(el);
+		for (let param of params) {
+			paramsStr += `${param}=${params[param]}`;
+			if (i !== getObjectLength(params) - 1) {
+				paramsStr += "&";
+				i++;
+			}
+		}
+		method = method.toUpperCase();
+		if (method == "GET") url = url + "?" + paramsStr;
+
+		xhr.open(method, url, true);
+
+		if (method == "POST") {
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("Content-length", getObjectLength(params));
+			xhr.setRequestHeader("Connection", "close");
 		}
 
-		form.submit();
-		form.remove();
+		xhr.onreadystatechange = function() {
+			console.log(xhr);
+			if (xhr.readyState == 4 && http.status == 200) {
+				this.win.alert(xhr.responseText);
+			}
+		}
+		let data = (method == "GET") ? null : params;
+		xhr.send(data);
+//		method = method || "post";
+//		let form = Element("form", {
+//			action: url,
+//			method: method.toLowerCase(),
+//			target: "_blank",
+//			container: this.doc.body,
+//			style: "display: none"
+//		}, this.doc);
+//
+//		for (let el of elements) {
+//			form.appendChild(el);
+//		}
+//
+//		form.submit();
+//		form.remove();
 	}
 }
 

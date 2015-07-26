@@ -26,7 +26,7 @@ LibrariesWidget.prototype = {
 			savedLibs = [];
 		}
 		for (let lib of savedLibs) {
-			this.LibrariesWidget.add(lib);
+			this.add(lib);
 		}
 	},
 	injected: [],

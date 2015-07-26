@@ -49,6 +49,7 @@ iframe {
 
 #settings .setting {
 	overflow: auto;
+	margin-bottom: 5px;
 }
 
 #settings .title {
