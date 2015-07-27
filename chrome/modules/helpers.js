@@ -28,15 +28,23 @@ function Element(tagName, attributes, doc = document) {
 			continue;
 		}
 		if (attr == "content") {
-			element.innerHTML = attributes.content;
+			element.textContent = attributes.content;
 			continue;
 		}
 		if (attr.startsWith("on")) {
 			element.addEventListener(attr.replace("on",""), attributes[attr]);
 			continue;
 		}
+		if (attr == "value") {
+			element.value = attributes[attr];
+			continue;
+		}
 		if (attr == "container") {
 			attributes.container.appendChild(element);
+			continue;
+		}
+		if (tagName == "input" || tagName == "form") {
+			element[attr] = attributes[attr];
 			continue;
 		}
 		element.setAttribute(attr, attributes[attr]);

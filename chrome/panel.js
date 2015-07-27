@@ -231,9 +231,9 @@ PrototyperPanel.prototype = {
 
 	exportPrototype: function(service, node) {
 		let filename = "prototype.html",
-		    description = `Prototype created using Firefox DevTools Prototyper\n${this.settings["prototype-description"]}`;
+		    description = "Prototype created with Firefox DevTools Prototyper";
 
-		let requestOptions = {url: "", elements: [], method: ""},
+		let requestOptions = {url: "", elements: [], method: "post"},
 		    data = {};
 
 		switch(service) {
@@ -245,11 +245,7 @@ PrototyperPanel.prototype = {
 				node.href = url;
 			break;
 			case "jsfiddle":
-				requestOptions = {
-					"url": "http://jsfiddle.net/api/post/library/pure/",
-					"method": "post",
-					"elements": []
-				};
+				requestOptions.url = "http://jsfiddle.net/api/post/library/pure/";
 				let txtarea;
 				for (let lang in this.editors) {
 					let editor = this.editors[lang];
@@ -258,15 +254,12 @@ PrototyperPanel.prototype = {
 						value: editor.getText()
 					}, this.doc);
 					requestOptions.elements.push(txtarea);
+					txtarea = null;
 				}
 				this.sendFormData(requestOptions);
 			break;
 			case "codepen":
-				requestOptions = {
-					"url": "http://codepen.io/pen/define",
-					"method": "post",
-					"elements": []
-				};
+				requestOptions.url = "http://codepen.io/pen/define";
 				let {html, css, js} = this.editors;
 				data = {
 					"description": description,
@@ -319,7 +312,6 @@ PrototyperPanel.prototype = {
 			action: url,
 			method: method.toLowerCase(),
 			target: "_blank",
-			container: this.doc.body,
 			style: "display: none"
 		}, this.doc);
 
@@ -327,6 +319,7 @@ PrototyperPanel.prototype = {
 			form.appendChild(el);
 		}
 
+		this.doc.body.appendChild(form);
 		form.submit();
 		form.remove();
 	}
