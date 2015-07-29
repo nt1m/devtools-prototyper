@@ -1,0 +1,35 @@
+{
+  "name": "devtools-prototyper",
+  "version": "3.1.0",
+  "description": "Firefox add-on that adds JSFiddle style prototyping to Firefox DevTools.",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nt1m/devtools-prototyper"
+  },
+  "keywords": [
+    "Addon",
+    "Firefox",
+    "Developer",
+    "Tools"
+  ],
+  "author": "Tim Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nt1m/devtools-prototyper/issues"
+  },
+  "homepage": "https://github.com/nt1m/devtools-prototyper",
+  "devDependencies": {
+    "eslint": "^0.24.1",
+    "eslint-plugin-react": "^3.1.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-eslint": "^16.0.0",
+    "grunt-react": "^0.12.2",
+    "grunt-zip": "^0.16.2"
+  }
+}
