@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+  var type = "type='application/javascript;version=1.8'";
+
   grunt.initConfig({
     pkg: require("./package.json"),
     eslint: {
@@ -25,6 +27,18 @@ module.exports = function(grunt) {
         }]
       }
     },
+    injector: {
+      options: {
+        transform: function(path) {
+          path = path.replace("/chrome/", "");
+          return "<script src='" + path + "' " + type + "></script>";
+        }
+      },
+      "chrome/panel.xhtml": ["chrome/**/*.js"]
+    },
+    clean: {
+      files: ["chrome"]
+    },
     zip: {
       "build/devtools-prototyper-<%= pkg.version %>.xpi":
       ["chrome/**/*", "locale/**/*", "skin/**/*",
@@ -47,7 +61,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-zip");
   grunt.loadNpmTasks("grunt-react");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-asset-injector");
 
-  grunt.registerTask("default", ["react", "copy", "eslint"]);
-  grunt.registerTask("build", ["react", "copy", "zip"]);
+  grunt.registerTask("default", ["clean", "react", "copy",
+                                 "injector", "eslint"]);
+  grunt.registerTask("build", ["clean", "react", "copy", "injector", "zip"]);
 };

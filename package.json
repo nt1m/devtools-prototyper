@@ -26,6 +26,8 @@
     "eslint": "^0.24.1",
     "eslint-plugin-react": "^3.1.0",
     "grunt": "^0.4.5",
+    "grunt-asset-injector": "^0.1.0",
+    "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-eslint": "^16.0.0",
