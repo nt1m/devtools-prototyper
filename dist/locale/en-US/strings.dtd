@@ -1,0 +1,23 @@
+<!ENTITY prototyperUI.run.tooltip "Run code">
+<!ENTITY prototyperUI.export.tooltip "Export prototype">
+<!ENTITY prototyperUI.beautify.tooltip "Prettify code">
+<!ENTITY prototyperUI.libraries.tooltip "Inject librairies">
+<!ENTITY prototyperUI.settings.tooltip "Settings">
+
+<!ENTITY prototyperUI.saveLocally.label "Save locally">
+<!ENTITY prototyperUI.JSFiddle.label "JSFiddle">
+<!ENTITY prototyperUI.codepen.label "CodePen">
+<!ENTITY prototyperUI.publicGist.label "Public Gist">
+
+<!ENTITY prototyperUI.libs.results "Results (powered by cdnjs)">
+<!ENTITY prototyperUI.libs.injected "Injected libraries">
+<!ENTITY prototyperUI.libs.noneFound "No libraries found.">
+<!ENTITY prototyperUI.libs.noneInjected "You haven't injected any library yet. Use the search box to find one.">
+
+<!ENTITY prototyperUI.prototypeSettings "Prototype settings">
+<!ENTITY prototyperUI.prototypeSettings.title "Title">
+<!ENTITY prototyperUI.prototypeSettings.description "Description">
+
+<!ENTITY prototyperUI.settings "Settings">
+<!ENTITY prototyperUI.settings.enableEmmet "Enable Emmet">
+<!ENTITY prototyperUI.settings.enableES6 "Enable EcmaScript 6">

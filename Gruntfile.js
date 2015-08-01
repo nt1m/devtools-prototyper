@@ -4,15 +4,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: require("./package.json"),
     eslint: {
-      scripts: ["src/**/*.js", "src/**/*.jsx", "!src/lib/*.js"]
+      scripts: ["src/**/*.js", "src/**/*.jsx", "!src/chrome/lib/*.js"]
     },
     react: {
       chrome: {
         files: [{
           expand: true,
-          cwd: "src",
+          cwd: "src/chrome",
           src: "**/*.jsx",
-          dest: "chrome",
+          dest: "dist/chrome",
           ext: ".js"
         }]
       }
@@ -21,38 +21,63 @@ module.exports = function(grunt) {
       chrome: {
         files: [{
           expand: true,
+          cwd: "src/chrome",
+          src: ["**/*.js", "**/*.xhtml", "**/*.html"],
+          dest: "dist/chrome"
+        }]
+      },
+      other: {
+        files: [{
+          expand: true,
           cwd: "src",
-          src: ["**/*.js", "**/*.xhtml"],
-          dest: "chrome"
+          src: ["*.js", "chrome.manifest", "install.rdf", "skin/**/*",
+                "locale/**/*"],
+          dest: "dist"
         }]
       }
     },
     injector: {
       options: {
         transform: function(path) {
-          path = path.replace("/chrome/", "");
+          path = path.replace("/dist/chrome/", "");
           return "<script src='" + path + "' " + type + "></script>";
         }
       },
-      "chrome/panel.xhtml": ["chrome/**/*.js"]
+      "dist/chrome/panel.xhtml": ["dist/chrome/globals.js",
+             "dist/chrome/lib/*.js",
+             "!dist/chrome/lib/emmet.min.js",
+             "dist/chrome/backend/storage.js",
+             "dist/chrome/backend/template.js",
+             "dist/chrome/backend/settings.js",
+             "dist/chrome/backend/code.js",
+             "dist/chrome/components/editors/editor.js",
+             "dist/chrome/components/editors/editors.js",
+             "dist/chrome/components/menus/menu.js",
+             "dist/chrome/components/menus/*.js",
+             "dist/chrome/components/settings/*.js",
+             "dist/chrome/components/sidebar/button.js",
+             "dist/chrome/components/sidebar/*.js",
+             "dist/chrome/app.js", "dist/chrome/main.js"]
     },
     clean: {
-      files: ["chrome"]
+      files: ["dist"]
     },
     zip: {
-      "build/devtools-prototyper-<%= pkg.version %>.xpi":
-      ["chrome/**/*", "locale/**/*", "skin/**/*",
-       "chrome.manifest", "install.rdf", "bootstrap.js"]
+      build: {
+        cwd: "dist",
+        src: "dist/**/*",
+        dest: "build/devtools-prototyper-<%= pkg.version %>.xpi"
+      }
     },
     watch: {
       jsx: {
         files: ["src/**/*.jsx"],
         tasks: ["react"]
       },
-      js: {
-        files: ["src/**/*.js", "!src/libs/*.js"],
+      copy: {
+        files: ["src/**/*", "!src/chrome/libs/*.js"],
         tasks: ["copy"]
-      }
+      },
     }
   });
 
@@ -62,7 +87,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-react");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-asset-injector");
+  grunt.loadNpmTasks("grunt-injector");
 
   grunt.registerTask("default", ["clean", "react", "copy",
                                  "injector", "eslint"]);

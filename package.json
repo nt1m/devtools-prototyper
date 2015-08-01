@@ -33,5 +33,8 @@
     "grunt-eslint": "^16.0.0",
     "grunt-react": "^0.12.2",
     "grunt-zip": "^0.16.2"
+  },
+  "dependencies": {
+    "grunt-injector": "^0.6.0"
   }
 }
