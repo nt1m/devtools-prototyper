@@ -19,3 +19,13 @@ let Storage = {
     Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
   }
 };
+
+if (!Storage.get("initialized")) {
+  const defaults = {
+    "user-emmet-enabled": true
+  };
+
+  for (let key in defaults) {
+    Storage.set(key, defaults[key]);
+  }
+}

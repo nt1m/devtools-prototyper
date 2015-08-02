@@ -6,7 +6,7 @@ iframe {
 	height: 100%;
 	width: 100%;
 }
-.container {
+.container, #wrapper {
 	height: 100%;
 }
 .devtools-main-content {

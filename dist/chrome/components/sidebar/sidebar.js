@@ -4,18 +4,35 @@ const buttons = [
     onClick: Code.run
   },
   {
-    id: "beautify"
+    id: "beautify",
+    onClick: Code.beautify
   },
   {
     id: "export"
   },
   {
-    id: "libraries"
+    id: "libraries",
+    onClick() {
+      let menu = app.props.libraries.refs.menu;
+      menu.setState({active: !menu.state.active});
+    }
   },
   {
     id: "settings"
   }
 ];
+
+const switches = [
+  {
+    id: "html"
+  },
+  {
+    id: "css"
+  },
+  {
+    id: "js"
+  }
+]
 
 let Sidebar = React.createClass({displayName: "Sidebar",
   getInitialState() {
@@ -29,6 +46,15 @@ let Sidebar = React.createClass({displayName: "Sidebar",
         React.createElement(SidebarButton, React.__spread({key: index},  value))
       );
     });
-    return React.createElement("div", {id: "sidebar"}, btns);
+    let toggles = switches.map((value, index) => {
+      return (
+        React.createElement(ToggleButton, React.__spread({key: btns.length + index},  value))
+      );
+    })
+    return React.createElement("div", {id: "sidebar"}, 
+      btns, 
+      React.createElement("i", {className: "spacer"}), 
+      toggles
+    );
   }
 });

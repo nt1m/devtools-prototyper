@@ -1,5 +1,5 @@
 let buildCode = function() {
-  const editors = app.props.editors.props;
+  const editors = app.props.editors.refs;
   return `<head>
 <meta charset="UTF-8"/>
 <meta name="description" content="${Storage.get("prototype-description")}"/>
@@ -10,5 +10,9 @@ let buildCode = function() {
 </head>
 <body>
   ${editors.html.props.cm.getText().replace(/\n/g, "\n\t\t")}
+
+  <script async type="application/javascript;version=1.8">
+  ${editors.js.props.cm.getText().replace(/\n/g, "\n\t\t")}
+  </script>
 </body>`;
 };

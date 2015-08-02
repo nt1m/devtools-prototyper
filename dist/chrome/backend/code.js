@@ -1,4 +1,5 @@
 let tabs = require("sdk/tabs");
+const beautify = require("devtools/jsbeautify");
 
 let Code = {
   run() {
@@ -9,15 +10,27 @@ let Code = {
     return buildCode();
   },
   openTab(html) {
-    const editors = app.props.editors.props;
-    let js = editors.js.props.cm.getText().replace(/\n/g, "\n\t\t");
+    if (this.previousTab) {
+      this.previousTab.close();
+    }
+
+    const editors = app.props.editors.refs;
     const mm = `self.port.on('html', html => {
       document.documentElement.innerHTML = html
-      ${js}
+      let script = document.querySelector('script');
+
+      let js = script.textContent;
+      script.remove();
+
+      let el = document.createElement('script');
+      el.textContent = js;
+      document.body.appendChild(el);
     });`;
+
     tabs.open({
-      url: "chrome://devtools-prototyper/content/prototype.html",
-      onReady(tab) {
+      url: "about:blank",
+      onReady: (tab) => {
+        this.previousTab = tab;
         let worker = tab.attach({
           contentScript: mm
         });
@@ -26,7 +39,24 @@ let Code = {
       }
     });
   },
-  save() {
+  save(lang) {
+    const editors = app.props.editors.refs;
 
+    Storage.set(`editor-${lang}`, editors[lang].props.cm.getText());
+  },
+  load(lang) {
+    const editors = app.props.editors.refs;
+
+    let cm = editors[lang].props.cm;
+    cm.setText(Storage.get(`editor-${lang}`));
+  },
+  beautify() {
+    const editors = app.props.editors.refs;
+
+    for (let lang in editors) {
+      let cm = editors[lang].props.cm;
+      let pretty = beautify[lang](cm.getText());
+      cm.setText(pretty);
+    }
   }
 };

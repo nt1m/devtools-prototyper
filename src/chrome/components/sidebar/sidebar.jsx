@@ -4,18 +4,35 @@ const buttons = [
     onClick: Code.run
   },
   {
-    id: "beautify"
+    id: "beautify",
+    onClick: Code.beautify
   },
   {
     id: "export"
   },
   {
-    id: "libraries"
+    id: "libraries",
+    onClick() {
+      let menu = app.props.libraries.refs.menu;
+      menu.setState({active: !menu.state.active});
+    }
   },
   {
     id: "settings"
   }
 ];
+
+const switches = [
+  {
+    id: "html"
+  },
+  {
+    id: "css"
+  },
+  {
+    id: "js"
+  }
+]
 
 let Sidebar = React.createClass({
   getInitialState() {
@@ -29,6 +46,15 @@ let Sidebar = React.createClass({
         <SidebarButton key={index} {...value} />
       );
     });
-    return <div id="sidebar">{btns}</div>;
+    let toggles = switches.map((value, index) => {
+      return (
+        <ToggleButton key={btns.length + index} {...value} />
+      );
+    })
+    return <div id="sidebar">
+      {btns}
+      <i className="spacer"></i>
+      {toggles}
+    </div>;
   }
 });

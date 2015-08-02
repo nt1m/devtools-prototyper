@@ -3,14 +3,18 @@ let App = React.createClass({
     return {};
   },
   render() {
-    this.props.sidebar = <Sidebar ref="sidebar" />;
-    this.props.editors = <Editors ref="editors" />;
-    
+
     return (
       <div className="container">
-        {this.props.sidebar}
-        {this.props.editors}
+        <Sidebar ref="sidebar" />
+        <LibrariesMenu ref="libraries" />
+        <Editors ref="editors" />
       </div>
     );
+  },
+  componentDidMount() {
+    this.props.sidebar = this.refs.sidebar;
+    this.props.libraries = this.refs.libraries;
+    this.props.editors = this.refs.editors;
   }
 });
