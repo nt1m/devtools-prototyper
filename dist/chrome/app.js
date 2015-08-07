@@ -1,15 +1,15 @@
-let App = React.createClass({displayName: "App",
+let App = React.createClass({
   getInitialState() {
     return {};
   },
   render() {
 
-    return (
-      React.createElement("div", {className: "container"}, 
-        React.createElement(Sidebar, {ref: "sidebar"}), 
-        React.createElement(LibrariesMenu, {ref: "libraries"}), 
-        React.createElement(Editors, {ref: "editors"})
-      )
+    return React.createElement(
+      "div",
+      { className: "container" },
+      React.createElement(Sidebar, { ref: "sidebar" }),
+      React.createElement(LibrariesMenu, { ref: "libraries" }),
+      React.createElement(Editors, { ref: "editors" })
     );
   },
   componentDidMount() {

@@ -1,13 +1,13 @@
-let Menu = React.createClass({displayName: "Menu",
+let Menu = React.createClass({
   render() {
-    let cls = "devtools-menu " + (this.state.active ? "active" : "");
-    return (
-      React.createElement("div", {className: cls}, 
-        this.props.children
-      )
+    let cls = "menu " + (this.state.active ? "active" : "");
+    return React.createElement(
+      "div",
+      { className: cls },
+      this.props.children
     );
   },
   getInitialState() {
-    return {active: false};
+    return { active: false };
   }
 });

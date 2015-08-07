@@ -1,9 +1,5 @@
-let ExportMenu = React.createClass({displayName: "ExportMenu",
+let ExportMenu = React.createClass({
   render() {
-    return (
-      React.createElement(Menu, null
-
-      )
-    )
+    return React.createElement(Menu, null);
   }
 });

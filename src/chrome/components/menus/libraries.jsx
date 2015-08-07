@@ -1,24 +1,14 @@
 let LibrariesMenu = React.createClass({
   render() {
     let results = this.state.results.map((value, index) => {
-      const iconClass = "devtools-icon lib-status-icon";
-      return (
-        <li className="item">
-          <div>
-            <span className="item-name">{value.name}</span>
-            <span className="item-url">{value.url}</span>
-          </div>
-
-          <a className={iconClass + (this.injected ? "checked" : "add")}></a>
-        </li>
-      );
+      return <LibrariesItem {...value} />;
     });
-          // <input type="search" className="devtools-searchinput" ref="search"
-          //  placeholder="Find libraries" onInput={this.search} />
 
     return (
       <Menu ref="menu">
         <div className="devtools-toolbar">
+          <input type="search" className="devtools-searchinput" ref="search"
+           placeholder="Find libraries" onInput={this.search} />
         </div>
 
         <div ref="results" data-placeholder="&prototyperUI.libs.noneFound;">

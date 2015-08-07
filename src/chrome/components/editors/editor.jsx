@@ -39,7 +39,7 @@ let Editor = React.createClass({
     };
 
     // Enabled Emmet for HTML and CSS
-    if (Storage.get("user-emmet-enabled") && (lang === "html" || lang === "css")) {
+    if (Settings.get("emmet-enabled") && (lang === "html" || lang === "css")) {
       config.externalScripts = [`${basePath}/content/lib/emmet.min.js`];
     }
 

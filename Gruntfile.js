@@ -6,7 +6,10 @@ module.exports = function(grunt) {
     eslint: {
       scripts: ["src/**/*.js", "src/**/*.jsx", "!src/chrome/lib/*.js"]
     },
-    react: {
+    babel: {
+      options: {
+        whitelist: ["react", "es6.arrowFunctions"],
+      },
       chrome: {
         files: [{
           expand: true,
@@ -47,6 +50,7 @@ module.exports = function(grunt) {
              "dist/chrome/lib/*.js",
              "!dist/chrome/lib/emmet.min.js",
              "dist/chrome/backend/storage.js",
+             "dist/chrome/backend/settings.js",
              "dist/chrome/backend/template.js",
              "dist/chrome/backend/settings.js",
              "dist/chrome/backend/code.js",
@@ -84,12 +88,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-zip");
-  grunt.loadNpmTasks("grunt-react");
+  grunt.loadNpmTasks("grunt-babel");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-injector");
 
-  grunt.registerTask("default", ["clean", "react", "copy",
+  grunt.registerTask("default", ["clean", "babel", "copy",
                                  "injector", "eslint"]);
-  grunt.registerTask("build", ["clean", "react", "copy", "injector", "zip"]);
+  grunt.registerTask("build", ["clean", "babel", "copy", "injector", "zip"]);
 };

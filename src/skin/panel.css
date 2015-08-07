@@ -1,10 +1,14 @@
 .devtools-container {
+	flex: 1;
 	height: 100%;
 }
 iframe {
 	border: none;
 	height: 100%;
 	width: 100%;
+}
+.container {
+	display: flex;
 }
 .container, #wrapper {
 	height: 100%;
@@ -74,14 +78,29 @@ iframe {
 	top: 36px;
 	z-index: 999;
 }
-.devtools-menu .item input {
+.menu .item input {
 	display: none;
 }
 
-#sidebar {
-	width: 35px;
+.menu {
+	box-sizing: border-box;
+
+	flex: 1;
+	max-width: 0px;
 	height: 100%;
-	float: left;
+
+	border-right: 1px solid var(--theme-splitter-color);
+
+	transition: max-width 0.3s ease;
+}
+
+.menu.active {
+	max-width: 270px;
+}
+
+#sidebar {
+	max-width: 35px;
+	height: 100%;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
@@ -146,14 +165,7 @@ iframe {
 	margin-left: -251px;
 	transition: margin-left 0.5s ease;
 }
-#libraries-menu.shown {
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	left: 36px;
 
-	margin-left: 0;
-}
 #libraries-menu:not(.results) b:first-of-type,
 #libraries-menu:not(.results) #libraries-search-results,
 #libraries-menu:not(.results) .separator {

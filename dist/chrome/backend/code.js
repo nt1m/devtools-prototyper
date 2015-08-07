@@ -10,34 +10,33 @@ let Code = {
     return buildCode();
   },
   openTab(html) {
-    if (this.previousTab) {
-      this.previousTab.close();
-    }
-
     const editors = app.props.editors.refs;
-    const mm = `self.port.on('html', html => {
+    const mm = `self.port.on("html", html => {
       document.documentElement.innerHTML = html
-      let script = document.querySelector('script');
+      let script = document.querySelector("script");
 
       let js = script.textContent;
       script.remove();
 
-      let el = document.createElement('script');
+      let el = document.createElement("script");
       el.textContent = js;
       document.body.appendChild(el);
     });`;
 
-    tabs.open({
-      url: "about:blank",
-      onReady: (tab) => {
-        this.previousTab = tab;
-        let worker = tab.attach({
-          contentScript: mm
-        });
+    if (this.previousTab !== tabs.activeTab) {
+      tabs.activeTab.url = "about:blank";
+      let worker = tabs.activeTab.attach({
+        contentScript: mm
+      });
 
-        worker.port.emit("html", html);
-      }
-    });
+      worker.port.emit("html", html);
+      console.log(html);
+
+      this.previousTab = tabs.activeTab;
+      this.previousWorker = worker;
+    } else {
+      this.previousWorker.port.emit("html", html);
+    }
   },
   save(lang) {
     const editors = app.props.editors.refs;

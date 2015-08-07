@@ -1,6 +1,6 @@
-let Settings = React.createClass({displayName: "Settings",
+let SettingPanel = React.createClass({
 	render() {},
 	componentDidMount() {
 		// Load settings
-	},
+	}
 });

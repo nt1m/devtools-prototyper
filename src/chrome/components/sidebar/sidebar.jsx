@@ -15,6 +15,9 @@ const buttons = [
     onClick() {
       let menu = app.props.libraries.refs.menu;
       menu.setState({active: !menu.state.active});
+
+      let active = !this.state.active;
+      this.setState({active});
     }
   },
   {
