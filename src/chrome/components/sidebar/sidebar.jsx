@@ -46,12 +46,12 @@ let Sidebar = React.createClass({
   render() {
     let btns = buttons.map((value, index) => {
       return (
-        <SidebarButton key={index} {...value} />
+        <SidebarButton ref={value.id} key={index} {...value} />
       );
     });
     let toggles = switches.map((value, index) => {
       return (
-        <ToggleButton key={btns.length + index} {...value} />
+        <ToggleButton ref={value.id} key={btns.length + index} {...value} />
       );
     })
     return <div id="sidebar">

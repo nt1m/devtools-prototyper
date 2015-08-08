@@ -89,13 +89,12 @@ iframe {
 	max-width: 0px;
 	height: 100%;
 
-	border-right: 1px solid var(--theme-splitter-color);
-
 	transition: max-width 0.3s ease;
 }
 
 .menu.active {
-	max-width: 300px;
+	max-width: 270px;
+	border-right: 1px solid var(--theme-splitter-color);
 }
 
 #sidebar {

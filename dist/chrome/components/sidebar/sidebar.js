@@ -37,10 +37,10 @@ let Sidebar = React.createClass({
   },
   render() {
     let btns = buttons.map(function (value, index) {
-      return React.createElement(SidebarButton, _extends({ key: index }, value));
+      return React.createElement(SidebarButton, _extends({ ref: value.id, key: index }, value));
     });
     let toggles = switches.map(function (value, index) {
-      return React.createElement(ToggleButton, _extends({ key: btns.length + index }, value));
+      return React.createElement(ToggleButton, _extends({ ref: value.id, key: btns.length + index }, value));
     });
     return React.createElement(
       "div",
