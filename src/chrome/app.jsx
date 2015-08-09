@@ -9,6 +9,7 @@ let App = React.createClass({
         <Sidebar ref="sidebar" />
         <LibrariesMenu ref="libraries" />
         <Editors ref="editors" />
+        <SettingsPanel ref="settings" />
       </div>
     );
   },
@@ -16,5 +17,6 @@ let App = React.createClass({
     this.props.sidebar = this.refs.sidebar;
     this.props.libraries = this.refs.libraries;
     this.props.editors = this.refs.editors;
+    this.props.settings = this.refs.settings;
   }
 });

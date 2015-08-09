@@ -17,7 +17,7 @@ XPCOMUtils.defineLazyGetter(this, "toolDefinition", () => ({
 	id: "prototyper",
 	icon: "chrome://devtools-prototyper/skin/images/icon.svg",
 	invertIconForLightTheme: true,
-	url: "chrome://devtools-prototyper/content/panel.xhtml",
+	url: "chrome://devtools-prototyper/content/panel.html",
 	label: toolStrings.GetStringFromName("prototyper.label"),
 	tooltip: toolStrings.GetStringFromName("prototyper.tooltip"),
 

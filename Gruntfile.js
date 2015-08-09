@@ -46,7 +46,7 @@ module.exports = function(grunt) {
           return "<script src='" + path + "' " + type + "></script>";
         }
       },
-      "dist/chrome/panel.xhtml": ["dist/chrome/globals.js",
+      "dist/chrome/panel.html": ["dist/chrome/globals.js",
              "dist/chrome/lib/*.js",
              "!dist/chrome/lib/emmet.min.js",
              "dist/chrome/backend/storage.js",
@@ -54,6 +54,7 @@ module.exports = function(grunt) {
              "dist/chrome/backend/template.js",
              "dist/chrome/backend/settings.js",
              "dist/chrome/backend/code.js",
+             "dist/chrome/components/overlay.js",
              "dist/chrome/components/editors/editor.js",
              "dist/chrome/components/editors/editors.js",
              "dist/chrome/components/menus/menu.js",
@@ -82,6 +83,13 @@ module.exports = function(grunt) {
         files: ["src/**/*", "!src/chrome/libs/*.js"],
         tasks: ["copy"]
       },
+    },
+    exec: {
+      install: {
+        stderr: false,
+        exitCode: 8,
+        command: "wget --post-file <%= zip.build.dest %> localhost:8888;"
+      }
     }
   });
 
@@ -91,9 +99,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-babel");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-exec");
   grunt.loadNpmTasks("grunt-injector");
 
   grunt.registerTask("default", ["clean", "babel", "copy",
                                  "injector", "eslint"]);
   grunt.registerTask("build", ["clean", "babel", "copy", "injector", "zip"]);
+  grunt.registerTask("install", ["build", "exec:install"]);
 };

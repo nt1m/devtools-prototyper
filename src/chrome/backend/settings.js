@@ -1,18 +1,27 @@
+const settingsPrefix = "settings-";
 let Settings = {
-  get: function(key) {
-    Storage.get(`settings-${key}`);
+  get(key) {
+    return Storage.get(settingsPrefix + key);
   },
-  set: function(key, value) {
-    Storage.set(`settings-${key}`, value);
+  set(key, value) {
+    return Storage.set(settingsPrefix + key, value);
+  },
+  entries() {
+    let entries = Storage.entries(settingsPrefix);
+    entries.forEach(arr => {
+      let smallKey = arr[0].slice(settingsPrefix.length);
+      arr[0] = smallKey;
+    });
+
+    return entries;
+  },
+  object() {
+    let obj = {};
+
+    for (let [key, value] of this.entries()) {
+      obj[key] = value;
+    }
+
+    return obj;
   }
 };
-
-if (!Settings.get("initialized")) {
-  const defaults = {
-    "emmet-enabled": true
-  };
-
-  for (let key in defaults) {
-    Settings.set(key, defaults[key]);
-  }
-}

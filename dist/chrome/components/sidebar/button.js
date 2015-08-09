@@ -22,6 +22,8 @@ let SidebarButton = React.createClass({
     return { active: false, badge: null };
   },
   onClick(e) {
+    // Call event listeners defined as property with the proper context
+    // e.g. <Button onClick={someFunction} /> is passed as `props.onClick`
     if (this.props.onClick) this.props.onClick.call(this, e);
   }
 });

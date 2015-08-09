@@ -1,6 +1,7 @@
 .tmp
 .DS_Store
 build/*
+dist
 
 #### joe made this: https://goel.io/joe
 

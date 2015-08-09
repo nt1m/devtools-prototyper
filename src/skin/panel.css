@@ -21,7 +21,7 @@ iframe {
 }
 .devtools-main-content::after {
 	content: attr(data-lang);
-	z-index: 99;
+	z-index: 1;
 	border: 1px solid rgba(0,0,0,0.3);
 	background-color: var(--theme-toolbar-background);
 	background-clip: padding-box;
@@ -43,8 +43,20 @@ iframe {
 }
 
 /* Settings Panel */
-#settings {
+.overlay {
+	position: absolute;
+	left: 33px;
+	top: 0;
+	width: calc(100% - 33px);
+	height: 100%;
 	padding: 10px 0;
+	z-index: 2;
+	display: none;
+	background-color: var(--theme-body-background);
+}
+
+.overlay.active {
+	display: flex;
 }
 
 #settings .column {
@@ -54,9 +66,35 @@ iframe {
 	box-sizing: border-box;
 }
 
+#settings form {
+	width: 100%;
+}
+
 #settings .setting {
 	overflow: auto;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+#settings .setting.single {
+	flex-direction: row;
+}
+
+#settings .setting:not(.single) label {
 	margin-bottom: 5px;
+}
+
+#settings .setting.single label {
+	margin-top: 2px;
+}
+
+#settings .setting textarea {
+	resize: resize-y;
+}
+
+#settings .setting :not([type="checkbox"]):not([type="radio"]) + label {
+	order: 1;
 }
 
 #settings .title {
@@ -64,6 +102,10 @@ iframe {
 	font-weight: normal;
 	margin-block-start: 1em;
 	margin-block-end: 1em;
+}
+
+#settings .setting :not([type="checkbox"]):not([type="radio"]) {
+	order: 2;
 }
 
 #settings label {
@@ -86,8 +128,10 @@ iframe {
 	box-sizing: border-box;
 
 	flex: 1;
-	max-width: 0px;
 	height: 100%;
+	max-width: 0;
+	background: var(--theme-sidebar-background);
+	box-sizing: border-box;
 
 	transition: max-width 0.3s ease;
 }
@@ -98,7 +142,7 @@ iframe {
 }
 
 #sidebar {
-	max-width: 35px;
+	max-width: 33px;
 	height: 100%;
 	overflow: hidden;
 	display: flex;
@@ -106,11 +150,12 @@ iframe {
 	z-index: 2;
 	border-right: 1px solid var(--theme-splitter-color);
 	background: var(--theme-toolbar-background);
+	box-sizing: border-box;
 }
 
 #sidebar button {
-	width: 35px;
-	height: 35px;
+	width: 32px;
+	height: 32px;
 	border: none;
 	display: block;
 	background-color: transparent;
@@ -157,23 +202,16 @@ iframe {
 	flex-grow: 1;
 }
 
-#libraries-menu {
-	width: 250px;
-	box-sizing: border-box;
-	background: var(--theme-sidebar-background);
-	margin-left: -251px;
-	transition: margin-left 0.5s ease;
-}
-
 #libraries-menu:not(.results) b:first-of-type,
 #libraries-menu:not(.results) #libraries-search-results,
 #libraries-menu:not(.results) .separator {
 	display: none;
 }
 #libraries-menu > b {
-	padding: 5px 0;
+	padding: 10px 0;
 	padding-inline-start: 10px;
 	font-weight: 500;
+	line-height: 30px;
 }
 #libraries-menu .devtools-toolbar {
 	padding: 0 5px;
@@ -182,6 +220,10 @@ iframe {
 #injected-libs {
 	flex: 1;
 	text-align: center;
+	overflow: auto;
+}
+#libraries-search-results {
+	max-height: 45%;
 }
 #libraries-search-results:empty::after,
 #injected-libs:empty::after {
@@ -202,9 +244,6 @@ iframe {
 }
 .item-name {
 	font-weight: 500;
-}
-#libraries-search-results {
-	overflow: auto;
 }
 #libraries-search-results .item,
 #injected-libs .item {

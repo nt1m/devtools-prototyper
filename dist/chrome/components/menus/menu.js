@@ -1,9 +1,9 @@
 let Menu = React.createClass({
   render() {
-    let cls = "menu " + (this.state.active ? "active" : "");
+    let cls = "menu " + (this.state.active ? "active" : "") + " " + this.props.className;
     return React.createElement(
       "div",
-      { className: cls },
+      { className: cls, id: this.props.id },
       this.props.children
     );
   },

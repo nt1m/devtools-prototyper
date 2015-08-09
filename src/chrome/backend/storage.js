@@ -3,8 +3,10 @@ Cu.import("resource://gre/modules/Services.jsm");
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
+console.log(Services.prefs);
+
 let Storage = {
-  get: function(pref) {
+  get(pref) {
     let prefname = prefPrefix + pref;
     if (!Services.prefs.getPrefType(prefname)) {
       Services.prefs.setCharPref(prefname, "");
@@ -12,17 +14,33 @@ let Storage = {
     }
     return Services.prefs.getCharPref(prefname);
   },
-  set: function(pref, value) {
+  set(pref, value) {
     Services.prefs.setCharPref(prefPrefix + pref, value);
   },
-  enablePrefSync: function(pref) {
+  entries(search = "") {
+    let keys = Services.prefs.getChildList(prefPrefix + search);
+    return keys.map(key => {
+      let smallKey = key.slice(prefPrefix.length);
+      return [smallKey, this.get(smallKey)];
+    });
+  },
+  object(search = "") {
+    let obj = {};
+
+    for (let [key, value] of this.entries(search)) {
+      obj[key] = value;
+    }
+
+    return obj;
+  },
+  enablePrefSync(pref) {
     Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
   }
 };
 
 if (!Storage.get("initialized")) {
   const defaults = {
-    "user-emmet-enabled": true
+    "settings-emmet-enabled": true
   };
 
   for (let key in defaults) {

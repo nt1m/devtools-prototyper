@@ -18,7 +18,14 @@ const buttons = [{
     this.setState({ active });
   }
 }, {
-  id: "settings"
+  id: "settings",
+  onClick() {
+    let settings = app.props.settings;
+    settings.toggle();
+
+    let active = !this.state.active;
+    this.setState({ active });
+  }
 }];
 
 const switches = [{

@@ -19,23 +19,22 @@ let Code = {
       script.remove();
 
       let el = document.createElement("script");
+      el.type = "application/javascript;version=1.8";
       el.textContent = js;
       document.body.appendChild(el);
     });`;
 
-    if (this.previousTab !== tabs.activeTab) {
-      tabs.activeTab.url = "about:blank";
+    tabs.activeTab.once("ready", () => {
       let worker = tabs.activeTab.attach({
         contentScript: mm
       });
 
       worker.port.emit("html", html);
-      console.log(html);
-
-      this.previousTab = tabs.activeTab;
-      this.previousWorker = worker;
+    });
+    if (tabs.activeTab.url === "about:blank") {
+      tabs.activeTab.reload();
     } else {
-      this.previousWorker.port.emit("html", html);
+      tabs.activeTab.url = "about:blank";
     }
   },
   save(lang) {
