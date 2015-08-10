@@ -1,6 +1,6 @@
 let SettingsItem = React.createClass({
   render() {
-    const value = app.props.settings ? app.props.settings.state[this.props.id] : "";
+    const value = app.props.settings ? app.props.settings.state.settings[this.props.id] : "";
     const single = this.props.single = ["checkbox", "radio"].includes(this.props.type);
 
     let input = this.props.type === "textarea" ? <textarea /> : <input type={this.props.type} />
@@ -16,12 +16,11 @@ let SettingsItem = React.createClass({
     }
 
     if (single) input.props.checked = value === "true" ? true : false;
-    console.log(input);
 
     return <div className={"setting " + (single ? "single" : "")}>
-				{input}
-				<label for={this.props.id}>{L10N.getStr(this.props.label)}</label>
-		</div>;
+        {input}
+        <label for={this.props.id}>{L10N.getStr(this.props.label)}</label>
+    </div>;
   },
   onChange() {
     let input = React.findDOMNode(this.refs.input);

@@ -1,54 +1,51 @@
-const buttons = [
-  {
-    id: "run",
-    onClick: Code.run
-  },
-  {
-    id: "beautify",
-    onClick: Code.beautify
-  },
-  {
-    id: "export"
-  },
-  {
-    id: "libraries",
-    onClick() {
-      let menu = app.props.libraries.refs.menu;
-      menu.setState({active: !menu.state.active});
-
-      let active = !this.state.active;
-      this.setState({active});
-    }
-  },
-  {
-    id: "settings",
-    onClick() {
-      let settings = app.props.settings;
-      settings.toggle();
-
-      let active = !this.state.active;
-      this.setState({active});
-    }
-  }
-];
-
-const switches = [
-  {
-  id: "html"
-  },
-  {
-    id: "css"
-  },
-  {
-    id: "js"
-  }
-]
+let buttons, switches;
 
 let Sidebar = React.createClass({
   getInitialState() {
     return {
       selectedButtons: null
     };
+  },
+  componentWillMount() {
+    buttons = [
+      {
+        id: "run",
+        onClick: Code.run
+      },
+      {
+        id: "beautify",
+        onClick: Code.beautify
+      },
+      {
+        id: "export"
+      },
+      {
+        id: "libraries",
+        onClick() {
+          this.toggle();
+          app.props.libraries.toggle();
+        }
+      },
+      {
+        id: "settings",
+        onClick() {
+          this.toggle();
+          app.props.settings.toggle();
+        }
+      }
+    ];
+
+    switches = [
+      {
+        id: "html"
+      },
+      {
+        id: "css"
+      },
+      {
+        id: "js"
+      }
+    ]
   },
   render() {
     let btns = buttons.map((value, index) => {

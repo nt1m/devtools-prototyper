@@ -1,4 +1,5 @@
 let LibrariesMenu = React.createClass({
+  mixins: [Togglable, Menu],
   render() {
     let results = this.state.results.map((value, index) => {
       return <LibrariesItem ref={`item-${index}`} key={index} {...value} />;
@@ -7,8 +8,12 @@ let LibrariesMenu = React.createClass({
       return <LibrariesItem {...value} injected={true} />;
     });
 
+    let resultsClassName = this.state.results.length ? "results" : "";
+    let menuClassName = this.menuClassName;
+    let className = resultsClassName + " " + menuClassName;
+
     return (
-      <Menu ref="menu" id="libraries-menu" className={this.state.results.length ? "results" : ""}>
+      <div id="libraries-menu" className={className}>
         <div className="devtools-toolbar">
           <input type="search" className="devtools-searchinput" ref="search"
            placeholder={L10N.getStr("prototyper.libs.search")} onInput={this.search} />
@@ -25,7 +30,7 @@ let LibrariesMenu = React.createClass({
         <div ref="injected" id="injected-libs" data-placeholder={L10N.getStr("prototyper.libs.noneInjected")}>
           {injected}
         </div>
-      </Menu>
+      </div>
     );
   },
   getInitialState() {
@@ -35,6 +40,7 @@ let LibrariesMenu = React.createClass({
     }
   },
   search() {
+    const cdn = "https://cdnjs.cloudflare.com/ajax/libs/";
     let query = React.findDOMNode(this.refs.search).value.trim();
     let results = React.findDOMNode(this.refs.results);
     let injected = React.findDOMNode(this.refs.injected);
@@ -50,6 +56,10 @@ let LibrariesMenu = React.createClass({
     xhr.addEventListener("readystatechange", () => {
       if (xhr.readyState == 4) {
         let response = JSON.parse(xhr.responseText);
+        response.results.map(item => {
+          item.url = item.latest.replace(cdn, "");
+        });
+        response.results = response.results.reverse();
         this.setState({results: response.results});
       }
     });

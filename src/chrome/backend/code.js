@@ -19,7 +19,7 @@ let Code = {
       script.remove();
 
       let el = document.createElement("script");
-      el.type = "application/javascript;version=1.8";
+      el.type = "type/javascript;version=1.8";
       el.textContent = js;
       document.body.appendChild(el);
     });`;

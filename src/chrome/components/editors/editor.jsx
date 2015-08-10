@@ -15,6 +15,7 @@ const KEYS = {
 }
 
 let Editor = React.createClass({
+  mixins: [Togglable],
   render() {
     const cls = "devtools-main-content" + (!this.state.active ? "hidden" : "");
     return (
@@ -26,7 +27,7 @@ let Editor = React.createClass({
     );
   },
   getInitialState() {
-    return {active: true}
+    return {active: true};
   },
   componentDidMount() {
     const lang = this.props.lang;
