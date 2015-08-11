@@ -38,7 +38,8 @@ let Storage = {
 
 if (!Storage.get("initialized")) {
   const defaults = {
-    "settings-emmet-enabled": true
+    "settings-emmet-enabled": true,
+    "initialized": true
   };
 
   for (let key in defaults) {

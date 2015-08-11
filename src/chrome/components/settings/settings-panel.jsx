@@ -18,10 +18,10 @@ let SettingsPanel = React.createClass({
   onSubmit(e) {
     e.preventDefault();
   },
+	getInitialState() {
+		return {settings: Settings.object()};
+	},
   update() {
-    this.setState({settings: Settings.object(), active: false});
-  },
-  componentDidMount() {
-    this.update();
+    this.setState({settings: Settings.object()});
   }
 });
