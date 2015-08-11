@@ -40,7 +40,7 @@ let LibrariesMenu = React.createClass({
     }
   },
   search() {
-    const cdn = "https://cdnjs.cloudflare.com/ajax/libs/";
+    const cdnPrefix = "https://cdnjs.cloudflare.com/ajax/libs/";
     let query = React.findDOMNode(this.refs.search).value.trim();
     let results = React.findDOMNode(this.refs.results);
     let injected = React.findDOMNode(this.refs.injected);
@@ -57,7 +57,7 @@ let LibrariesMenu = React.createClass({
       if (xhr.readyState == 4) {
         let response = JSON.parse(xhr.responseText);
         response.results.map(item => {
-          item.url = item.latest.replace(cdn, "");
+          item.url = item.latest.replace(cdnPrefix, "");
         });
         response.results = response.results.reverse();
         this.setState({results: response.results});

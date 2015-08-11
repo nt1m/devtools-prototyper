@@ -2,7 +2,7 @@ let LibrariesItem = React.createClass({
   render() {
     const iconClass = "devtools-icon ";
     const injected = this;
-    const statusClass = this.props.injected ? "remove" : this.state.injected ? "checked" : "add";
+    const statusClass = this.state.injected || this.props.injected ? "remove" : "add";
 
     return React.createElement(
       "li",
@@ -18,7 +18,7 @@ let LibrariesItem = React.createClass({
         React.createElement(
           "span",
           { className: "item-url" },
-          this.props.latest
+          this.props.url
         )
       ),
       React.createElement("a", { onClick: this.onStatusIconClick,
@@ -29,9 +29,7 @@ let LibrariesItem = React.createClass({
     return { injected: this.props.injected ? true : false };
   },
   onStatusIconClick() {
-    let injected = !this.state.injected;
-
-    this.updateStates(injected);
+    this.updateStates(!(this.state.injected || this.props.injected));
   },
   // Updates the states of the component itself and related components.
   // Keeps injected and search results in sync
@@ -47,13 +45,16 @@ let LibrariesItem = React.createClass({
     if (state) {
       injected.push(this.props);
     } else {
-      injected.splice(injected.indexOf(this.props), 1);
+      let index = injected.findIndex(function (item) {
+        return item.name === _this.props.name;
+      });
+      injected.splice(index, 1);
 
       if (this.props.injected) {
         let matched = results.findIndex(function (item) {
           return item.name === _this.props.name;
         });
-        let component = libraries.refs[`item-${ matched }`].updateStates(false);
+        let component = libraries.refs[`item-${ matched }`].setState({ injected: state });
       }
     }
 

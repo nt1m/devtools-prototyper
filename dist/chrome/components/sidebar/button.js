@@ -1,4 +1,5 @@
 let SidebarButton = React.createClass({
+  mixins: [Togglable],
   render() {
     let badge = null;
     if (this.state.badge) {

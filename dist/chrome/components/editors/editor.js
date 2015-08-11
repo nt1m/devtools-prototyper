@@ -15,6 +15,7 @@ const KEYS = {
 };
 
 let Editor = React.createClass({
+  mixins: [Togglable],
   render() {
     const cls = "devtools-main-content" + (!this.state.active ? "hidden" : "");
     return React.createElement("div", { className: cls,

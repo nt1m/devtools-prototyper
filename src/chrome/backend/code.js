@@ -10,16 +10,19 @@ let Code = {
     return buildCode();
   },
   openTab(html) {
+    const prototype = `${basePath}/content/prototype.html`;
     const editors = app.props.editors.refs;
     const mm = `self.port.on("html", html => {
       document.documentElement.innerHTML = html
       let script = document.querySelector("script");
+      console.log(html);
+      console.log(script);
 
       let js = script.textContent;
       script.remove();
 
       let el = document.createElement("script");
-      el.type = "type/javascript;version=1.8";
+      el.type = "text/javascript;version=1.8";
       el.textContent = js;
       document.body.appendChild(el);
     });`;
@@ -31,10 +34,10 @@ let Code = {
 
       worker.port.emit("html", html);
     });
-    if (tabs.activeTab.url === "about:blank") {
+    if (tabs.activeTab.url === prototype) {
       tabs.activeTab.reload();
     } else {
-      tabs.activeTab.url = "about:blank";
+      tabs.activeTab.url = prototype;
     }
   },
   save(lang) {

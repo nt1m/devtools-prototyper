@@ -3,8 +3,6 @@ Cu.import("resource://gre/modules/Services.jsm");
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
-console.log(Services.prefs);
-
 let Storage = {
   get(pref) {
     let prefname = prefPrefix + pref;

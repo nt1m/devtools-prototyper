@@ -1,6 +1,7 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 let LibrariesMenu = React.createClass({
+  mixins: [Togglable, Menu],
   render() {
     let results = this.state.results.map(function (value, index) {
       return React.createElement(LibrariesItem, _extends({ ref: `item-${ index }`, key: index }, value));
@@ -9,9 +10,13 @@ let LibrariesMenu = React.createClass({
       return React.createElement(LibrariesItem, _extends({}, value, { injected: true }));
     });
 
+    let resultsClassName = this.state.results.length ? "results" : "";
+    let menuClassName = this.menuClassName;
+    let className = resultsClassName + " " + menuClassName;
+
     return React.createElement(
-      Menu,
-      { ref: "menu", id: "libraries-menu", className: this.state.results.length ? "results" : "" },
+      "div",
+      { id: "libraries-menu", className: className },
       React.createElement(
         "div",
         { className: "devtools-toolbar" },
@@ -51,6 +56,7 @@ let LibrariesMenu = React.createClass({
   search() {
     var _this = this;
 
+    const cdnPrefix = "https://cdnjs.cloudflare.com/ajax/libs/";
     let query = React.findDOMNode(this.refs.search).value.trim();
     let results = React.findDOMNode(this.refs.results);
     let injected = React.findDOMNode(this.refs.injected);
@@ -66,6 +72,10 @@ let LibrariesMenu = React.createClass({
     xhr.addEventListener("readystatechange", function () {
       if (xhr.readyState == 4) {
         let response = JSON.parse(xhr.responseText);
+        response.results.map(function (item) {
+          item.url = item.latest.replace(cdnPrefix, "");
+        });
+        response.results = response.results.reverse();
         _this.setState({ results: response.results });
       }
     });

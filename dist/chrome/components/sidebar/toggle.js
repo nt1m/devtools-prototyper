@@ -1,4 +1,5 @@
 let ToggleButton = React.createClass({
+  mixins: [Togglable],
   render() {
     return React.createElement(
       "button",
@@ -9,11 +10,8 @@ let ToggleButton = React.createClass({
     );
   },
   onClick() {
-    const active = !this.state.active;
-    this.setState({ active });
-
-    const editors = app.props.editors.refs;
-    editors[this.props.id].setState({ active });
+    this.toggle();
+    app.props.editors.refs[this.props.id].toggle();
   },
   getInitialState() {
     return { active: true };

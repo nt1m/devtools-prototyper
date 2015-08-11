@@ -132,6 +132,7 @@ iframe {
 	max-width: 0;
 	background: var(--theme-sidebar-background);
 	box-sizing: border-box;
+	overflow-y: auto;
 
 	transition: max-width 0.3s ease;
 }
@@ -223,7 +224,7 @@ iframe {
 	overflow: auto;
 }
 #libraries-search-results {
-	max-height: 45%;
+	max-height: 40%;
 }
 #libraries-search-results:empty::after,
 #injected-libs:empty::after {
@@ -262,10 +263,15 @@ iframe {
 	text-decoration: underline;
 	font-weight: 400;
 }
-#injected-libs .item-name,
+#injected-libs .item > div,
 #libraries-search-results .item > div {
 	flex: 1;
 	min-width: 0;
+}
+
+#libraries-menu .devtools-searchinput {
+	flex: 1 100%;
+	width: 98%;
 }
 
 /* Icons */
