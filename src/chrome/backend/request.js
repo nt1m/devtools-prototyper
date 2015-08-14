@@ -1,4 +1,4 @@
-let request = function({url, method, data, form}) {
+let request = function({url, method, data, submitForm}) {
   method = method || "POST";
   let copy = {};
 

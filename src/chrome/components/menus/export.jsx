@@ -19,9 +19,18 @@ const EXPORT_SERVICES = [
     id: "jsfiddle",
     url: "http://jsfiddle.net/api/post/library/pure/",
     data: {
-      html: () => editors.html.props.cm.getText().replace(/\n/g, "\n\t\t"),
-      css: () => editors.css.props.cm.getText().replace(/\n/g, "\n\t\t"),
-      js: () => editors.js.props.cm.getText().replace(/\n/g, "\n\t\t")
+      html: () => {
+        let editor = app.props.editors.refs.html;
+        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+      },
+      css: () => {
+        let editor = app.props.editors.refs.css;
+        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+      },
+      js: () => {
+        let editor = app.props.editors.refs.js;
+        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+      }
     },
     submitForm: true
   },
