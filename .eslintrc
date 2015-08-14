@@ -27,7 +27,19 @@
     "XPCOMUtils": true,
     "React": true,
     "app": true,
-    "buildCode": true
+    "buildCode": true,
+    "EXPORT_SERVICES": true,
+    "prototypeName": true,
+    "request": true,
+    "UI": true,
+    "Code": true,
+    "basePath": true,
+    "Togglable": true,
+    "Menu": true,
+    "Overlay": true,
+    "Settings": true,
+    "Storage": true,
+    "tabs": true
   },
   "rules": {
     // These are the rules that have been configured so far to match the

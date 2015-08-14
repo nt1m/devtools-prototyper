@@ -1,6 +1,6 @@
 let UI = {
   closeMenus(except) {
-    let menus = [app.props.libraries, app.props.settings];
+    let menus = [app.props.libraries, app.props.settings, app.props.export];
 
     for (let menu of menus) {
       if (menu === except) {

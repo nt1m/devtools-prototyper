@@ -1,4 +1,3 @@
-let tabs = require("sdk/tabs");
 const beautify = require("devtools/jsbeautify");
 
 let Code = {
@@ -10,13 +9,10 @@ let Code = {
     return buildCode();
   },
   openTab(html) {
-    const prototype = `${basePath}/content/prototype.html`;
-    const editors = app.props.editors.refs;
+    const prototypeURL = `${basePath}/content/${prototypeName}`;
     const mm = `self.port.on("html", html => {
       document.documentElement.innerHTML = html
       let script = document.querySelector("script");
-      console.log(html);
-      console.log(script);
 
       let js = script.textContent;
       script.remove();
@@ -34,10 +30,10 @@ let Code = {
 
       worker.port.emit("html", html);
     });
-    if (tabs.activeTab.url === prototype) {
+    if (tabs.activeTab.url === prototypeURL) {
       tabs.activeTab.reload();
     } else {
-      tabs.activeTab.url = prototype;
+      tabs.activeTab.url = prototypeURL;
     }
   },
   save(lang) {
@@ -59,5 +55,14 @@ let Code = {
       let pretty = beautify[lang](cm.getText());
       cm.setText(pretty);
     }
+  },
+  exportCode(service) {
+    let properties = EXPORT_SERVICES.find(item => item.id === service);
+
+    request(properties).then(response => {
+      if (service === "gist") {
+        tabs.open(response.html_url);
+      }
+    });
   }
 };

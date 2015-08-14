@@ -1,8 +1,7 @@
 .tmp
 .DS_Store
 build/*
-dist/
-dist/chrome
+dist
 
 #### joe made this: https://goel.io/joe
 

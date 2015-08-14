@@ -39,6 +39,7 @@ let Storage = {
 if (!Storage.get("initialized")) {
   const defaults = {
     "settings-emmet-enabled": true,
+    "settings-gist-public": true,
     "initialized": true
   };
 

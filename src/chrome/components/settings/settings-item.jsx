@@ -16,12 +16,8 @@ let SettingsItem = React.createClass({
       props.value = value;
     }
 
-    let input;
-    if (props.type === "textarea") {
-      input = <textarea {...props} />
-    } else {
-      input = <input {...props} />
-    }
+    let input = props.type === "textarea" ? <textarea {...props} />
+                                          : <input {...props} />
 
     return <div className={"setting " + (isToggle ? "single" : "")}>
         {input}
@@ -34,8 +30,6 @@ let SettingsItem = React.createClass({
     if (this.isToggle) {
       value = input.checked;
     }
-
-    console.log(this.props.id, value);
 
     Settings.set(this.props.id, value);
     app.props.settings.update();

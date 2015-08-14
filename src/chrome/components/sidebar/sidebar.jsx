@@ -17,7 +17,11 @@ let Sidebar = React.createClass({
         onClick: Code.beautify
       },
       {
-        id: "export"
+        id: "export",
+        onClick() {
+          this.toggle(),
+          app.props.export.toggle();
+        }
       },
       {
         id: "libraries",
