@@ -23,9 +23,10 @@ let request = function({url, method, data, submitForm}) {
       form.appendChild(input);
     }
 
-    form.style = "display: none";
+    form.hidden = true;
     document.body.appendChild(form);
     form.submit();
+    form.remove();
     return Promise.resolve(true);
   }
 
