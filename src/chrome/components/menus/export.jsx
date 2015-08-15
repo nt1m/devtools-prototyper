@@ -5,6 +5,7 @@ let ExportMenu = React.createClass({
 
     return (
       <div id="export-menu" className={this.menuClassName}>
+        <p className="menu-title">Export Prototype</p>
         {items}
       </div>
     );
@@ -51,10 +52,34 @@ const EXPORT_SERVICES = [
     submitForm: true
   },
   {
-    id: "gist",
+    id: "gist-public",
     url: "https://api.github.com/gists",
     data: {
-      public: !!Settings.get("gist-public"),
+      public: true,
+      files: () => {
+        let files = {};
+        let editors = app.props.editors.refs;
+
+        for (let lang in editors) {
+          let name = prototypeName.replace(".html", "." + lang);
+          let content = editors[lang].props.cm.getText();
+          if (!content) {
+            continue;
+          }
+
+          files[name] = {content};
+        }
+
+        return files;
+      },
+      description: () => Settings.get("prototype-description")
+    }
+  },
+  {
+    id: "gist-private",
+    url: "https://api.github.com/gists",
+    data: {
+      public: false,
       files: () => {
         let files = {};
         let editors = app.props.editors.refs;

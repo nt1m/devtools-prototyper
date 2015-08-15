@@ -9,6 +9,7 @@ let App = React.createClass({
       { className: "container" },
       React.createElement(Sidebar, { ref: "sidebar" }),
       React.createElement(LibrariesMenu, { ref: "libraries" }),
+      React.createElement(ExportMenu, { ref: "export" }),
       React.createElement(Editors, { ref: "editors" }),
       React.createElement(SettingsPanel, { ref: "settings" })
     );
@@ -18,5 +19,6 @@ let App = React.createClass({
     this.props.libraries = this.refs.libraries;
     this.props.editors = this.refs.editors;
     this.props.settings = this.refs.settings;
+    this.props.export = this.refs.export;
   }
 });

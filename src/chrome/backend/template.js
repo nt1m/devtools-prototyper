@@ -11,6 +11,7 @@ let buildCode = function() {
 <body>
   ${editors.html.props.cm.getText().replace(/\n/g, "\n\t\t")}
 
+  ${Code.getLibraries()}
   <script async type="application/javascript;version=1.8">
   ${editors.js.props.cm.getText().replace(/\n/g, "\n\t\t")}
   </script>

@@ -54,11 +54,15 @@ let LibrariesItem = React.createClass({
         let matched = results.findIndex(function (item) {
           return item.name === _this.props.name;
         });
-        let component = libraries.refs[`item-${ matched }`].setState({ injected: state });
+        let target = libraries.refs[`item-${ matched }`];
+        target.setState({
+          injected: state
+        });
       }
     }
 
     libraries.setState({ injected, results });
+    libraries.save();
     libraries.setBadge(injected.length);
   }
 });

@@ -12,15 +12,27 @@ let Code = {
     const prototypeURL = `${basePath}/content/${prototypeName}`;
     const mm = `self.port.on("html", html => {
       document.documentElement.innerHTML = html
-      let script = document.querySelector("script");
+      let scripts = document.querySelectorAll("script");
 
-      let js = script.textContent;
-      script.remove();
+      let libs = [];
+      for (let script of scripts) {
+        let el = document.createElement("script");
+        el.type = "text/javascript;version=1.8";
+        el.textContent = script.textContent;
 
-      let el = document.createElement("script");
-      el.type = "text/javascript;version=1.8";
-      el.textContent = js;
-      document.body.appendChild(el);
+        if (script.src) {
+          let promise = new Promise((resolve) => {
+            el.onload = resolve;
+          });
+          el.src = script.src;
+          libs.push(promise);
+          document.body.appendChild(el);
+        } else {
+          Promise.all(libs).then(() => document.body.appendChild(el));
+        }
+
+        script.remove();
+      }
     });`;
 
     tabs.activeTab.once("ready", () => {
@@ -60,9 +72,16 @@ let Code = {
     let properties = EXPORT_SERVICES.find(item => item.id === service);
 
     request(properties).then(response => {
-      if (service === "gist") {
+      if (service.indexOf("gist") > -1) {
         tabs.open(response.html_url);
       }
     });
+  },
+  getLibraries() {
+    let injected = app.props.libraries.state.injected;
+
+    return injected.reduce((a, b) => {
+      return a + `<script src="${b.latest}"></script>\n\t\t`;
+    }, "");
   }
 };

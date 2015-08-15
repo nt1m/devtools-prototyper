@@ -16,7 +16,7 @@ let LibrariesMenu = React.createClass({
       <div id="libraries-menu" className={className}>
         <div className="devtools-toolbar">
           <input type="search" className="devtools-searchinput" ref="search"
-           placeholder={L10N.getStr("prototyper.libs.search")} onInput={this.search} />
+           placeholder={L10N.getStr("prototyper.libs.search")} onInput={debounce(this.search, 500)} />
         </div>
 
         <b>{L10N.getStr("prototyper.libs.results")}</b>
@@ -37,13 +37,18 @@ let LibrariesMenu = React.createClass({
     return {
       results: [],
       injected: []
-    }
+    };
+  },
+  componentDidMount() {
+    let injected = Storage.get("injected-libraries");
+    this.setState({injected});
+    setTimeout(() => {
+      this.setBadge(injected.length);
+    }, 1000);
   },
   search() {
     const cdnPrefix = "https://cdnjs.cloudflare.com/ajax/libs/";
     let query = React.findDOMNode(this.refs.search).value.trim();
-    let results = React.findDOMNode(this.refs.results);
-    let injected = React.findDOMNode(this.refs.injected);
 
     if (!query) {
       this.setState({results: []});
@@ -68,5 +73,8 @@ let LibrariesMenu = React.createClass({
   setBadge(number) {
     let menuButton = app.props.sidebar.refs.libraries;
     menuButton.setState({badge: number});
+  },
+  save() {
+    Storage.set("injected-libraries", this.state.injected);
   }
 });

@@ -10,9 +10,21 @@ let Storage = {
       Services.prefs.setCharPref(prefname, "");
       this.enablePrefSync(pref);
     }
-    return Services.prefs.getCharPref(prefname);
+    let result = Services.prefs.getCharPref(prefname);
+
+    try {
+      result = JSON.parse(result);
+    } catch(e) {
+      // nevermind
+    }
+
+    return result;
   },
   set(pref, value) {
+    if (typeof value === "object") {
+      value = JSON.stringify(value);
+    }
+
     Services.prefs.setCharPref(prefPrefix + pref, value);
   },
   entries(search = "") {
@@ -40,6 +52,7 @@ if (!Storage.get("initialized")) {
   const defaults = {
     "settings-emmet-enabled": true,
     "settings-gist-public": true,
+    "injected-libraries": [],
     "initialized": true
   };
 

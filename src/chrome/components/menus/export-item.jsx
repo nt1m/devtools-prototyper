@@ -1,7 +1,7 @@
 let ExportItem = React.createClass({
   render() {
     return (
-      <a onClick={this.onClick}>
+      <a onClick={this.onClick} data-service={this.props.id}>
         {L10N.getStr(`prototyper.export.${this.props.id}.label`)}
       </a>
     );

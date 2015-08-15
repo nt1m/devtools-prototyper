@@ -146,6 +146,14 @@ iframe {
 	border-right: 1px solid var(--theme-splitter-color);
 }
 
+.menu .menu-title {
+	font-size: 1.3em;
+
+	padding: 15px 10px;
+
+	margin: 0;
+}
+
 #sidebar {
 	max-width: 33px;
 	height: 100%;
@@ -198,6 +206,7 @@ iframe {
 	font-weight: 500;
 	color: #fff;
 	background-color: #F44336;
+	z-index: 2;
 }
 #sidebar button .badge:empty {
 	display: none;
@@ -294,6 +303,15 @@ iframe {
 #export-menu a:hover {
 	background: var(--theme-selection-background);
 	color: var(--theme-selection-color);
+}
+
+#export-menu a[data-service^="gist"] {
+	width: 50%;
+	display: inline-block;
+}
+
+#export-menu a[data-service="gist-public"] {
+	border-right: 1px solid var(--theme-splitter-color);
 }
 
 /* Icons */

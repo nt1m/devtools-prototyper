@@ -49,7 +49,7 @@ let Sidebar = React.createClass({
       {
         id: "js"
       }
-    ]
+    ];
   },
   render() {
     let btns = buttons.map((value, index) => {
@@ -61,7 +61,7 @@ let Sidebar = React.createClass({
       return (
         <ToggleButton ref={value.id} key={btns.length + index} {...value} />
       );
-    })
+    });
     return <div id="sidebar">
       {btns}
       <i className="spacer"></i>
