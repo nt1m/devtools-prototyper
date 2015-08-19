@@ -14,7 +14,7 @@ let Code = {
       document.documentElement.innerHTML = html
       let scripts = document.querySelectorAll("script");
 
-      let libs = [];
+      let libsPromises = [];
       for (let script of scripts) {
         let el = document.createElement("script");
         el.type = "text/javascript;version=1.8";
@@ -25,10 +25,10 @@ let Code = {
             el.onload = resolve;
           });
           el.src = script.src;
-          libs.push(promise);
+          libsPromises.push(promise);
           document.body.appendChild(el);
         } else {
-          Promise.all(libs).then(() => document.body.appendChild(el));
+          Promise.all(libsPromises).then(() => document.body.appendChild(el));
         }
 
         script.remove();

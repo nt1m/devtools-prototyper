@@ -6,11 +6,16 @@ const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 let Storage = {
   get(pref) {
     let prefname = prefPrefix + pref;
-    if (!Services.prefs.getPrefType(prefname)) {
+    let type = Services.prefs.getPrefType(prefname);
+
+    const {PREF_BOOL} = Services.prefs;
+
+    if (!type) {
       Services.prefs.setCharPref(prefname, "");
-      this.enablePrefSync(pref);
     }
-    let result = Services.prefs.getCharPref(prefname);
+
+    let result = type === PREF_BOOL ? Services.prefs.getBoolPref(prefname)
+                                    : Services.prefs.getCharPref(prefname);
 
     try {
       result = JSON.parse(result);
@@ -21,11 +26,19 @@ let Storage = {
     return result;
   },
   set(pref, value) {
+    let prefname = prefPrefix + pref;
+    let type = Services.prefs.getPrefType(prefname);
+
+    if (type === Services.prefs.PREF_BOOL) {
+      Services.prefs.setBoolPref(prefname, value);
+      return;
+    }
+
     if (typeof value === "object") {
       value = JSON.stringify(value);
     }
 
-    Services.prefs.setCharPref(prefPrefix + pref, value);
+    Services.prefs.setCharPref(prefname, value);
   },
   entries(search = "") {
     let keys = Services.prefs.getChildList(prefPrefix + search);
@@ -43,20 +56,21 @@ let Storage = {
 
     return obj;
   },
-  enablePrefSync(pref) {
-    Services.prefs.setBoolPref(syncPrefPrefix + pref, true);
+  sync(pref, value) {
+    Services.prefs.setBoolPref(syncPrefPrefix + pref, value);
   }
 };
 
 if (!Storage.get("initialized")) {
   const defaults = {
     "settings-emmet-enabled": true,
-    "settings-gist-public": true,
-    "injected-libraries": [],
+    "injected-libraries": "[]",
     "initialized": true
   };
 
   for (let key in defaults) {
     Storage.set(key, defaults[key]);
   }
+
+  Storage.sync("initialized", false);
 }

@@ -1,7 +1,9 @@
 let SettingsItem = React.createClass({
   render() {
-    const value = app.props.settings ? app.props.settings.state.settings[this.props.id] : "";
-    const isToggle = this.isToggle = ["checkbox", "radio"].indexOf(this.props.type) > -1;
+    let settings = app.props.settings;
+    const value = app.props.settings ? settings.state.settings[this.props.id]
+                                     : "";
+    this.isToggle = ["checkbox", "radio"].indexOf(this.props.type) > -1;
 
     const props = {
       ref: "input",
@@ -10,16 +12,16 @@ let SettingsItem = React.createClass({
       onChange: this.onChange
     };
 
-    if (isToggle) {
-      props.checked = value === "true";
+    if (this.isToggle) {
+      props.defaultChecked = value === "true";
     } else {
       props.value = value;
     }
 
     let input = props.type === "textarea" ? <textarea {...props} />
-                                          : <input {...props} />
+                                          : <input {...props} />;
 
-    return <div className={"setting " + (isToggle ? "single" : "")}>
+    return <div className={"setting " + (this.isToggle ? "single" : "")}>
         {input}
         <label htmlFor={this.props.id}>{L10N.getStr(this.props.label)}</label>
     </div>;
@@ -34,4 +36,4 @@ let SettingsItem = React.createClass({
     Settings.set(this.props.id, value);
     app.props.settings.update();
   }
-})
+});

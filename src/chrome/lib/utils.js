@@ -1,12 +1,12 @@
-function debounce(func, wait) {
+function debounce(callback, delay) {
   let timeout;
   return function() {
     let context = this, args = arguments;
     let later = function() {
       timeout = null;
-      func.apply(context, args);
+      callback.apply(context, args);
     };
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    timeout = setTimeout(later, delay);
   };
 }

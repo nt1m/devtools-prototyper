@@ -1,10 +1,12 @@
+const LIBRARIES_SEARCH_TIMEOUT = 500;
+
 let LibrariesMenu = React.createClass({
   mixins: [Togglable, Menu],
   render() {
     let results = this.state.results.map((value, index) => {
       return <LibrariesItem ref={`item-${index}`} key={index} {...value} />;
     });
-    let injected = this.state.injected.map((value, index) => {
+    let injected = this.state.injected.map(value => {
       return <LibrariesItem {...value} injected={true} />;
     });
 
@@ -16,7 +18,8 @@ let LibrariesMenu = React.createClass({
       <div id="libraries-menu" className={className}>
         <div className="devtools-toolbar">
           <input type="search" className="devtools-searchinput" ref="search"
-           placeholder={L10N.getStr("prototyper.libs.search")} onInput={debounce(this.search, 500)} />
+           placeholder={L10N.getStr("prototyper.libs.search")}
+           onInput={debounce(this.search, LIBRARIES_SEARCH_TIMEOUT)} />
         </div>
 
         <b>{L10N.getStr("prototyper.libs.results")}</b>
@@ -27,7 +30,8 @@ let LibrariesMenu = React.createClass({
         <div className="separator"></div>
 
         <b>{L10N.getStr("prototyper.libs.injected")}</b>
-        <div ref="injected" id="injected-libs" data-placeholder={L10N.getStr("prototyper.libs.noneInjected")}>
+        <div ref="injected" id="injected-libs"
+             data-placeholder={L10N.getStr("prototyper.libs.noneInjected")}>
           {injected}
         </div>
       </div>

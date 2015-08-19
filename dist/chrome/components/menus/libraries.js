@@ -1,12 +1,14 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+const LIBRARIES_SEARCH_TIMEOUT = 500;
+
 let LibrariesMenu = React.createClass({
   mixins: [Togglable, Menu],
   render() {
     let results = this.state.results.map(function (value, index) {
       return React.createElement(LibrariesItem, _extends({ ref: `item-${ index }`, key: index }, value));
     });
-    let injected = this.state.injected.map(function (value, index) {
+    let injected = this.state.injected.map(function (value) {
       return React.createElement(LibrariesItem, _extends({}, value, { injected: true }));
     });
 
@@ -21,7 +23,8 @@ let LibrariesMenu = React.createClass({
         "div",
         { className: "devtools-toolbar" },
         React.createElement("input", { type: "search", className: "devtools-searchinput", ref: "search",
-          placeholder: L10N.getStr("prototyper.libs.search"), onInput: debounce(this.search, 500) })
+          placeholder: L10N.getStr("prototyper.libs.search"),
+          onInput: debounce(this.search, LIBRARIES_SEARCH_TIMEOUT) })
       ),
       React.createElement(
         "b",
@@ -42,7 +45,8 @@ let LibrariesMenu = React.createClass({
       ),
       React.createElement(
         "div",
-        { ref: "injected", id: "injected-libs", "data-placeholder": L10N.getStr("prototyper.libs.noneInjected") },
+        { ref: "injected", id: "injected-libs",
+          "data-placeholder": L10N.getStr("prototyper.libs.noneInjected") },
         injected
       )
     );

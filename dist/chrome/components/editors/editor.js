@@ -1,6 +1,7 @@
 const CodeMirror = require("devtools/sourceeditor/editor");
+const EMMET = `${ basePath }/content/lib/emmet.min.js`;
 
-const MAC = navigator.platform.toLowerCase().includes("mac");
+const IS_MAC = navigator.platform.toLowerCase().includes("mac");
 const KEYS = {
   mac: {
     "Cmd-Enter": Code.run,
@@ -24,7 +25,12 @@ let Editor = React.createClass({
       ref: "container" });
   },
   getInitialState() {
-    return { active: true };
+    return {
+      active: true
+    };
+  },
+  updateEmmet() {
+    this.componentDidMount();
   },
   componentDidMount() {
     const lang = this.props.lang;
@@ -33,12 +39,12 @@ let Editor = React.createClass({
       lineNumbers: true,
       readOnly: false,
       autoCloseBrackets: "{}()[]",
-      extraKeys: MAC ? KEYS.mac : KEYS.other
+      extraKeys: IS_MAC ? KEYS.mac : KEYS.other
     };
 
     // Enabled Emmet for HTML and CSS
     if (Settings.get("emmet-enabled") && (lang === "html" || lang === "css")) {
-      config.externalScripts = [`${ basePath }/content/lib/emmet.min.js`];
+      config.externalScripts = [EMMET];
     }
 
     let sourceEditor = new CodeMirror(config);
@@ -46,6 +52,8 @@ let Editor = React.createClass({
     this.props.cm = sourceEditor;
 
     const container = React.findDOMNode(this.refs.container);
+    container.innerHTML = "";
+
     sourceEditor.appendTo(container).then(function () {
       Code.load(lang);
       sourceEditor.on("change", function () {

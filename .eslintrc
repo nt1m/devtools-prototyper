@@ -39,7 +39,9 @@
     "Overlay": true,
     "Settings": true,
     "Storage": true,
-    "tabs": true
+    "tabs": true,
+    "L10N": true,
+    "debounce": true
   },
   "rules": {
     // These are the rules that have been configured so far to match the

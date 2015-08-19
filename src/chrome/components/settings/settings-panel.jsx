@@ -4,13 +4,20 @@ let SettingsPanel = React.createClass({
     return <div className={this.overlayClassName} id="settings">
       <form onSubmit={this.onSubmit}>
         <div className="column">
-          <h1 className="title">{L10N.getStr("prototyper.prototypeSettings")}</h1>
-          <SettingsItem id="prototype-title" type="text" label="prototyper.prototypeSettings.title" />
-          <SettingsItem id="prototype-description" type="textarea" label="prototyper.prototypeSettings.description" />
+          <h1 className="title">
+            {L10N.getStr("prototyper.prototypeSettings")}
+          </h1>
+          <SettingsItem id="prototype-title" type="text"
+                        label="prototyper.prototypeSettings.title" />
+          <SettingsItem id="prototype-description" type="textarea"
+                        label="prototyper.prototypeSettings.description" />
         </div>
         <div className="column">
-          <h1 className="title">{L10N.getStr("prototyper.settings")}</h1>
-          <SettingsItem id="emmet-enabled" type="checkbox" label="prototyper.settings.enableEmmet" />
+          <h1 className="title">
+            {L10N.getStr("prototyper.settings")}
+          </h1>
+          <SettingsItem id="emmet-enabled" type="checkbox"
+                        label="prototyper.settings.enableEmmet" />
         </div>
       </form>
     </div>;
@@ -23,5 +30,12 @@ let SettingsPanel = React.createClass({
   },
   update() {
     this.setState({settings: Settings.object()});
+
+    let editors = app.props.editors.refs;
+    let emmet = Settings.get("emmet-enabled");
+
+    for (let editor in editors) {
+      editors[editor].updateEmmet(emmet);
+    }
   }
 });
