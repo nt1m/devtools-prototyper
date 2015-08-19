@@ -1,5 +1,0 @@
-content devtools-prototyper       chrome/
-skin    devtools-prototyper       classic/1.0 skin/
-
-locale  devtools-prototyper en-US locale/en-US/
-locale  devtools-prototyper fr    locale/fr/

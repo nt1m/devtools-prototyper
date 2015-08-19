@@ -2,7 +2,7 @@
 .DS_Store
 build/*
 
-dist
+dist/
 
 #### joe made this: https://goel.io/joe
 

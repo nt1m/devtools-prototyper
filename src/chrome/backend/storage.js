@@ -25,7 +25,7 @@ let Storage = {
 
     return result;
   },
-  set(pref, value) {
+  set(pref, value, sync = true) {
     let prefname = prefPrefix + pref;
     let type = Services.prefs.getPrefType(prefname);
 
@@ -39,6 +39,7 @@ let Storage = {
     }
 
     Services.prefs.setCharPref(prefname, value);
+    this.setSync(pref, sync);
   },
   entries(search = "") {
     let keys = Services.prefs.getChildList(prefPrefix + search);
@@ -56,7 +57,7 @@ let Storage = {
 
     return obj;
   },
-  sync(pref, value) {
+  setSync(pref, value) {
     Services.prefs.setBoolPref(syncPrefPrefix + pref, value);
   }
 };
@@ -72,5 +73,5 @@ if (!Storage.get("initialized")) {
     Storage.set(key, defaults[key]);
   }
 
-  Storage.sync("initialized", false);
+  Storage.setSync("initialized", false);
 }

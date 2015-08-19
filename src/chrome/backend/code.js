@@ -51,7 +51,7 @@ let Code = {
   save(lang) {
     const editors = app.props.editors.refs;
 
-    Storage.set(`editor-${lang}`, editors[lang].props.cm.getText());
+    Storage.set(lang, editors[lang].props.cm.getText());
   },
   load(lang) {
     const editors = app.props.editors.refs;

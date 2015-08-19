@@ -1,5 +1,5 @@
 const CodeMirror = require("devtools/sourceeditor/editor");
-const EMMET = `${basePath}/content/lib/emmet.min.js`;
+const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
 
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");
 const KEYS = {
@@ -47,7 +47,7 @@ let Editor = React.createClass({
 
     // Enabled Emmet for HTML and CSS
     if (Settings.get("emmet-enabled") && (lang === "html" || lang === "css")) {
-      config.externalScripts = [EMMET];
+      config.externalScripts = [EMMET_URL];
     }
 
     let sourceEditor = new CodeMirror(config);
