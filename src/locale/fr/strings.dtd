@@ -10,9 +10,9 @@
 <!ENTITY prototyperUI.publicGist.label "Gist public">
 
 <!ENTITY prototyperUI.libs.results "Résultats (par cdnjs)">
-<!ENTITY prototyperUI.libs.injected "Librairies injectées">
-<!ENTITY prototyperUI.libs.noneFound "Aucune librairie trouvée.">
-<!ENTITY prototyperUI.libs.noneInjected "Vous n'avez pas encore injecté une librairie. Utilisez la boite de recherche pour commencer.">
+<!ENTITY prototyperUI.libs.injected "Bibliothèques injectées">
+<!ENTITY prototyperUI.libs.noneFound "Aucune bibliothèque trouvée.">
+<!ENTITY prototyperUI.libs.noneInjected "Vous n'avez pas encore injecté de bibliothèque. Utilisez la boite de recherche pour commencer.">
 
 <!ENTITY prototyperUI.prototypeSettings "Options du prototype">
 <!ENTITY prototyperUI.prototypeSettings.title "Titre">
