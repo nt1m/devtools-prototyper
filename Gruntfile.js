@@ -94,14 +94,12 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks("grunt-contrib-watch");
-  grunt.loadNpmTasks("grunt-eslint");
-  grunt.loadNpmTasks("grunt-zip");
-  grunt.loadNpmTasks("grunt-babel");
-  grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-exec");
-  grunt.loadNpmTasks("grunt-injector");
+  var packageJson = JSON.parse(grunt.file.read("package.json"));
+  for (var packageName in packageJson.devDependencies) {
+    if (packageName.indexOf("grunt-") !== -1) {
+      grunt.loadNpmTasks(packageName);
+    }
+  }
 
   grunt.registerTask("default", ["clean", "babel", "copy",
                                  "injector", "eslint"]);
