@@ -22,15 +22,15 @@ const EXPORT_SERVICES = [
     data: {
       html: () => {
         let editor = app.props.editors.refs.html;
-        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+        return editor.props.cm.getText();
       },
       css: () => {
         let editor = app.props.editors.refs.css;
-        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+        return editor.props.cm.getText();
       },
       js: () => {
         let editor = app.props.editors.refs.js;
-        return editor.props.cm.getText().replace(/\n/g, "\n\t\t");
+        return editor.props.cm.getText();
       }
     },
     submitForm: true

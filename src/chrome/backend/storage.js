@@ -70,7 +70,7 @@ if (!Storage.get("initialized")) {
   };
 
   for (let key in defaults) {
-    Storage.set(key, defaults[key]);
+    Storage.set(key, defaults[key], defaults[key]);
   }
 
   Storage.setSync("initialized", false);

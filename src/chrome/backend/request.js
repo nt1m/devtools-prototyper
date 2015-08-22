@@ -25,8 +25,8 @@ let request = function({url, method, data, submitForm}) {
 
     form.hidden = true;
     document.body.appendChild(form);
-    // form.submit();
-    // form.remove();
+    form.submit();
+    form.remove();
     return Promise.resolve(true);
   }
 

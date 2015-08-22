@@ -44,7 +44,7 @@ let LibrariesMenu = React.createClass({
     };
   },
   componentDidMount() {
-    let injected = Storage.get("injected-libraries");
+    let injected = Storage.get("injected-libraries") || [];
     this.setState({injected});
     setTimeout(() => {
       this.setBadge(injected.length);
