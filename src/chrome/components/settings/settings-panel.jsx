@@ -17,7 +17,9 @@ let SettingsPanel = React.createClass({
             {L10N.getStr("prototyper.settings")}
           </h1>
           <SettingsItem id="emmet-enabled" type="checkbox"
-                        label="prototyper.settings.enableEmmet" />
+                        label="prototyper.settings.enableEmmet"/>
+          <SettingsItem id="sync-enabled" type="checkbox"
+                        label="prototyper.settings.enableSync" synced={false}/>
         </div>
       </form>
     </div>;

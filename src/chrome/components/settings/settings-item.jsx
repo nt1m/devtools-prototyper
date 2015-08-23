@@ -1,4 +1,7 @@
 let SettingsItem = React.createClass({
+  getDefaultProps() {
+    return {synced: true};
+  },
   render() {
     let settings = app.props.settings;
     const value = app.props.settings ? settings.state.settings[this.props.id]
@@ -17,9 +20,13 @@ let SettingsItem = React.createClass({
     } else {
       props.value = value;
     }
-
+      
     let input = props.type === "textarea" ? <textarea {...props} />
                                           : <input {...props} />;
+    
+    if (props.type == "text" || props.type == "textarea") {
+      input.props.className = "devtools-textinput";
+    }
 
     return <div className={"setting " + (this.isToggle ? "single" : "")}>
         {input}
@@ -33,7 +40,11 @@ let SettingsItem = React.createClass({
       value = input.checked;
     }
 
-    Settings.set(this.props.id, value);
+    Settings.set(this.props.id, value, this.props.synced);
     app.props.settings.update();
+    
+    if (this.props.id == "sync-enabled") {
+      Settings.refreshSyncState();
+    }
   }
 });

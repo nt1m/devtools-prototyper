@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: "src/chrome",
-          src: ["**/*.js", "**/*.xhtml", "**/*.html"],
+          src: ["**/*.js", "**/*.html"],
           dest: "dist/chrome"
         }]
       },

@@ -25,21 +25,23 @@ let Storage = {
 
     return result;
   },
-  set(pref, value, sync = true) {
+  set(pref, value, shouldSync = true) {
     let prefname = prefPrefix + pref;
     let type = Services.prefs.getPrefType(prefname);
+    let valueType = typeof value;
 
-    if (type === Services.prefs.PREF_BOOL) {
+    this.setSync(pref, shouldSync);
+
+    if (valueType === "boolean" ||
+        type === Services.prefs.PREF_BOOL) {
       Services.prefs.setBoolPref(prefname, value);
       return;
     }
 
-    if (typeof value === "object") {
+    if (valueType === "object") {
       value = JSON.stringify(value);
     }
-
     Services.prefs.setCharPref(prefname, value);
-    this.setSync(pref, sync);
   },
   entries(search = "") {
     let keys = Services.prefs.getChildList(prefPrefix + search);
@@ -58,12 +60,16 @@ let Storage = {
     return obj;
   },
   setSync(pref, value) {
+    if (Settings.get("settings-sync-enabled") == false) {
+      value = false;
+    }
     Services.prefs.setBoolPref(syncPrefPrefix + pref, value);
   }
 };
 
 if (!Storage.get("initialized")) {
   const defaults = {
+    "settings-sync-enabled": true,
     "settings-emmet-enabled": true,
     "injected-libraries": "[]",
     "initialized": true
