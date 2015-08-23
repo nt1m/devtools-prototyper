@@ -23,7 +23,7 @@ let SettingsItem = React.createClass({
 
     let input = props.type === "textarea" ? <textarea {...props} />
                                           : <input {...props} />;
-    
+
     if (props.type == "text" || props.type == "textarea") {
       input.props.className = "devtools-textinput";
     }
@@ -42,7 +42,7 @@ let SettingsItem = React.createClass({
 
     Settings.set(this.props.id, value, this.props.synced);
     app.props.settings.update();
-    
+
     if (this.props.id == "sync-enabled") {
       Settings.refreshSyncState();
     }

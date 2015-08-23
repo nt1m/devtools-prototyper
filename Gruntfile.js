@@ -66,7 +66,7 @@ module.exports = function(grunt) {
              "dist/chrome/app.js", "dist/chrome/main.js"]
     },
     clean: {
-      files: ["dist"]
+      files: ["dist", "build"]
     },
     zip: {
       build: {

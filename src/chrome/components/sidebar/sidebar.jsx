@@ -19,7 +19,7 @@ let Sidebar = React.createClass({
       {
         id: "export",
         onClick() {
-          this.toggle(),
+          this.toggle();
           app.props.export.toggle();
         }
       },

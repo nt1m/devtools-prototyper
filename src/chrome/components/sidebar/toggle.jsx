@@ -4,10 +4,10 @@ let ToggleButton = React.createClass({
     return (
       <button id={"toggle-" + this.props.id}
               onClick={this.onClick}
-              className={this.state.active ? "active": ""}>
+              className={this.state.active ? "active" : ""}>
         {this.props.id.toUpperCase()}
       </button>
-    )
+    );
   },
   onClick() {
     this.toggle();
@@ -16,4 +16,4 @@ let ToggleButton = React.createClass({
   getInitialState() {
     return {active: true};
   }
-})
+});

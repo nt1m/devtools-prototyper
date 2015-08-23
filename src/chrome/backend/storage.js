@@ -60,7 +60,7 @@ let Storage = {
     return obj;
   },
   setSync(pref, value) {
-    if (!Settings.get("settings-sync-enabled")) {
+    if (!this.get("settings-sync-enabled")) {
       value = false;
     }
     Services.prefs.setBoolPref(syncPrefPrefix + pref, value);

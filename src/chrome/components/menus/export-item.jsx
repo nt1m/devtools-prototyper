@@ -9,4 +9,4 @@ let ExportItem = React.createClass({
   onClick() {
     Code.exportCode(this.props.id);
   }
-})
+});

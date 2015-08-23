@@ -132,7 +132,7 @@ iframe {
   max-width: 0;
   background: var(--theme-sidebar-background);
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: hidden;
   transition: max-width 0.3s ease;
 }
 
@@ -211,6 +211,10 @@ iframe {
 }
 
 /* Libraries menu */
+#libraries-menu {
+  display: flex;
+  flex-direction: column;
+}
 #libraries-menu:not(.results) b:first-of-type,
 #libraries-menu:not(.results) #libraries-search-results,
 #libraries-menu:not(.results) .separator {
@@ -220,7 +224,6 @@ iframe {
   padding: 10px 0;
   padding-inline-start: 10px;
   font-weight: 500;
-  line-height: 30px;
 }
 #libraries-menu .devtools-toolbar {
   padding: 0 5px;

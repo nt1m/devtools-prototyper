@@ -6,6 +6,6 @@ let Editors = React.createClass({
         <Editor lang="css" ref="css" />
         <Editor lang="js" ref="js" />
       </div>
-		);
+    );
   }
 });

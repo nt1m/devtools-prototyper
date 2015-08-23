@@ -3,9 +3,9 @@ let SidebarButton = React.createClass({
   render() {
     let badge = null;
     if (this.state.badge) {
-      badge = <span className="badge" ref="badge">
+      badge = (<span className="badge" ref="badge">
         {this.state.badge}
-      </span>
+      </span>);
     }
 
     return (
@@ -23,6 +23,8 @@ let SidebarButton = React.createClass({
   onClick(e) {
     // Call event listeners defined as property with the proper context
     // e.g. <Button onClick={someFunction} /> is passed as `props.onClick`
-    if (this.props.onClick) this.props.onClick.call(this, e);
+    if (this.props.onClick) {
+      this.props.onClick.call(this, e);
+    }
   }
 });

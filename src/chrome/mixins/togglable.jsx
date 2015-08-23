@@ -14,4 +14,4 @@ let Togglable = {
 
     this.setState({active: newState});
   }
-}
+};

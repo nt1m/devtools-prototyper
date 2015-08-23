@@ -1,7 +1,6 @@
 let LibrariesItem = React.createClass({
   render() {
     const iconClass = "devtools-icon ";
-    const injected = this;
     const statusClass = (this.state.injected || this.props.injected) ? "remove"
                                                                       : "add";
 
@@ -19,7 +18,7 @@ let LibrariesItem = React.createClass({
     );
   },
   getInitialState() {
-    return {injected: this.props.injected ? true : false};
+    return {injected: this.props.injected};
   },
   onStatusIconClick() {
     this.updateStates(!(this.state.injected || this.props.injected));
