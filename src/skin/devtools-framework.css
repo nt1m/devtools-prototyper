@@ -131,7 +131,7 @@ html, body {
   box-sizing: border-box;
 }
 .devtools-textinput {
-  border-radius: 2px;
+  border-radius: 2px !important;
 }
 textarea.devtools-textinput {
   resize: vertical;

@@ -16,7 +16,7 @@ let SettingsItem = React.createClass({
     };
 
     if (this.isToggle) {
-      props.defaultChecked = value === "true";
+      props.defaultChecked = props.checked = value;
     } else {
       props.value = value;
     }
