@@ -20,7 +20,7 @@ let SettingsItem = React.createClass({
     } else {
       props.value = value;
     }
-      
+
     let input = props.type === "textarea" ? <textarea {...props} />
                                           : <input {...props} />;
     
