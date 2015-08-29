@@ -73,7 +73,7 @@ let Code = {
     const editors = app.props.editors.refs;
 
     let cm = editors[lang].props.cm;
-    cm.setText(Storage.get(`editor-${lang}`));
+    cm.setText(Storage.get(`${lang}`));
   },
   update(lang, newCode) {
     if (this.running) {
@@ -91,6 +91,31 @@ let Code = {
   },
   exportCode(service) {
     let properties = EXPORT_SERVICES.find(item => item.id === service);
+
+    if (service == "local") {
+      let zip = new JSZip();
+      zip.file("index.html", exportedCode.html);
+
+      let cssFolder = zip.folder("css");
+      cssFolder.file("style.css", exportedCode.css);
+
+      let jsFolder = zip.folder("js");
+      jsFolder.file("script.js", exportedCode.js);
+
+      let blob = zip.generate({type: "blob"});
+      let url = URL.createObjectURL(blob);
+
+      // This is the only way to make sure the ZIP has a file name
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "prototype.zip";
+      a.hidden = true;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      return;
+    }
 
     request(properties).then(response => {
       if (service.indexOf("gist") > -1) {

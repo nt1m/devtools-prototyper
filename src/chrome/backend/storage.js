@@ -4,6 +4,13 @@ const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
 let Storage = {
+  defaults: {
+    "settings-sync-enabled": true,
+    "settings-live-edit-enabled": true,
+    "settings-emmet-enabled": true,
+    "injected-libraries": "[]",
+    "initialized": true
+  },
   get(pref) {
     let prefname = prefPrefix + pref;
     let type = Services.prefs.getPrefType(prefname);
@@ -11,7 +18,12 @@ let Storage = {
     const {PREF_BOOL} = Services.prefs;
 
     if (!type) {
-      Services.prefs.setCharPref(prefname, "");
+      if (this.defaults.hasOwnProperty(pref)) {
+        Storage.set(pref, this.defaults[pref]);
+      }
+      else {
+        Services.prefs.setCharPref(prefname, "");
+      }
     }
 
     let result = type === PREF_BOOL ? Services.prefs.getBoolPref(prefname)
@@ -68,13 +80,7 @@ let Storage = {
 };
 
 if (!Storage.get("initialized")) {
-  const defaults = {
-    "settings-sync-enabled": true,
-    "settings-live-edit-enabled": true,
-    "settings-emmet-enabled": true,
-    "injected-libraries": "[]",
-    "initialized": true
-  };
+  const defaults = Storage.defaults;
 
   for (let key in defaults) {
     Storage.set(key, defaults[key]);
