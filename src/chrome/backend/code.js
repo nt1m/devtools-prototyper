@@ -76,7 +76,6 @@ let Code = {
     cm.setText(Storage.get(`editor-${lang}`));
   },
   update(lang, newCode) {
-    console.log("foo",this.running)
     if (this.running) {
       this.currentWorker.port.emit(`${lang}-update`, newCode);
     }

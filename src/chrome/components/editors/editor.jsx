@@ -59,7 +59,9 @@ let Editor = React.createClass({
       Code.load(lang);
       sourceEditor.on("change", () => {
         Code.save(lang);
-        Code.update(lang, sourceEditor.getText());
+        if (Settings.get("live-edit-enabled")) {
+          Code.update(lang, sourceEditor.getText());
+        }
       });
       sourceEditor.setMode(CodeMirror.modes[lang].name);
     });

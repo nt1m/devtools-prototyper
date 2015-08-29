@@ -70,6 +70,7 @@ let Storage = {
 if (!Storage.get("initialized")) {
   const defaults = {
     "settings-sync-enabled": true,
+    "settings-live-edit-enabled": true,
     "settings-emmet-enabled": true,
     "injected-libraries": "[]",
     "initialized": true
