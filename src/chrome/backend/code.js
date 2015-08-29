@@ -1,5 +1,37 @@
 const beautify = require("devtools/jsbeautify");
+// The content script can't be placed in a separate file because the SDK
+// forbids chrome:// URIs
+let PrototypeContentScript = `
+let PrototypeManager = {
+  onNewPrototype({html, js, libs}) {
+    document.documentElement.innerHTML = html;
 
+    let head = document.querySelector("head");
+    let script = document.createElement("script");
+    script.type = "text/javascript;version=1.8";
+    script.async = true;
+    script.innerHTML = js;
+    head.appendChild(script);
+
+    for (let lib of libs) {
+      let libScript = document.createElement("script");
+      libScript.src = lib.latest;
+      head.appendChild(libScript);
+    }
+  },
+  updateCSS(newCss) {
+    document.querySelector("head > style").textContent = newCss;
+  },
+  updateHTML(newHtml) {
+    document.body.innerHTML = newHtml;
+  },
+  init() {
+    self.port.on("new-prototype", this.onNewPrototype.bind(this));
+    self.port.on("css-update", this.updateCSS.bind(this));
+    self.port.on("html-update", this.updateHTML.bind(this));
+  }
+};
+PrototypeManager.init();`;
 let Code = {
   run() {
     let html = Code.getCode();
@@ -10,21 +42,27 @@ let Code = {
   },
   openTab(html) {
     const prototypeURL = `${basePath}/content/${prototypeName}`;
-    const mm = ``;
 
     tabs.activeTab.once("ready", () => {
-      let csURL = `${basePath}/content/backend/prototype-contentscript.js`;
-      let worker = tabs.activeTab.attach({
-        contentScriptFile: csURL
+      let worker = this.currentWorker = tabs.activeTab.attach({
+        contentScript: PrototypeContentScript
       });
 
-      worker.port.emit("html", html);
+      const editors = app.props.editors.refs;
+      let js = editors.js.props.cm.getText().replace(/\n/g, "\n\t\t");
+      let libs = app.props.libraries.state.injected;
+      worker.port.emit("new-prototype", {html, js, libs});
     });
-    if (tabs.activeTab.url === prototypeURL) {
+    if (this.running) {
       tabs.activeTab.reload();
     } else {
       tabs.activeTab.url = prototypeURL;
     }
+  },
+  get running() {
+    const prototypeURL = `${basePath}/content/${prototypeName}`;
+    return tabs.activeTab.url === prototypeURL &&
+           this.currentWorker;
   },
   save(lang) {
     const editors = app.props.editors.refs;
@@ -36,6 +74,12 @@ let Code = {
 
     let cm = editors[lang].props.cm;
     cm.setText(Storage.get(`editor-${lang}`));
+  },
+  update(lang, newCode) {
+    console.log("foo",this.running)
+    if (this.running) {
+      this.currentWorker.port.emit(`${lang}-update`, newCode);
+    }
   },
   beautify() {
     const editors = app.props.editors.refs;
@@ -63,3 +107,4 @@ let Code = {
     }, "");
   }
 };
+
