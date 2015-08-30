@@ -34,34 +34,61 @@ let PrototypeManager = {
 PrototypeManager.init();`;
 let Code = {
   run() {
-    let html = Code.getCode();
-    Code.openTab(html);
+    Code.openTab();
   },
   getCode() {
     return buildCode();
   },
-  openTab(html) {
+  openTab() {
     const prototypeURL = `${basePath}/content/${prototypeName}`;
+    let currentTab;
 
-    tabs.activeTab.once("ready", () => {
-      let worker = this.currentWorker = tabs.activeTab.attach({
-        contentScript: PrototypeContentScript
+    // If Prototyper is running on a tab by itself
+    if (window.top == window &&
+        !this.running) {
+      tabs.open({
+        url: prototypeURL,
+        onReady: (tab) => {
+          currentTab = this.currentTab = tab;
+          this.attachContentScript(tab);
+        }
       });
+      return;
+    }
 
-      const editors = app.props.editors.refs;
-      let js = editors.js.props.cm.getText().replace(/\n/g, "\n\t\t");
-      let libs = app.props.libraries.state.injected;
-      worker.port.emit("new-prototype", {html, js, libs});
+    // If Prototyper is running in the toolbox, but the prototype isn't ran yet
+    if (!this.currentTab) {
+      currentTab = this.currentTab = tabs.activeTab;
+      
+    }
+    // If the Prototype is already ran.
+    else {
+      currentTab = this.currentTab;
+    }
+    currentTab.once("ready", () => {
+      this.attachContentScript(currentTab);
     });
     if (this.running) {
-      tabs.activeTab.reload();
+      currentTab.reload();
     } else {
-      tabs.activeTab.url = prototypeURL;
+      currentTab.url = prototypeURL;
     }
+  },
+  attachContentScript(tab) {
+    let worker = this.currentWorker = tab.attach({
+      contentScript: PrototypeContentScript
+    });
+
+    const editors = app.props.editors.refs;
+    let html = Code.getCode();
+    let js = editors.js.props.cm.getText().replace(/\n/g, "\n\t\t");
+    let libs = app.props.libraries.state.injected;
+    worker.port.emit("new-prototype", {html, js, libs});
   },
   get running() {
     const prototypeURL = `${basePath}/content/${prototypeName}`;
-    return tabs.activeTab.url === prototypeURL &&
+    return this.currentTab &&
+           this.currentTab.url === prototypeURL &&
            this.currentWorker;
   },
   save(lang) {
