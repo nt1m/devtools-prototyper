@@ -2,8 +2,8 @@ let buildCode = function() {
   const editors = app.props.editors.refs;
   return `<head>
 <meta charset="UTF-8"/>
-<meta name="description" content="${Storage.get("prototype-description")}"/>
-<title>${Storage.get("prototype-title")}</title>
+<meta name="description" content="${Settings.get("prototype-description")}"/>
+<title>${Settings.get("prototype-title")}</title>
 <style>
   ${editors.css.props.cm.getText().replace(/\n/g, "\n\t\t")}
 </style>
@@ -20,8 +20,8 @@ let exportedCode = {
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <meta name="description" content="${Storage.get("prototype-description")}"/>
-  <title>${Storage.get("prototype-title")}</title>
+  <meta name="description" content="${Settings.get("prototype-description")}"/>
+  <title>${Settings.get("prototype-title")}</title>
   <link href="css/style.css" rel="stylesheet"/>
 </head>
 <body>
