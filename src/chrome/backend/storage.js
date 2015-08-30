@@ -18,12 +18,7 @@ let Storage = {
     const {PREF_BOOL} = Services.prefs;
 
     if (!type) {
-      if (this.defaults.hasOwnProperty(pref)) {
-        Storage.set(pref, this.defaults[pref]);
-      }
-      else {
-        Services.prefs.setCharPref(prefname, "");
-      }
+      Services.prefs.setCharPref(prefname, "");
     }
 
     let result = type === PREF_BOOL ? Services.prefs.getBoolPref(prefname)
