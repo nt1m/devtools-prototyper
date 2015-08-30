@@ -3,6 +3,7 @@
 - Refactored to use React (thanks <a href="http://dibaiee.ir/">mdibaiee</a> !)
 - Live HTML/CSS edit
 - ZIP export (replaces the old HTML export)
+- DevTools Prototyper can now run alone in a tab
 - Many bug fixes, and much more stability
 
 ## 3.1
