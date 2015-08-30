@@ -82,6 +82,4 @@ if (!Storage.get("initialized")) {
   for (let key in defaults) {
     Storage.set(key, defaults[key]);
   }
-
-  Storage.setSync("initialized", false);
 }
