@@ -2,13 +2,13 @@ let LibrariesItem = React.createClass({
   render() {
     const iconClass = "devtools-icon ";
     const statusClass = (this.state.injected || this.props.injected) ? "remove"
-                                                                      : "add";
-
+                                                                     : "add";
     return (
       <li className="item">
         <div>
           <span className="item-name">{this.props.name}</span>
-          <span className="item-url">{this.props.url}</span>
+          <a target="_blank" href={this.props.latest}
+             className="item-url">{this.props.url}</a>
         </div>
 
         <a onClick={this.onStatusIconClick}
@@ -33,17 +33,22 @@ let LibrariesItem = React.createClass({
     let results = libraries.state.results;
 
     if (state) {
+      // Add item in injected libs if state == true
       injected.push(this.props);
     } else {
+      // Remove item from injected libs if state == false
       let index = injected.findIndex(item => item.name === this.props.name);
       injected.splice(index, 1);
 
+      // Keep the injected and search results in sync
       if (this.props.injected) {
         let matched = results.findIndex(item => item.name === this.props.name);
-        let target = libraries.refs[`item-${matched}`];
-        target.setState({
-          injected: state
-        });
+        if (matched > -1) {
+          let target = libraries.refs[`item-${matched}`];
+          target.setState({
+            injected: state
+          });
+        }
       }
     }
 
