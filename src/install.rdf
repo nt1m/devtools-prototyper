@@ -3,7 +3,7 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>devtools-prototyper@tim-addons.com</em:id>
-    <em:version>4.0</em:version>
+    <em:version>${version}</em:version>
     <em:name>DevTools Prototyper</em:name>
     <em:description>Quickly prototype webpages using this handy add-on.</em:description>
     <em:creator>Tim Nguyen</em:creator>

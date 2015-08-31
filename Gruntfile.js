@@ -1,6 +1,18 @@
 module.exports = function(grunt) {
   var type = "type='application/javascript;version=1.8'";
 
+  grunt.task.registerTask("setRdfFileVersion", undefined, function() {
+    var JSONManifest = grunt.file.read("package.json");
+    var versionNumber = JSON.parse(JSONManifest).version;
+    console.log("Setting install.rdf version to " + versionNumber + ".");
+
+    var manifestURI = "dist/install.rdf";
+    var addonManifest = grunt.file.read(manifestURI);
+    addonManifest = addonManifest.replace("${version}", versionNumber);
+    grunt.file.write(manifestURI, addonManifest);
+    console.log("Version successfully set.");
+  });
+
   grunt.initConfig({
     pkg: require("./package.json"),
     eslint: {
@@ -102,7 +114,7 @@ module.exports = function(grunt) {
   }
 
   grunt.registerTask("default", ["clean", "babel", "copy",
-                                 "injector", "eslint"]);
-  grunt.registerTask("build", ["clean", "babel", "copy", "injector", "zip"]);
+                                 "injector", "setRdfFileVersion", "eslint"]);
+  grunt.registerTask("build", ["clean", "babel", "copy", "injector", "setRdfFileVersion", "zip"]);
   grunt.registerTask("install", ["build", "exec:install"]);
 };
