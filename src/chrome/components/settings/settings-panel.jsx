@@ -1,7 +1,7 @@
 let SettingsPanel = React.createClass({
   mixins: [Togglable, Overlay],
   render() {
-    return <div className={this.overlayClassName} id="settings">
+    return (<div className={this.overlayClassName} id="settings">
       <form onSubmit={this.onSubmit}>
         <div className="column">
           <h1 className="title">
@@ -17,10 +17,14 @@ let SettingsPanel = React.createClass({
             {L10N.getStr("prototyper.settings")}
           </h1>
           <SettingsItem id="emmet-enabled" type="checkbox"
-                        label="prototyper.settings.enableEmmet" />
+                        label="prototyper.settings.enableEmmet"/>
+          <SettingsItem id="live-edit-enabled" type="checkbox"
+                        label="prototyper.settings.enableLiveEdit"/>
+          <SettingsItem id="sync-enabled" type="checkbox"
+                        label="prototyper.settings.enableSync" synced={false}/>
         </div>
       </form>
-    </div>;
+    </div>);
   },
   onSubmit(e) {
     e.preventDefault();

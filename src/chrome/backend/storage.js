@@ -4,6 +4,15 @@ const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
 let Storage = {
+  defaults: {
+    "settings-sync-enabled": true,
+    "settings-prototype-title": "Prototype",
+    "settings-prototype-description": "Prototype created with DevTools Prototyper",
+    "settings-live-edit-enabled": true,
+    "settings-emmet-enabled": true,
+    "injected-libraries": "[]",
+    "initialized": true
+  },
   get(pref) {
     let prefname = prefPrefix + pref;
     let type = Services.prefs.getPrefType(prefname);
@@ -25,21 +34,23 @@ let Storage = {
 
     return result;
   },
-  set(pref, value, sync = true) {
+  set(pref, value, shouldSync = true) {
     let prefname = prefPrefix + pref;
     let type = Services.prefs.getPrefType(prefname);
+    let valueType = typeof value;
 
-    if (type === Services.prefs.PREF_BOOL) {
+    this.setSync(pref, shouldSync);
+
+    if (valueType === "boolean" ||
+        type === Services.prefs.PREF_BOOL) {
       Services.prefs.setBoolPref(prefname, value);
       return;
     }
 
-    if (typeof value === "object") {
+    if (valueType === "object") {
       value = JSON.stringify(value);
     }
-
     Services.prefs.setCharPref(prefname, value);
-    this.setSync(pref, sync);
   },
   entries(search = "") {
     let keys = Services.prefs.getChildList(prefPrefix + search);
@@ -58,20 +69,17 @@ let Storage = {
     return obj;
   },
   setSync(pref, value) {
+    if (!this.get("settings-sync-enabled")) {
+      value = false;
+    }
     Services.prefs.setBoolPref(syncPrefPrefix + pref, value);
   }
 };
 
 if (!Storage.get("initialized")) {
-  const defaults = {
-    "settings-emmet-enabled": true,
-    "injected-libraries": "[]",
-    "initialized": true
-  };
+  const defaults = Storage.defaults;
 
   for (let key in defaults) {
     Storage.set(key, defaults[key]);
   }
-
-  Storage.setSync("initialized", false);
 }

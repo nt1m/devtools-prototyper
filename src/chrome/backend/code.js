@@ -1,52 +1,95 @@
 const beautify = require("devtools/jsbeautify");
+// The content script can't be placed in a separate file because the SDK
+// forbids chrome:// URIs
+let PrototypeContentScript = `
+let PrototypeManager = {
+  onNewPrototype({html, js, libs}) {
+    document.documentElement.innerHTML = html;
 
+    let head = document.querySelector("head");
+    let script = document.createElement("script");
+    script.type = "text/javascript;version=1.8";
+    script.async = true;
+    script.innerHTML = js;
+    head.appendChild(script);
+
+    for (let lib of libs) {
+      let libScript = document.createElement("script");
+      libScript.src = lib.latest;
+      head.appendChild(libScript);
+    }
+  },
+  updateCSS(newCss) {
+    document.querySelector("head > style").textContent = newCss;
+  },
+  updateHTML(newHtml) {
+    document.body.innerHTML = newHtml;
+  },
+  init() {
+    self.port.on("new-prototype", this.onNewPrototype.bind(this));
+    self.port.on("css-update", this.updateCSS.bind(this));
+    self.port.on("html-update", this.updateHTML.bind(this));
+  }
+};
+PrototypeManager.init();`;
 let Code = {
   run() {
-    let html = Code.getCode();
-    Code.openTab(html);
+    Code.openTab();
   },
   getCode() {
     return buildCode();
   },
-  openTab(html) {
+  openTab() {
     const prototypeURL = `${basePath}/content/${prototypeName}`;
-    const mm = `self.port.on("html", html => {
-      document.documentElement.innerHTML = html
-      let scripts = document.querySelectorAll("script");
+    let currentTab;
 
-      let libsPromises = [];
-      for (let script of scripts) {
-        let el = document.createElement("script");
-        el.type = "text/javascript;version=1.8";
-        el.textContent = script.textContent;
-
-        if (script.src) {
-          let promise = new Promise((resolve) => {
-            el.onload = resolve;
-          });
-          el.src = script.src;
-          libsPromises.push(promise);
-          document.body.appendChild(el);
-        } else {
-          Promise.all(libsPromises).then(() => document.body.appendChild(el));
+    // If Prototyper is running on a tab by itself
+    if (window.top == window &&
+        !this.running) {
+      tabs.open({
+        url: prototypeURL,
+        onReady: (tab) => {
+          currentTab = this.currentTab = tab;
+          this.attachContentScript(tab);
         }
-
-        script.remove();
-      }
-    });`;
-
-    tabs.activeTab.once("ready", () => {
-      let worker = tabs.activeTab.attach({
-        contentScript: mm
       });
-
-      worker.port.emit("html", html);
-    });
-    if (tabs.activeTab.url === prototypeURL) {
-      tabs.activeTab.reload();
-    } else {
-      tabs.activeTab.url = prototypeURL;
+      return;
     }
+
+    // If Prototyper is running in the toolbox, but the prototype isn't ran yet
+    if (!this.currentTab) {
+      currentTab = this.currentTab = tabs.activeTab;
+      
+    }
+    // If the Prototype is already ran.
+    else {
+      currentTab = this.currentTab;
+    }
+    currentTab.once("ready", () => {
+      this.attachContentScript(currentTab);
+    });
+    if (this.running) {
+      currentTab.reload();
+    } else {
+      currentTab.url = prototypeURL;
+    }
+  },
+  attachContentScript(tab) {
+    let worker = this.currentWorker = tab.attach({
+      contentScript: PrototypeContentScript
+    });
+
+    const editors = app.props.editors.refs;
+    let html = Code.getCode();
+    let js = editors.js.props.cm.getText().replace(/\n/g, "\n\t\t");
+    let libs = app.props.libraries.state.injected;
+    worker.port.emit("new-prototype", {html, js, libs});
+  },
+  get running() {
+    const prototypeURL = `${basePath}/content/${prototypeName}`;
+    return this.currentTab &&
+           this.currentTab.url === prototypeURL &&
+           this.currentWorker;
   },
   save(lang) {
     const editors = app.props.editors.refs;
@@ -57,7 +100,12 @@ let Code = {
     const editors = app.props.editors.refs;
 
     let cm = editors[lang].props.cm;
-    cm.setText(Storage.get(`editor-${lang}`));
+    cm.setText(Storage.get(`${lang}`));
+  },
+  update(lang, newCode) {
+    if (this.running) {
+      this.currentWorker.port.emit(`${lang}-update`, newCode);
+    }
   },
   beautify() {
     const editors = app.props.editors.refs;
@@ -70,6 +118,31 @@ let Code = {
   },
   exportCode(service) {
     let properties = EXPORT_SERVICES.find(item => item.id === service);
+
+    if (service == "local") {
+      let zip = new JSZip();
+      zip.file("index.html", exportedCode.html);
+
+      let cssFolder = zip.folder("css");
+      cssFolder.file("style.css", exportedCode.css);
+
+      let jsFolder = zip.folder("js");
+      jsFolder.file("script.js", exportedCode.js);
+
+      let blob = zip.generate({type: "blob"});
+      let url = URL.createObjectURL(blob);
+
+      // This is the only way to make sure the ZIP has a file name
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "prototype.zip";
+      a.hidden = true;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      return;
+    }
 
     request(properties).then(response => {
       if (service.indexOf("gist") > -1) {
@@ -85,3 +158,4 @@ let Code = {
     }, "");
   }
 };
+

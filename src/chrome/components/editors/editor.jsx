@@ -52,9 +52,7 @@ let Editor = React.createClass({
       config.externalScripts = [EMMET_URL];
     }
 
-    let sourceEditor = new CodeMirror(config);
-
-    this.props.cm = sourceEditor;
+    let sourceEditor = this.props.cm = new CodeMirror(config);
 
     const container = React.findDOMNode(this.refs.container);
     container.innerHTML = "";
@@ -63,6 +61,9 @@ let Editor = React.createClass({
       Code.load(lang);
       sourceEditor.on("change", () => {
         Code.save(lang);
+        if (Settings.get("live-edit-enabled")) {
+          Code.update(lang, sourceEditor.getText());
+        }
       });
       sourceEditor.setMode(CodeMirror.modes[lang].name);
     });

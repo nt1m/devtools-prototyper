@@ -1,47 +1,42 @@
 "use strict";
 
-const { classes: Cc, interfaces: Ci, utils: Cu, results: Cr } = Components;
+const basePath = "chrome://devtools-prototyper";
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource:///modules/devtools/gDevTools.jsm");
+const {utils: Cu} = Components;
+const {require, loader} =
+      Cu.import("resource://gre/modules/devtools/Loader.jsm", {});
+const Services = require("Services");
+const {gDevTools} = Cu.import("resource:///modules/devtools/gDevTools.jsm", {});
+const {ViewHelpers} = require("resource:///modules/devtools/ViewHelpers.jsm");
+const L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 
-XPCOMUtils.defineLazyGetter(this, "osString", () =>
-	Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS);
+loader.lazyGetter(this, "toolDefinition", () => ({
+  id: "prototyper",
+  icon: `${basePath}/skin/images/icon.svg`,
+  invertIconForLightTheme: true,
+  url: `${basePath}/content/panel.html`,
+  label: L10N.getStr("prototyper.label"),
+  tooltip: L10N.getStr("prototyper.tooltip"),
 
+  isTargetSupported: function(target) {
+    return target.isLocalTab;
+  },
 
-XPCOMUtils.defineLazyGetter(this, "toolStrings", () =>
-	Services.strings.createBundle("chrome://devtools-prototyper/locale/strings.properties"));
-
-XPCOMUtils.defineLazyGetter(this, "toolDefinition", () => ({
-	id: "prototyper",
-	icon: "chrome://devtools-prototyper/skin/images/icon.svg",
-	invertIconForLightTheme: true,
-	url: "chrome://devtools-prototyper/content/panel.html",
-	label: toolStrings.GetStringFromName("prototyper.label"),
-	tooltip: toolStrings.GetStringFromName("prototyper.tooltip"),
-
-	isTargetSupported: function(target) {
-		return true;
-	},
-
-	build: function(iframeWindow, toolbox) {
-		Cu.import("chrome://devtools-prototyper/content/panel.js");
-		return new PrototyperPanel(iframeWindow, toolbox);
-	}
+  build: function(iframeWindow, toolbox) {
+    let {PrototyperPanel} = require(`${basePath}/content/panel.js`);
+    return new PrototyperPanel(iframeWindow, toolbox);
+  }
 }));
 
 function startup() {
-	gDevTools.registerTool(toolDefinition);
+  gDevTools.registerTool(toolDefinition);
 }
 
 function shutdown() {
-	gDevTools.unregisterTool(toolDefinition);
-	Services.obs.notifyObservers(null, "startupcache-invalidate", null);
+  gDevTools.unregisterTool(toolDefinition);
+  Services.obs.notifyObservers(null, "startupcache-invalidate", null);
 }
 
-function install() {
-}
+function install() {}
 
-function uninstall() {
-}
+function uninstall() {}

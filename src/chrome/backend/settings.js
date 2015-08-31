@@ -3,8 +3,13 @@ let Settings = {
   get(key) {
     return Storage.get(settingsPrefix + key);
   },
-  set(key, value) {
-    return Storage.set(settingsPrefix + key, value);
+  set(key, value, shouldSync = true) {
+    return Storage.set(settingsPrefix + key, value, shouldSync);
+  },
+  refreshSyncState() {
+    Storage.entries().forEach(arr => {
+      Storage.setSync(arr[0], Settings.get("sync-enabled"));
+    });
   },
   entries() {
     let entries = Storage.entries(settingsPrefix);

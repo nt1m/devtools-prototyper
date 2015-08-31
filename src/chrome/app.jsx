@@ -3,7 +3,6 @@ let App = React.createClass({
     return {};
   },
   render() {
-
     return (
       <div className="container">
         <Sidebar ref="sidebar" />

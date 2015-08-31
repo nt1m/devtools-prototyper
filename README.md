@@ -6,11 +6,13 @@ This is an add-on that adds JSFiddle style prototyping to Firefox DevTools.
 
 AMO : https://addons.mozilla.org/en-US/firefox/addon/devtools-prototyper/
 
-## Compatibility
-Only tested with Firefox 33 and Firefox 36+.
+## Contributing
+You can contribute by submitting pull requests. 
 
-## How to contribute ?
-Pull requests :) See existing issues : https://github.com/nt1m/devtools-prototyper/issues
+See existing issues : https://github.com/nt1m/devtools-prototyper/issues
 
-## How to build an XPI
-Use the Makefile, or if you don't know how to use it, just copy everything into a zip file, then rename that zip file to addon.xpi.
+## Localizing
+Localizations are located in the `src/locales` directory. You can submit pull requests for that directory. There is also a mirror set up at <a href="https://www.transifex.com/tim-nguyen/devtools-prototyper/">Transifex</a>.
+
+## Build instructions
+Install grunt, then run `grunt build`. The XPI will appear in the `build/` directory.

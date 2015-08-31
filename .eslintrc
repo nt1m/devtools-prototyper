@@ -1,6 +1,7 @@
 {
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true
   },
   "ecmaFeatures": {
     "jsx": true
@@ -284,7 +285,7 @@
     // statement.
     "no-unreachable": 2,
     // Disallow declaration of variables that are not used in the code
-    "no-unused-vars": 2,
+    "no-unused-vars": 1,
     // Allow using variables before they are defined.
     "no-use-before-define": 0,
     // Require let or const instead of var.
@@ -344,7 +345,7 @@
     // Require a space immediately following the // in a line comment.
     "spaced-line-comment": [1, "always"],
     // Require "use strict" to be defined globally in the script.
-    "strict": [2, "global"],
+    "strict": [1, "global"],
     // Disallow comparisons with the value NaN.
     "use-isnan": 2,
     // Warn about invalid JSDoc comments.
