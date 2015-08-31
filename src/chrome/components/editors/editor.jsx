@@ -6,12 +6,14 @@ const KEYS = {
   mac: {
     "Cmd-Enter": Code.run,
     "Cmd-R": Code.run,
-    "Cmd-S": () => {}
+    "Cmd-S": () => {},
+    "Esc": false
   },
   other: {
     "Ctrl-Enter": Code.run,
     "Ctrl-R": Code.run,
-    "Ctrl-S": () => {}
+    "Ctrl-S": () => {},
+    "Esc": false
   }
 };
 
