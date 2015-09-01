@@ -3,14 +3,14 @@
 const basePath = "chrome://devtools-prototyper";
 
 const {utils: Cu} = Components;
-const {require, loader} =
-      Cu.import("resource://gre/modules/devtools/Loader.jsm", {});
+const {require, lazyGetter} = 
+      Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools;
 const Services = require("Services");
 const {gDevTools} = Cu.import("resource:///modules/devtools/gDevTools.jsm", {});
 const {ViewHelpers} = require("resource:///modules/devtools/ViewHelpers.jsm");
 const L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 
-loader.lazyGetter(this, "toolDefinition", () => ({
+lazyGetter(this, "toolDefinition", () => ({
   id: "prototyper",
   icon: `${basePath}/skin/images/icon.svg`,
   invertIconForLightTheme: true,
