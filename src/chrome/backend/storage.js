@@ -1,5 +1,3 @@
-Cu.import("resource://gre/modules/Services.jsm");
-
 const prefPrefix = "extensions.devtools-prototyper.";
 const syncPrefPrefix = "services.sync.prefs.sync." + prefPrefix;
 
