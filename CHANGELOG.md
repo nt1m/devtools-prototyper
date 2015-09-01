@@ -4,6 +4,8 @@
 - Live HTML/CSS edit
 - ZIP export (replaces the old HTML export)
 - DevTools Prototyper can now run alone in a tab
+- More translations
+- New icon
 - Many bug fixes, and much more stability
 
 ## 3.1
