@@ -3,7 +3,7 @@
 const basePath = "chrome://devtools-prototyper";
 
 const {utils: Cu} = Components;
-const {require, lazyGetter} = 
+const {require, lazyGetter} =
       Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools;
 const Services = require("Services");
 const {gDevTools} = Cu.import("resource:///modules/devtools/gDevTools.jsm", {});
