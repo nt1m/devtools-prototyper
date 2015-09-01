@@ -10,3 +10,17 @@ function debounce(callback, delay) {
     timeout = setTimeout(later, delay);
   };
 }
+
+function openExportMenu() {
+  let sidebarButton = app.props.sidebar.refs.export;
+  sidebarButton.activate();
+
+  app.props.export.activate();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    openExportMenu();
+  }
+})

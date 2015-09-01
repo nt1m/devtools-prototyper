@@ -2,17 +2,19 @@ const CodeMirror = require("devtools/sourceeditor/editor");
 const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
 
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");
+
+// openExportMenu is defined in lib/utils.js
 const KEYS = {
   mac: {
     "Cmd-Enter": Code.run,
     "Cmd-R": Code.run,
-    "Cmd-S": () => {},
+    "Cmd-S": openExportMenu,
     "Esc": false
   },
   other: {
     "Ctrl-Enter": Code.run,
     "Ctrl-R": Code.run,
-    "Ctrl-S": () => {},
+    "Ctrl-S": openExportMenu,
     "Esc": false
   }
 };
