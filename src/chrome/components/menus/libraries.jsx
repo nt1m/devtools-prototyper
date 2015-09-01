@@ -4,7 +4,8 @@ let LibrariesMenu = React.createClass({
   mixins: [Togglable, Menu],
   render() {
     let results = this.state.results.map((value, index) => {
-      return <LibrariesItem ref={`item-${index}`} key={index} {...value} injected={false}/>;
+      return (<LibrariesItem ref={`item-${index}`}
+                             key={index} {...value} injected={false}/>);
     });
     let injected = this.state.injected.map(value => {
       return <LibrariesItem {...value} injected={true} />;

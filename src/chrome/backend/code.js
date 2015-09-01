@@ -59,10 +59,8 @@ let Code = {
     // If Prototyper is running in the toolbox, but the prototype isn't ran yet
     if (!this.currentTab) {
       currentTab = this.currentTab = tabs.activeTab;
-      
-    }
-    // If the Prototype is already ran.
-    else {
+    } else {
+      // If the Prototype is already ran.
       currentTab = this.currentTab;
     }
     currentTab.once("ready", () => {

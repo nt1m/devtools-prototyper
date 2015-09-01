@@ -5,7 +5,8 @@ let Storage = {
   defaults: {
     "settings-sync-enabled": true,
     "settings-prototype-title": "Prototype",
-    "settings-prototype-description": "Prototype created with DevTools Prototyper",
+    "settings-prototype-description":
+      "Prototype created with DevTools Prototyper",
     "settings-live-edit-enabled": true,
     "settings-emmet-enabled": true,
     "injected-libraries": "[]",
