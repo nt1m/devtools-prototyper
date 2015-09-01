@@ -18,8 +18,8 @@ function openExportMenu() {
   app.props.export.activate();
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+document.addEventListener("keydown", e => {
+  if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
     e.preventDefault();
     openExportMenu();
   }
