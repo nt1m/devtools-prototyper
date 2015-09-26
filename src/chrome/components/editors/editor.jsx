@@ -1,4 +1,9 @@
-const CodeMirror = require("devtools/sourceeditor/editor");
+let CodeMirror;
+try {
+  CodeMirror = require("devtools/client/sourceeditor/editor");
+} catch(e) {
+  CodeMirror = require("devtools/sourceeditor/editor");
+}
 const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
 
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");

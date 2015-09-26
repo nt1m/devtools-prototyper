@@ -1,4 +1,9 @@
-const beautify = require("devtools/jsbeautify");
+let beautify;
+try {
+  beautify = require("devtools/shared/jsbeautify/beautify");
+} catch(e) {
+  beautify = require("devtools/jsbeautify");
+}
 // The content script can't be placed in a separate file because the SDK
 // forbids chrome:// URIs
 let PrototypeContentScript = `
@@ -156,4 +161,3 @@ let Code = {
     }, "");
   }
 };
-

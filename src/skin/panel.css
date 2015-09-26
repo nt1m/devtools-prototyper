@@ -323,6 +323,7 @@ iframe {
 button.active .devtools-icon::after {
   filter: none !important;
 }
+button:not(.active) .devtools-icon.beautify::after,
 button:not(.active) .devtools-icon.export::after,
 button:not(.active) .devtools-icon.libraries::after,
 button:not(.active) .devtools-icon.settings::after {
@@ -337,29 +338,22 @@ button:not(.active) .devtools-icon.settings::after {
   background-image: url("images/save.svg");
 }
 .devtools-icon.add::after {
-  background-image: url("chrome://browser/skin/devtools/add.svg");
+  background-image: url("images/add.svg");
 }
 .devtools-icon.remove::after {
   background-image: url("images/remove.svg");
 }
 .devtools-icon.libraries::after {
-  background-image: url(images/librairies.svg);
+  background-image: url("images/librairies.svg");
 }
 .devtools-icon.stopwatch::after {
-  background-image: url("chrome://browser/skin/devtools/profiler-stopwatch.svg");
+  background-image: url("chrome://devtools/skin/themes/images/profiler-stopwatch.svg");
 }
 .devtools-icon.settings::after {
-  background-image: url(chrome://browser/skin/devtools/tool-options.svg);
-  background-size: 16px 16px;
+  background-image: url("images/options.svg");
 }
 .devtools-icon.beautify::after {
-  background-image: url("chrome://browser/skin/devtools/debugger-prettyprint.png");
-  background-position: center left;
-  background-size: 32px 16px;
+  background-image: url("images/beautify.svg");
+  background-size: 15px;
+  background-repeat: no-repeat;
 }
-@media (min-resolution: 1.1dppx) {
-  .devtools-icon.beautify::after {
-    background-image: url("chrome://browser/skin/devtools/debugger-prettyprint@2x.png");
-  }
-}
-
