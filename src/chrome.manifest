@@ -3,3 +3,6 @@ skin    devtools-prototyper       classic/1.0 skin/
 
 locale  devtools-prototyper en-US locale/en-US/
 locale  devtools-prototyper fr    locale/fr/
+locale  devtools-prototyper de    locale/de/
+locale  devtools-prototyper sv    locale/sv/
+locale  devtools-prototyper ru    locale/ru/
