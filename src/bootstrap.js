@@ -6,11 +6,11 @@ const {utils: Cu} = Components;
 let require, lazyGetter, gDevTools, ViewHelpers;
 try {
   ({require, lazyGetter} =
- Cu.import("resource://gre/modules/devtools/shared/Loader.jsm", {}).devtools);
+ Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools);
   ({gDevTools} =
- Cu.import("resource:///modules/devtools/client/framework/gDevTools.jsm", {}));
+ Cu.import("resource://devtools/client/framework/gDevTools.jsm", {}));
   ({ViewHelpers} =
-require("resource:///modules/devtools/client/shared/widgets/ViewHelpers.jsm"));
+require("resource://devtools/client/shared/widgets/ViewHelpers.jsm"));
 } catch(e) {
   // Fallback to old paths
   ({require, lazyGetter} =

@@ -1,6 +1,6 @@
 {
   "name": "devtools-prototyper",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Firefox add-on that adds JSFiddle style prototyping to Firefox DevTools.",
   "main": "Gruntfile.js",
   "scripts": {

@@ -5,7 +5,7 @@ let ExportMenu = React.createClass({
 
     return (
       <div id="export-menu" className={this.menuClassName}>
-        <p className="menu-title">Export Prototype</p>
+        <p className="menu-title">{L10N.getStr("prototyper.export.tooltip")}</p>
         {items}
       </div>
     );

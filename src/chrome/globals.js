@@ -5,9 +5,9 @@ const prototypeName = "prototype.html";
 let require, ViewHelpers;
 try {
   ({require} =
-  Cu.import("resource://gre/modules/devtools/shared/Loader.jsm", {}).devtools);
+  Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools);
   ({ViewHelpers} =
-require("resource:///modules/devtools/client/shared/widgets/ViewHelpers.jsm"));
+require("resource://devtools/client/shared/widgets/ViewHelpers.jsm"));
 } catch(e) {
   // Fallback to old paths
   ({require} =
