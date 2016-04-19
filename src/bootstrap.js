@@ -3,14 +3,14 @@
 const basePath = "chrome://devtools-prototyper";
 
 const {utils: Cu} = Components;
-let require, lazyGetter, gDevTools, ViewHelpers;
+let require, lazyGetter, gDevTools, ViewHelpers, LocalizationHelper, L10N;
 try {
   ({require, lazyGetter} =
  Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools);
   ({gDevTools} =
  Cu.import("resource://devtools/client/framework/gDevTools.jsm", {}));
-  ({ViewHelpers} =
-require("resource://devtools/client/shared/widgets/ViewHelpers.jsm"));
+  ({ LocalizationHelper } = require("devtools/client/shared/l10n"));
+  L10N = new LocalizationHelper(`${basePath}/locale/strings.properties`);
 } catch(e) {
   // Fallback to old paths
   ({require, lazyGetter} =
@@ -19,10 +19,9 @@ require("resource://devtools/client/shared/widgets/ViewHelpers.jsm"));
     Cu.import("resource:///modules/devtools/gDevTools.jsm", {}));
   ({ViewHelpers} =
     require("resource:///modules/devtools/ViewHelpers.jsm"));
+  L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 }
 const Services = require("Services");
-
-const L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 
 lazyGetter(this, "toolDefinition", () => ({
   id: "prototyper",

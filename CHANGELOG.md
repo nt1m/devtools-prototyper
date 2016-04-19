@@ -1,4 +1,7 @@
 # Changelog
+## 4.0.3
+- Fixed Nightly compatibility (bug 1258305)
+
 ## 4.0
 - Refactored to use React (thanks <a href="http://dibaiee.ir/">mdibaiee</a> !)
 - Live HTML/CSS edit
@@ -18,7 +21,7 @@
 - Settings panel (thanks to mdibaiee)
 
 ## 2.0
-- Brand new UI 
+- Brand new UI
 - Ability to toggle panes
 - Ability to prettify code
 - Emmet support, you need to use Ctrl/Cmd+E (Only works from Firefox 40+)
@@ -26,7 +29,7 @@ Big thanks to  <a href="http://dibaiee.ir/">mdibaiee</a> for contributing the 3 
 
 ## 1.5.1
 - Fixed encoding error
-- Improved menu 
+- Improved menu
 
 ## 1.4.1
 - Added codepen export
