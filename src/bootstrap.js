@@ -3,24 +3,22 @@
 const basePath = "chrome://devtools-prototyper";
 
 const {utils: Cu} = Components;
-let require, lazyGetter, gDevTools, L10N;
+let {require, lazyGetter} =
+  Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools;
+let {gDevTools} =
+  Cu.import("resource://devtools/client/framework/gDevTools.jsm", {});
+let L10N;
 try {
-  ({require, lazyGetter} =
- Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools);
-  ({gDevTools} =
- Cu.import("resource://devtools/client/framework/gDevTools.jsm", {}));
+  // Firefox 48+
   let { LocalizationHelper } = require("devtools/client/shared/l10n");
   L10N = new LocalizationHelper(`${basePath}/locale/strings.properties`);
 } catch(e) {
-  // Fallback to old paths
-  ({require, lazyGetter} =
-    Cu.import("resource://gre/modules/devtools/Loader.jsm", {}).devtools);
-  ({gDevTools} =
-    Cu.import("resource:///modules/devtools/gDevTools.jsm", {}));
+  // Firefox 44 to 47
   let {ViewHelpers} =
-    require("resource:///modules/devtools/ViewHelpers.jsm");
+    require("resource://devtools/client/shared/widgets/ViewHelpers.jsm");
   L10N = new ViewHelpers.L10N(`${basePath}/locale/strings.properties`);
 }
+
 const Services = require("Services");
 
 lazyGetter(this, "toolDefinition", () => ({
