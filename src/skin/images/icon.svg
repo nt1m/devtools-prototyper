@@ -1,7 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 100 100">
-<g fill="#edf0f1">
-  <polygon points="53.954,52.16 53.954,100 93.337,77.072 93.337,30.328"/>
-  <polygon points="6.664,77.072 46.047,100 46.047,52.16 6.664,30.328"/>
-  <polygon points="50.105,0 10.213,23.144 50.079,45.237 50.105,45.222 89.999,23.144"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>16</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="16" sketch:type="MSArtboardGroup" fill="#F5F5F5">
+            <path d="M7.99999995,6 L11.9999999,3.99999988 L7.99999995,2 L3.99999995,3.99999989 L7.99999995,6 L7.99999995,6 Z M2,4 L2,4 L8,1 L14,4 L8,7 L2,4 L2,4 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+            <path d="M7.99999995,14 L13.0000004,11.5 L13,6.50000003 L8.00000001,9.00000003 L3.00000001,6.50000003 L3.00000001,11.5 L7.99999995,14 Z M2,5 L8,8 L14,5 L14,12 L8,15 L2,12 L2,5 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+            <circle id="Oval-1" sketch:type="MSShapeGroup" cx="4.5" cy="9.5" r="0.5"></circle>
+            <circle id="Oval-1-Copy" sketch:type="MSShapeGroup" cx="6.5" cy="10.5" r="0.5"></circle>
+            <circle id="Oval-1-Copy-2" sketch:type="MSShapeGroup" cx="9.5" cy="10.5" r="0.5"></circle>
+            <circle id="Oval-1-Copy-3" sketch:type="MSShapeGroup" cx="11.5" cy="9.5" r="0.5"></circle>
+        </g>
+    </g>
 </svg>
