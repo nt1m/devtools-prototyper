@@ -43,8 +43,8 @@ let PrototypeManager = {
 };
 PrototypeManager.init();`;
 let Code = {
-  run() {
-    Code.openTab();
+  run(ctrlOrCmd) {
+    Code.openTab(ctrlOrCmd);
   },
   getCode() {
     return buildCode();
@@ -55,7 +55,7 @@ let Code = {
     }
     return "data:text/html;charset=utf-8,";
   },
-  openTab() {
+  openTab(ctrlOrCmd) {
     let currentTab;
 
     // If Prototyper is running on a tab by itself
@@ -63,6 +63,7 @@ let Code = {
         !this.running) {
       tabs.open({
         url: this.prototypeURL,
+        inNewWindow: ctrlOrCmd,
         onReady: (tab) => {
           currentTab = this.currentTab = tab;
           this.attachContentScript(tab);

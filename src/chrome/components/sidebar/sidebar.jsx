@@ -10,7 +10,7 @@ let Sidebar = React.createClass({
     buttons = [
       {
         id: "run",
-        onClick: Code.run
+        onClick: (e) => Code.run(e.ctrlKey || e.metaKey)
       },
       {
         id: "beautify",
