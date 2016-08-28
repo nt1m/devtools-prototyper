@@ -42,6 +42,10 @@
     "Storage": true,
     "tabs": true,
     "L10N": true,
+    "toolbox": true,
+    "openExportMenu": true,
+    "JSZip": true,
+    "exportedCode": true,
     "debounce": true
   },
   "rules": {
@@ -110,7 +114,7 @@
     // rule is a better rule to check this.
     "max-depth": 0,
     // Maximum length of a line.
-    "max-len": [1, 80],
+    "max-len": [1, 90],
     // Maximum depth callbacks can be nested.
     "max-nested-callbacks": [2, 3],
     // Don't limit the number of parameters that can be used in a function.
@@ -315,8 +319,6 @@
     // Don't require to sort variables within the same declaration block.
     // Anyway, one-var is disabled.
     "sort-vars": 0,
-    // Deprecated, will be removed in 1.0.
-    "space-after-function-name": 0,
     // Require a space after keywords.
     "space-after-keywords": [1, "always"],
     // Deprecated, will be removed in 1.0.

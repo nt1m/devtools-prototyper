@@ -1,3 +1,6 @@
 "use strict";
-let app = <App />;
-React.render(app, document.querySelector("#wrapper"));
+let app;
+window.addEventListener("inspector-loaded", () => {
+  app = <App />;
+  React.render(app, document.querySelector("#wrapper"));
+});

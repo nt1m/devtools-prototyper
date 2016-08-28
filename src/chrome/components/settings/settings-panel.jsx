@@ -20,6 +20,8 @@ let SettingsPanel = React.createClass({
                         label="prototyper.settings.enableEmmet"/>
           <SettingsItem id="live-edit-enabled" type="checkbox"
                         label="prototyper.settings.enableLiveEdit"/>
+          <SettingsItem id="chrome-privilege-enabled" type="checkbox"
+                        label="prototyper.settings.enableChromePrivilege"/>
           <SettingsItem id="sync-enabled" type="checkbox"
                         label="prototyper.settings.enableSync" synced={false}/>
         </div>

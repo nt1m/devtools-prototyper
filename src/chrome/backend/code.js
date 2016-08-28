@@ -18,6 +18,11 @@ let PrototypeManager = {
     script.innerHTML = js;
     head.appendChild(script);
 
+    let icon = document.createElement("link");
+    icon.rel = "shortcut icon";
+    icon.href = "${basePath}/skin/images/page-icon.svg";
+    head.appendChild(icon);
+
     for (let lib of libs) {
       let libScript = document.createElement("script");
       libScript.src = lib.latest;
@@ -44,15 +49,20 @@ let Code = {
   getCode() {
     return buildCode();
   },
+  get prototypeURL() {
+    if (Settings.get("chrome-privilege-enabled")) {
+      return `${basePath}/content/${prototypeName}`;
+    }
+    return "data:text/html;charset=utf-8,";
+  },
   openTab() {
-    const prototypeURL = `${basePath}/content/${prototypeName}`;
     let currentTab;
 
     // If Prototyper is running on a tab by itself
     if (window.top == window &&
         !this.running) {
       tabs.open({
-        url: prototypeURL,
+        url: this.prototypeURL,
         onReady: (tab) => {
           currentTab = this.currentTab = tab;
           this.attachContentScript(tab);
@@ -74,7 +84,7 @@ let Code = {
     if (this.running) {
       currentTab.reload();
     } else {
-      currentTab.url = prototypeURL;
+      currentTab.url = this.prototypeURL;
     }
   },
   attachContentScript(tab) {
@@ -89,9 +99,8 @@ let Code = {
     worker.port.emit("new-prototype", {html, js, libs});
   },
   get running() {
-    const prototypeURL = `${basePath}/content/${prototypeName}`;
     return this.currentTab &&
-           this.currentTab.url === prototypeURL &&
+           this.currentTab.url === this.prototypeURL &&
            this.currentWorker;
   },
   save(lang) {

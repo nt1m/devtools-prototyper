@@ -1,28 +1,8 @@
-let CodeMirror;
-try {
-  CodeMirror = require("devtools/client/sourceeditor/editor");
-} catch(e) {
-  CodeMirror = require("devtools/sourceeditor/editor");
-}
+let CodeMirror = require("devtools/client/sourceeditor/editor");
+const {StyleSheetFront} = require("devtools/shared/fronts/stylesheets");
 const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
-
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");
-
-// openExportMenu is defined in lib/utils.js
-const KEYS = {
-  mac: {
-    "Cmd-Enter": Code.run,
-    "Cmd-R": Code.run,
-    "Cmd-S": openExportMenu,
-    "Esc": false
-  },
-  other: {
-    "Ctrl-Enter": Code.run,
-    "Ctrl-R": Code.run,
-    "Ctrl-S": openExportMenu,
-    "Esc": false
-  }
-};
+const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
 
 let Editor = React.createClass({
   mixins: [Togglable],
@@ -47,11 +27,17 @@ let Editor = React.createClass({
   componentDidMount() {
     const lang = this.props.lang;
 
+    const CtrlOrCmd = IS_MAC ? "Cmd" : "Ctrl";
     const config = {
       lineNumbers: true,
       readOnly: false,
       autoCloseBrackets: "{}()[]",
-      extraKeys: IS_MAC ? KEYS.mac : KEYS.other
+      extraKeys: {
+        [`${CtrlOrCmd}-Enter`]: Code.run,
+        [`${CtrlOrCmd}-R`]: Code.run,
+        [`${CtrlOrCmd}-S`]: openExportMenu,
+        "Esc": false
+      }
     };
 
     // Enabled Emmet for HTML and CSS
@@ -73,6 +59,64 @@ let Editor = React.createClass({
         }
       });
       sourceEditor.setMode(CodeMirror.modes[lang].name);
+      if (!toolbox || lang !== "css") {
+        return;
+      }
+      let hUtils = toolbox.highlighterUtils;
+      if (hUtils.supportsCustomHighlighters()) {
+        try {
+          hUtils.getHighlighterByType("SelectorHighlighter").then((highlighter) => {
+            this.highlighter = highlighter;
+            if (this.highlighter && toolbox.walker) {
+              sourceEditor.container.addEventListener("mousemove", this._onMouseMove);
+            }
+          });
+        } catch (e) {
+          // The selectorHighlighter can't always be instantiated, for example
+          // it doesn't work with XUL windows (until bug 1094959 gets fixed);
+          // or the selectorHighlighter doesn't exist on the backend.
+          console.warn("The selectorHighlighter couldn't be instantiated, " +
+            "elements matching hovered selectors will not be highlighted");
+        }
+      }
     });
-  }
+  },
+
+  _onMouseMove(e) {
+    this.highlighter.hide();
+
+    if (this.mouseMoveTimeout) {
+      window.clearTimeout(this.mouseMoveTimeout);
+      this.mouseMoveTimeout = null;
+    }
+
+    this.mouseMoveTimeout = window.setTimeout(() => {
+      this._highlightSelectorAt(e.clientX, e.clientY);
+    }, SELECTOR_HIGHLIGHT_TIMEOUT);
+  },
+
+  _highlightSelectorAt(x, y) {
+    const CSSCompleter =
+      require("devtools/client/sourceeditor/css-autocompleter");
+    let completer = new CSSCompleter();
+    let pos = this.props.cm.getPositionFromCoords({left: x, top: y});
+    let info = completer.getInfoAt(this.props.cm.getText(), pos);
+    if (!info || info.state !== "selector") {
+      return;
+    }
+
+    let {selector} = info;
+    toolbox.walker.querySelector(toolbox.walker.rootNode, "body").then((node) => {
+      toolbox.walker.querySelectorAll(toolbox.walker.rootNode, selector).then((nodes) => {
+        let params = {
+          selector,
+          hideInfoBar: nodes.length > 1,
+        };
+        if (nodes.length > 1) {
+          params.showOnly = params.region = "border";
+        }
+        this.highlighter.show(node, params);
+      });
+    });
+  },
 });

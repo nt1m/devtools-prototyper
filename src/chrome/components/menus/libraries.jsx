@@ -69,7 +69,6 @@ let LibrariesMenu = React.createClass({
         response.results.map(item => {
           item.url = item.latest.replace(cdnPrefix, "");
         });
-        response.results = response.results.reverse();
         this.setState({results: response.results});
       }
     });

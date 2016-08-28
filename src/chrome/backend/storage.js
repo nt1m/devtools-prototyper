@@ -9,6 +9,7 @@ let Storage = {
       "Prototype created with DevTools Prototyper",
     "settings-live-edit-enabled": true,
     "settings-emmet-enabled": true,
+    "settings-chrome-privilege-enabled": false,
     "injected-libraries": "[]",
     "initialized": true
   },
