@@ -1,6 +1,32 @@
 # Changelog
+## 4.1.1
+- Fixed DevTools Prototyper in standalone tab
+- Support for Ctrl/Cmd+Click to run prototype in new window when Prototyper is in standalone tab
+
+## 4.1
+- Better e10s support (toolbox no longer disappears when running prototype)
+- Debugging is now easier (console errors are shown)
+- Tab icon on Prototyper tabs
+- Switch to toggle chrome privileged code execution
+- Nightly 51 compatible
+- Removed compatibility for versions older than Firefox 48
+
+## 4.0.5
+- updated icon
+- marked as e10s compatible
+
+## 4.0.4
+- Fixed compat for Firefox release (45/46)
+- Removed compat for versions older than Firefox 44
+
 ## 4.0.3
+- Add danish locales
 - Fixed Nightly compatibility (bug 1258305)
+
+## 4.0.1
+- Localization bug fixes
+- Russian locale support
+- Latest Nightly compatibility
 
 ## 4.0
 - Refactored to use React (thanks <a href="http://dibaiee.ir/">mdibaiee</a> !)
