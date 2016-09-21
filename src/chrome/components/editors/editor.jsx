@@ -1,5 +1,4 @@
 let CodeMirror = require("devtools/client/sourceeditor/editor");
-const {StyleSheetFront} = require("devtools/shared/fronts/stylesheets");
 const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");
 const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
