@@ -4,14 +4,7 @@ const prototypeName = "prototype.html";
 
 let {require, lazyGetter} =
   Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools;
-let LocalizationHelper;
-try {
-  // Firefox 51
-  ({ LocalizationHelper } = require("devtools/shared/l10n"));
-} catch(e) {
-  // Firefox 48-50
-  ({ LocalizationHelper } = require("devtools/client/shared/l10n"));
-}
+let LocalizationHelper = require(`${basePath}/content/lib/l10n`);
 let L10N = new LocalizationHelper(`${basePath}/locale/strings.properties`);
 const tabs = require("sdk/tabs");
 let Services;

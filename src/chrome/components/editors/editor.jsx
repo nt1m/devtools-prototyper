@@ -6,9 +6,13 @@ const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
 let Editor = React.createClass({
   mixins: [Togglable],
   render() {
-    const cls = "devtools-main-content" + (!this.state.active ? "hidden" : "");
+    let classes = ["devtools-main-content"]
+
+    if (!this.state.active) {
+      classes.push("hidden");
+    }
     return (
-      <div className={cls}
+      <div className={classes.join(" ")}
         data-lang={this.props.lang}
         id={this.props.lang + "-editor"}
         ref="container">
@@ -56,6 +60,9 @@ let Editor = React.createClass({
         if (Settings.get("live-edit-enabled")) {
           Code.update(lang, sourceEditor.getText());
         }
+        if (lang === "css" && this.previewer) {
+          this.previewer.destroy();
+        }
       });
       sourceEditor.setMode(CodeMirror.modes[lang].name);
       if (!toolbox || lang !== "css") {
@@ -84,27 +91,56 @@ let Editor = React.createClass({
   _onMouseMove(e) {
     this.highlighter.hide();
 
+    if (this.previewer) {
+      this.previewer.destroy();
+      this.previewer = undefined;
+    }
+
     if (this.mouseMoveTimeout) {
       window.clearTimeout(this.mouseMoveTimeout);
       this.mouseMoveTimeout = null;
     }
 
     this.mouseMoveTimeout = window.setTimeout(() => {
-      this._highlightSelectorAt(e.clientX, e.clientY);
+      this._highlightItemAt(e.clientX, e.clientY);
     }, SELECTOR_HIGHLIGHT_TIMEOUT);
   },
 
-  _highlightSelectorAt(x, y) {
+  _highlightItemAt(x, y) {
     const CSSCompleter =
       require("devtools/client/sourceeditor/css-autocompleter");
     let completer = new CSSCompleter();
     let pos = this.props.cm.getPositionFromCoords({left: x, top: y});
     let info = completer.getInfoAt(this.props.cm.getText(), pos);
-    if (!info || info.state !== "selector") {
+
+    if (!info) {
       return;
     }
 
-    let {selector} = info;
+    switch (info.state) {
+      case "selector":
+        if (info.selector) {
+          this._highlightSelector(info.selector);
+        }
+        break;
+      case "value":
+        if (info.propertyName && info.value &&
+           Previewer.isAvailable(info.propertyName, info.value)) {
+          if (this.refs.container.getDOMNode().offsetLeft) {
+            x += this.refs.container.getDOMNode().offsetLeft;
+          }
+          this._createPreviewer(info, x, y);
+        }
+        break;
+    }
+  },
+
+  _createPreviewer(info, x, y) {
+    // info.loc.end/start.{ch/line}
+    this.previewer = new Previewer(info.propertyName, info.value, {x, y});
+  },
+
+  _highlightSelector(selector) {
     toolbox.walker.querySelector(toolbox.walker.rootNode, "body").then((node) => {
       toolbox.walker.querySelectorAll(toolbox.walker.rootNode, selector).then((nodes) => {
         let params = {

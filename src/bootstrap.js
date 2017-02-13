@@ -4,46 +4,44 @@
 "use strict";
 
 const basePath = "chrome://devtools-prototyper";
-const {utils: Cu} = Components;
+const Cu = Components.utils;
 let {require, lazyGetter} =
   Cu.import("resource://devtools/shared/Loader.jsm", {}).devtools;
+
+let Services = require("Services");
+
 let {gDevTools} =
   Cu.import("resource://devtools/client/framework/gDevTools.jsm", {});
-let LocalizationHelper;
-try {
-  // Firefox 51
-  ({ LocalizationHelper } = require("devtools/shared/l10n"));
-} catch(e) {
-  // Firefox 48-50
-  ({ LocalizationHelper } = require("devtools/client/shared/l10n"));
-}
-let L10N = new LocalizationHelper(`${basePath}/locale/strings.properties`);
-const Services = require("Services");
 
-lazyGetter(this, "toolDefinition", () => ({
-  id: "prototyper",
-  icon: `${basePath}/skin/images/icon.svg`,
-  invertIconForLightTheme: true,
-  url: `${basePath}/content/panel.html`,
-  label: L10N.getStr("prototyper.label"),
-  tooltip: L10N.getStr("prototyper.tooltip"),
+// Can't use l10n.js because FF loads manifest after bootstrap file :(
+let L10N = Services.strings.createBundle(`${basePath}/locale/strings.properties?${Date.now()}`);
 
-  isTargetSupported: function(target) {
-    return target.isLocalTab;
-  },
+function getToolDefinition() {
+  return {
+    id: "prototyper",
+    icon: `${basePath}/skin/images/icon.svg`,
+    invertIconForLightTheme: true,
+    url: `${basePath}/content/panel.html`,
+    label: L10N.GetStringFromName("prototyper.label"),
+    tooltip: L10N.GetStringFromName("prototyper.tooltip"),
 
-  build: function(iframeWindow, toolbox) {
-    let {PrototyperPanel} = require(`${basePath}/content/panel.js`);
-    return new PrototyperPanel(iframeWindow, toolbox);
+    isTargetSupported: function(target) {
+      return target.isLocalTab;
+    },
+
+    build: function(iframeWindow, toolbox) {
+      let {PrototyperPanel} = require(`${basePath}/content/panel.js`);
+      return new PrototyperPanel(iframeWindow, toolbox);
+    }
   }
-}));
+}
 
 function startup() {
-  gDevTools.registerTool(toolDefinition);
+  gDevTools.registerTool(getToolDefinition());
 }
 
 function shutdown() {
-  gDevTools.unregisterTool(toolDefinition);
+  gDevTools.unregisterTool(getToolDefinition());
   Services.obs.notifyObservers(null, "startupcache-invalidate", null);
 }
 

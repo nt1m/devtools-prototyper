@@ -1,6 +1,6 @@
 {
   "name": "devtools-prototyper",
-  "version": "4.1.2",
+  "version": "4.5.1",
   "description": "Firefox add-on that adds JSFiddle style prototyping to Firefox DevTools.",
   "main": "Gruntfile.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "Tools"
   ],
   "author": "Tim Nguyen",
+  "contributors": ["Mahdi Dibaiee", "Clochix", "Anders Busch"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nt1m/devtools-prototyper/issues"
