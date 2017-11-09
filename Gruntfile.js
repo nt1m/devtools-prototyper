@@ -47,7 +47,6 @@ module.exports = function(grunt) {
       "dist/chrome/panel.html": ["dist/chrome/globals.js",
              "dist/chrome/lib/*.js",
              "!dist/chrome/lib/l10n.js",
-             "!dist/chrome/lib/emmet.min.js",
              "dist/chrome/backend/request.js",
              "dist/chrome/backend/storage.js",
              "dist/chrome/backend/settings.js",

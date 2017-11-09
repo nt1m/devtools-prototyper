@@ -1,4 +1,3 @@
-let CodeMirror = require("devtools/client/sourceeditor/editor");
 const EMMET_URL = `${basePath}/content/lib/emmet.min.js`;
 const IS_MAC = navigator.platform.toLowerCase().includes("mac");
 const SELECTOR_HIGHLIGHT_TIMEOUT = 500;
@@ -48,44 +47,42 @@ let Editor = React.createClass({
       config.externalScripts = [EMMET_URL];
     }
 
-    let sourceEditor = this.props.cm = new CodeMirror(config);
+    // const container = React.findDOMNode(this.refs.container);
+    // container.innerHTML = "";
 
-    const container = React.findDOMNode(this.refs.container);
-    container.innerHTML = "";
+    // let sourceEditor = this.props.cm = CodeMirror(container, config);
 
-    sourceEditor.appendTo(container).then(() => {
-      Code.load(lang);
-      sourceEditor.on("change", () => {
-        Code.save(lang);
-        if (Settings.get("live-edit-enabled")) {
-          Code.update(lang, sourceEditor.getText());
-        }
-        if (lang === "css" && this.previewer) {
-          this.previewer.destroy();
-        }
-      });
-      sourceEditor.setMode(CodeMirror.modes[lang].name);
-      if (!toolbox || lang !== "css") {
-        return;
-      }
-      let hUtils = toolbox.highlighterUtils;
-      if (hUtils.supportsCustomHighlighters()) {
-        try {
-          hUtils.getHighlighterByType("SelectorHighlighter").then((highlighter) => {
-            this.highlighter = highlighter;
-            if (this.highlighter && toolbox.walker) {
-              sourceEditor.container.addEventListener("mousemove", this._onMouseMove);
-            }
-          });
-        } catch (e) {
-          // The selectorHighlighter can't always be instantiated, for example
-          // it doesn't work with XUL windows (until bug 1094959 gets fixed);
-          // or the selectorHighlighter doesn't exist on the backend.
-          console.warn("The selectorHighlighter couldn't be instantiated, " +
-            "elements matching hovered selectors will not be highlighted");
-        }
-      }
-    });
+    //   Code.load(lang);
+    //   sourceEditor.on("change", () => {
+    //     Code.save(lang);
+    //     if (Settings.get("live-edit-enabled")) {
+    //       Code.update(lang, sourceEditor.getText());
+    //     }
+    //     if (lang === "css" && this.previewer) {
+    //       this.previewer.destroy();
+    //     }
+    //   });
+    //   sourceEditor.setMode(CodeMirror.modes[lang].name);
+    //   if (!toolbox || lang !== "css") {
+    //     return;
+    //   }
+    //   let hUtils = toolbox.highlighterUtils;
+    //   if (toolbox && hUtils.supportsCustomHighlighters()) {
+    //     try {
+    //       hUtils.getHighlighterByType("SelectorHighlighter").then((highlighter) => {
+    //         this.highlighter = highlighter;
+    //         if (this.highlighter && toolbox.walker) {
+    //           sourceEditor.container.addEventListener("mousemove", this._onMouseMove);
+    //         }
+    //       });
+    //     } catch (e) {
+    //       // The selectorHighlighter can't always be instantiated, for example
+    //       // it doesn't work with XUL windows (until bug 1094959 gets fixed);
+    //       // or the selectorHighlighter doesn't exist on the backend.
+    //       console.warn("The selectorHighlighter couldn't be instantiated, " +
+    //         "elements matching hovered selectors will not be highlighted");
+    //     }
+    //   }
   },
 
   _onMouseMove(e) {
