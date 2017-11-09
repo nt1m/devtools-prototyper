@@ -17,7 +17,11 @@
     "Tools"
   ],
   "author": "Tim Nguyen",
-  "contributors": ["Mahdi Dibaiee", "Clochix", "Anders Busch"],
+  "contributors": [
+    "Mahdi Dibaiee",
+    "Clochix",
+    "Anders Busch"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nt1m/devtools-prototyper/issues"
@@ -36,6 +40,5 @@
     "grunt-injector": "^0.6.0",
     "grunt-zip": "^0.16.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

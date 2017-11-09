@@ -1,18 +1,4 @@
 module.exports = function(grunt) {
-  var type = "type='application/javascript;version=1.8'";
-
-  grunt.task.registerTask("setRdfFileVersion", undefined, function() {
-    var JSONManifest = grunt.file.read("package.json");
-    var versionNumber = JSON.parse(JSONManifest).version;
-    console.log("Setting install.rdf version to " + versionNumber + ".");
-
-    var manifestURI = "dist/install.rdf";
-    var addonManifest = grunt.file.read(manifestURI);
-    addonManifest = addonManifest.replace("${version}", versionNumber);
-    grunt.file.write(manifestURI, addonManifest);
-    console.log("Version successfully set.");
-  });
-
   grunt.initConfig({
     pkg: require("./package.json"),
     eslint: {
@@ -45,7 +31,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: "src",
-          src: ["*.js", "chrome.manifest", "install.rdf", "skin/**/*",
+          src: ["*.js", "manifest.json", "devtools.html", "skin/**/*",
                 "locale/**/*"],
           dest: "dist"
         }]
@@ -55,7 +41,7 @@ module.exports = function(grunt) {
       options: {
         transform: function(path) {
           path = path.replace("/dist/chrome/", "");
-          return "<script src='" + path + "' " + type + "></script>";
+          return "<script src='" + path + "'></script>";
         }
       },
       "dist/chrome/panel.html": ["dist/chrome/globals.js",
@@ -82,13 +68,6 @@ module.exports = function(grunt) {
     clean: {
       files: ["dist", "build"]
     },
-    zip: {
-      build: {
-        cwd: "dist",
-        src: "dist/**/*",
-        dest: "build/devtools-prototyper-<%= pkg.version %>.xpi"
-      }
-    },
     watch: {
       jsx: {
         files: ["src/**/*.jsx"],
@@ -103,7 +82,7 @@ module.exports = function(grunt) {
       install: {
         stderr: false,
         exitCode: 8,
-        command: "wget --post-file <%= zip.build.dest %> localhost:8888;"
+        command: "web-ext run -s dist -f nightly"
       }
     }
   });
@@ -116,7 +95,7 @@ module.exports = function(grunt) {
   }
 
   grunt.registerTask("default", ["clean", "babel", "copy",
-                                 "injector", "setRdfFileVersion", "eslint"]);
-  grunt.registerTask("build", ["clean", "babel", "copy", "injector", "setRdfFileVersion", "zip"]);
-  grunt.registerTask("install", ["build", "exec:install"]);
+                                 "injector", "eslint"]);
+  grunt.registerTask("build", ["clean", "babel", "copy", "injector"]);
+  grunt.registerTask("dev", ["build", "exec:install"]);
 };
