@@ -32,7 +32,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: "src",
           src: ["*.js", "manifest.json", "devtools.html", "skin/**/*",
-                "locale/**/*"],
+                "_locales/**/*"],
           dest: "dist"
         }]
       }
@@ -70,11 +70,11 @@ module.exports = function(grunt) {
     watch: {
       jsx: {
         files: ["src/**/*.jsx"],
-        tasks: ["react"]
+        tasks: ["build"]
       },
       copy: {
         files: ["src/**/*", "!src/chrome/libs/*.js"],
-        tasks: ["copy"]
+        tasks: ["build"]
       },
     },
     exec: {
@@ -97,4 +97,5 @@ module.exports = function(grunt) {
                                  "injector", "eslint"]);
   grunt.registerTask("build", ["clean", "babel", "copy", "injector"]);
   grunt.registerTask("dev", ["build", "exec:install"]);
+  grunt.registerTask("watch", ["watch"]);
 };

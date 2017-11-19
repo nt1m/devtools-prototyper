@@ -1,0 +1,102 @@
+{
+  "label": {
+    "message": "Prototyper",
+    "description": "Prototyper"
+  },
+  "tooltip": {
+    "message": "Lav Hurtige Prototyper",
+    "description": "Lav Hurtige Prototyper"
+  },
+  "runTooltip": {
+    "message": "Kør kode",
+    "description": "Kør kode"
+  },
+  "exportTooltip": {
+    "message": "Eksportér prototype",
+    "description": "Eksportér prototype"
+  },
+  "beautifyTooltip": {
+    "message": "Forskøn kode",
+    "description": "Forskøn kode"
+  },
+  "librariesTooltip": {
+    "message": "Tilføj libraries",
+    "description": "Tilføj libraries"
+  },
+  "settingsTooltip": {
+    "message": "Indstillinger",
+    "description": "Indstillinger"
+  },
+  "exportLocalLabel": {
+    "message": "Gem som ZIP-fil",
+    "description": "Gem som ZIP-fil"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Offentlig Gist",
+    "description": "Offentlig Gist"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Hemmelig Gist",
+    "description": "Hemmelig Gist"
+  },
+  "libsSearch": {
+    "message": "Find Libraries",
+    "description": "Find Libraries"
+  },
+  "libsResults": {
+    "message": "Resultater (via cdnjs)",
+    "description": "Resultater (via cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Tilføjede libraries",
+    "description": "Tilføjede libraries"
+  },
+  "libsNoneFound": {
+    "message": "Ingen libraries fundet.",
+    "description": "Ingen libraries fundet."
+  },
+  "libsNoneInjected": {
+    "message": "Du har ikke tilføjet nogle libraries endnu. Brug søgefeltet til at finde et.",
+    "description": "Du har ikke tilføjet nogle libraries endnu. Brug søgefeltet til at finde et."
+  },
+  "prototypeSettings": {
+    "message": "Prototype indstillinger",
+    "description": "Prototype indstillinger"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Titel",
+    "description": "Titel"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Beskrivelse",
+    "description": "Beskrivelse"
+  },
+  "settings": {
+    "message": "Indstillinger",
+    "description": "Indstillinger"
+  },
+  "settingsEnableEmmet": {
+    "message": "Aktivér Emmet",
+    "description": "Aktivér Emmet"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Aktivér Live Edit (for HTML og CSS)",
+    "description": "Aktivér Live Edit (for HTML og CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Synkronisér code og præferencer",
+    "description": "Synkronisér code og præferencer"
+  },
+  "settingsEnableES6": {
+    "message": "Aktivér EcmaScript 6",
+    "description": "Aktivér EcmaScript 6"
+  }
+}

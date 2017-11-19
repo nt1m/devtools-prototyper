@@ -1,0 +1,106 @@
+{
+  "label": {
+    "message": "Prototyper",
+    "description": "Prototyper"
+  },
+  "tooltip": {
+    "message": "Créateur rapide de prototypes",
+    "description": "Créateur rapide de prototypes"
+  },
+  "runTooltip": {
+    "message": "Exécuter le code",
+    "description": "Exécuter le code"
+  },
+  "exportTooltip": {
+    "message": "Exporter le prototype",
+    "description": "Exporter le prototype"
+  },
+  "beautifyTooltip": {
+    "message": "Embellir le code",
+    "description": "Embellir le code"
+  },
+  "librariesTooltip": {
+    "message": "Injecter des librairies",
+    "description": "Injecter des librairies"
+  },
+  "settingsTooltip": {
+    "message": "Options",
+    "description": "Options"
+  },
+  "exportLocalLabel": {
+    "message": "Sauvegarder en tant que ZIP",
+    "description": "Sauvegarder en tant que ZIP"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Gist public",
+    "description": "Gist public"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Gist secret",
+    "description": "Gist secret"
+  },
+  "libsSearch": {
+    "message": "Trouver des bibliothèques",
+    "description": "Trouver des bibliothèques"
+  },
+  "libsResults": {
+    "message": "Résultats (par cdnjs)",
+    "description": "Résultats (par cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Bibliothèques injectées",
+    "description": "Bibliothèques injectées"
+  },
+  "libsNoneFound": {
+    "message": "Aucune bibliothèque trouvée.",
+    "description": "Aucune bibliothèque trouvée."
+  },
+  "libsNoneInjected": {
+    "message": "Vous n'avez pas encore injecté de bibliothèque. Utilisez la boite de recherche pour commencer.",
+    "description": "Vous n'avez pas encore injecté de bibliothèque. Utilisez la boite de recherche pour commencer."
+  },
+  "prototypeSettings": {
+    "message": "Options du prototype",
+    "description": "Options du prototype"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Titre",
+    "description": "Titre"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Description",
+    "description": "Description"
+  },
+  "settings": {
+    "message": "Options",
+    "description": "Options"
+  },
+  "settingsEnableEmmet": {
+    "message": "Activer Emmet",
+    "description": "Activer Emmet"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Activer l'édition instantanée (pour HTML et CSS)",
+    "description": "Activer l'édition instantanée (pour HTML et CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Synchroniser le code et les préférences",
+    "description": "Synchroniser le code et les préférences"
+  },
+  "settingsEnableChromePrivilege": {
+    "message": "Activer l'accès au code `chrome` privilegié",
+    "description": "Activer l'accès au code `chrome` privilegié"
+  },
+  "settingsEnableES6": {
+    "message": "Activer EcmaScript 6",
+    "description": "Activer EcmaScript 6"
+  }
+}

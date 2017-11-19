@@ -1,0 +1,106 @@
+{
+  "label": {
+    "message": "Prototyper",
+    "description": "Prototyper"
+  },
+  "tooltip": {
+    "message": "Quickly create prototypes",
+    "description": "Quickly create prototypes"
+  },
+  "runTooltip": {
+    "message": "Run code",
+    "description": "Run code"
+  },
+  "exportTooltip": {
+    "message": "Export prototype",
+    "description": "Export prototype"
+  },
+  "beautifyTooltip": {
+    "message": "Prettify code",
+    "description": "Prettify code"
+  },
+  "librariesTooltip": {
+    "message": "Inject librairies",
+    "description": "Inject librairies"
+  },
+  "settingsTooltip": {
+    "message": "Settings",
+    "description": "Settings"
+  },
+  "exportLocalLabel": {
+    "message": "Save as ZIP",
+    "description": "Save as ZIP"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Public Gist",
+    "description": "Public Gist"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Secret Gist",
+    "description": "Secret Gist"
+  },
+  "libsSearch": {
+    "message": "Find Libraries",
+    "description": "Find Libraries"
+  },
+  "libsResults": {
+    "message": "Results (powered by cdnjs)",
+    "description": "Results (powered by cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Injected libraries",
+    "description": "Injected libraries"
+  },
+  "libsNoneFound": {
+    "message": "No libraries found.",
+    "description": "No libraries found."
+  },
+  "libsNoneInjected": {
+    "message": "You haven't injected any library yet. Use the search box to find one.",
+    "description": "You haven't injected any library yet. Use the search box to find one."
+  },
+  "prototypeSettings": {
+    "message": "Prototype settings",
+    "description": "Prototype settings"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Title",
+    "description": "Title"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Description",
+    "description": "Description"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings"
+  },
+  "settingsEnableEmmet": {
+    "message": "Enable Emmet",
+    "description": "Enable Emmet"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Enable Live Edit (for HTML and CSS)",
+    "description": "Enable Live Edit (for HTML and CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Sync code and preferences",
+    "description": "Sync code and preferences"
+  },
+  "settingsEnableChromePrivilege": {
+    "message": "Enable chrome execution privileges",
+    "description": "Enable chrome execution privileges"
+  },
+  "settingsEnableES6": {
+    "message": "Enable EcmaScript 6",
+    "description": "Enable EcmaScript 6"
+  }
+}

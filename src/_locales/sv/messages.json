@@ -1,0 +1,102 @@
+{
+  "label": {
+    "message": "Prototyper",
+    "description": "Prototyper"
+  },
+  "tooltip": {
+    "message": "Skapa prototyper snabbt",
+    "description": "Skapa prototyper snabbt"
+  },
+  "runTooltip": {
+    "message": "Kör kod",
+    "description": "Kör kod"
+  },
+  "exportTooltip": {
+    "message": "Exportera prototyp",
+    "description": "Exportera prototyp"
+  },
+  "beautifyTooltip": {
+    "message": "Snygga till kod",
+    "description": "Snygga till kod"
+  },
+  "librariesTooltip": {
+    "message": "Inject librairies",
+    "description": "Inject librairies"
+  },
+  "settingsTooltip": {
+    "message": "Inställningar",
+    "description": "Inställningar"
+  },
+  "exportLocalLabel": {
+    "message": "Spara som ZIP",
+    "description": "Spara som ZIP"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Publik Gist",
+    "description": "Publik Gist"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Hemlig Gist",
+    "description": "Hemlig Gist"
+  },
+  "libsSearch": {
+    "message": "Hitta bibliotek",
+    "description": "Hitta bibliotek"
+  },
+  "libsResults": {
+    "message": "Results (powered by cdnjs)",
+    "description": "Results (powered by cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Injected libraries",
+    "description": "Injected libraries"
+  },
+  "libsNoneFound": {
+    "message": "Inga bibliotek hittade.",
+    "description": "Inga bibliotek hittade."
+  },
+  "libsNoneInjected": {
+    "message": "You haven't injected any library yet. Use the search box to find one.",
+    "description": "You haven't injected any library yet. Use the search box to find one."
+  },
+  "prototypeSettings": {
+    "message": "Prototype settings",
+    "description": "Prototype settings"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Titel",
+    "description": "Titel"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Beskrivning",
+    "description": "Beskrivning"
+  },
+  "settings": {
+    "message": "Inställningar",
+    "description": "Inställningar"
+  },
+  "settingsEnableEmmet": {
+    "message": "Aktivera Emmet",
+    "description": "Aktivera Emmet"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Aktivera live-redigering (för HTML ch CSS)",
+    "description": "Aktivera live-redigering (för HTML ch CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Synka kod och inställningar",
+    "description": "Synka kod och inställningar"
+  },
+  "settingsEnableES6": {
+    "message": "Aktivera EcmaScript 6",
+    "description": "Aktivera EcmaScript 6"
+  }
+}

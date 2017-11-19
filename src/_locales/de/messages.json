@@ -1,0 +1,102 @@
+{
+  "label": {
+    "message": "Prototyper",
+    "description": "Prototyper"
+  },
+  "tooltip": {
+    "message": "Prototypen schnell erstellen",
+    "description": "Prototypen schnell erstellen"
+  },
+  "runTooltip": {
+    "message": "Code ausführen",
+    "description": "Code ausführen"
+  },
+  "exportTooltip": {
+    "message": "Prototyp exportieren",
+    "description": "Prototyp exportieren"
+  },
+  "beautifyTooltip": {
+    "message": "Code verschönern",
+    "description": "Code verschönern"
+  },
+  "librariesTooltip": {
+    "message": "Bibliotheken hinzufügen",
+    "description": "Bibliotheken hinzufügen"
+  },
+  "settingsTooltip": {
+    "message": "Einstellungen",
+    "description": "Einstellungen"
+  },
+  "exportLocalLabel": {
+    "message": "Als ZIP speichern",
+    "description": "Als ZIP speichern"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Öffentlicher Gist",
+    "description": "Öffentlicher Gist"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Privater Gist",
+    "description": "Privater Gist"
+  },
+  "libsSearch": {
+    "message": "Finde Bibliotheken",
+    "description": "Finde Bibliotheken"
+  },
+  "libsResults": {
+    "message": "Ergebnisse (bereitgestellt durch cdnjs)",
+    "description": "Ergebnisse (bereitgestellt durch cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Hinzugefügte Bibliotheken",
+    "description": "Hinzugefügte Bibliotheken"
+  },
+  "libsNoneFound": {
+    "message": "Keine Bibliotheken gefunden.",
+    "description": "Keine Bibliotheken gefunden."
+  },
+  "libsNoneInjected": {
+    "message": "Du hast bisher keine Bibliothek hinzugefügt. Benutze die Suche, um eine zu finden.",
+    "description": "Du hast bisher keine Bibliothek hinzugefügt. Benutze die Suche, um eine zu finden."
+  },
+  "prototypeSettings": {
+    "message": "Prototyp-Einstellungen",
+    "description": "Prototyp-Einstellungen"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Titel",
+    "description": "Titel"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Beschreibung",
+    "description": "Beschreibung"
+  },
+  "settings": {
+    "message": "Einstellungen",
+    "description": "Einstellungen"
+  },
+  "settingsEnableEmmet": {
+    "message": "Emmet aktivieren",
+    "description": "Emmet aktivieren"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Live-Bearbeitung aktivieren (für HTML und CSS)",
+    "description": "Live-Bearbeitung aktivieren (für HTML und CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Code und Einstellungen synchronisieren",
+    "description": "Code und Einstellungen synchronisieren"
+  },
+  "settingsEnableES6": {
+    "message": "EcmaScript 6 aktivieren",
+    "description": "EcmaScript 6 aktivieren"
+  }
+}

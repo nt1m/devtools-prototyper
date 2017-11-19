@@ -50,8 +50,14 @@ let Editor = React.createClass({
     const container = React.findDOMNode(this.refs.container);
     container.innerHTML = "";
 
-    let sourceEditor = this.props.cm = CodeMirror(container, config);
+    let sourceEditor = new CodeMirror(container, config);
+    console.log(sourceEditor);
 
+    this.props.cm = {
+      getText() {
+        return sourceEditor.getValue();
+      }
+    }
       // Code.load(lang);
       // sourceEditor.on("change", () => {
       //   Code.save(lang);

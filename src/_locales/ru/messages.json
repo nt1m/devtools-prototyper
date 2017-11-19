@@ -1,0 +1,102 @@
+{
+  "label": {
+    "message": "Прототип",
+    "description": "Прототип"
+  },
+  "tooltip": {
+    "message": "Быстрое создание прототипов",
+    "description": "Быстрое создание прототипов"
+  },
+  "runTooltip": {
+    "message": "Выполнить код",
+    "description": "Выполнить код"
+  },
+  "exportTooltip": {
+    "message": "Экспорт прототипа",
+    "description": "Экспорт прототипа"
+  },
+  "beautifyTooltip": {
+    "message": "Причесать код",
+    "description": "Причесать код"
+  },
+  "librariesTooltip": {
+    "message": "Подключить библиотеки",
+    "description": "Подключить библиотеки"
+  },
+  "settingsTooltip": {
+    "message": "Настройки",
+    "description": "Настройки"
+  },
+  "exportLocalLabel": {
+    "message": "Сохранить как ZIP",
+    "description": "Сохранить как ZIP"
+  },
+  "exportJsfiddleLabel": {
+    "message": "JSFiddle",
+    "description": "JSFiddle"
+  },
+  "exportCodepenLabel": {
+    "message": "CodePen",
+    "description": "CodePen"
+  },
+  "exportGistPublicLabel": {
+    "message": "Публичный Gist",
+    "description": "Публичный Gist"
+  },
+  "exportGistPrivateLabel": {
+    "message": "Секретный Gist",
+    "description": "Секретный Gist"
+  },
+  "libsSearch": {
+    "message": "Найти Библиотеки",
+    "description": "Найти Библиотеки"
+  },
+  "libsResults": {
+    "message": "Результаты (найдено через cdnjs)",
+    "description": "Результаты (найдено через cdnjs)"
+  },
+  "libsInjected": {
+    "message": "Подключенные библиотеки",
+    "description": "Подключенные библиотеки"
+  },
+  "libsNoneFound": {
+    "message": "Нет библиотек.",
+    "description": "Нет библиотек."
+  },
+  "libsNoneInjected": {
+    "message": "Не подключено ни одной библиотеки. Используйте поиск чтобы добавить новую.",
+    "description": "Не подключено ни одной библиотеки. Используйте поиск чтобы добавить новую."
+  },
+  "prototypeSettings": {
+    "message": "Настройки прототипа",
+    "description": "Настройки прототипа"
+  },
+  "prototypeSettingsTitle": {
+    "message": "Заголовок",
+    "description": "Заголовок"
+  },
+  "prototypeSettingsDescription": {
+    "message": "Описание",
+    "description": "Описание"
+  },
+  "settings": {
+    "message": "Настройки",
+    "description": "Настройки"
+  },
+  "settingsEnableEmmet": {
+    "message": "Включить автодополнение",
+    "description": "Включить автодополнение"
+  },
+  "settingsEnableLiveEdit": {
+    "message": "Включить живое редактирование (для HTML и CSS)",
+    "description": "Включить живое редактирование (для HTML и CSS)"
+  },
+  "settingsEnableSync": {
+    "message": "Синхронизировать код и настройки",
+    "description": "Синхронизировать код и настройки"
+  },
+  "settingsEnableES6": {
+    "message": "Включить EcmaScript 6",
+    "description": "Включить EcmaScript 6"
+  }
+}

@@ -3,10 +3,11 @@
   "name": "DevTools Prototyper",
   "version": "2.0",
   "description": "JSFiddle style prototyping.",
-  "permissions": ["theme", "tabs", "<all_urls>"],
+  "permissions": ["tabs", "<all_urls>"],
   "background": {
     "scripts": ["background.js"]
   },
+  "default_locale": "en-US",
   "devtools_page": "devtools.html",
   "author": "Tim Nguyen",
   "applications": {
