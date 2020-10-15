@@ -1,0 +1,19 @@
+{
+  "name": "prototyper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "init.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nt1m/devtools-prototyper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nt1m/devtools-prototyper/issues"
+  },
+  "homepage": "https://github.com/nt1m/devtools-prototyper#readme"
+}
