@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "DevTools Prototyper",
+  "version": "2.0",
+  "description": "JSFiddle style prototyping.",
+  "permissions": [
+    "tabs",
+    "devtools",
+    "<all_urls>"
+  ],
+  "devtools_page": "devtools_page.html",
+  "author": "Tim Nguyen",
+  "applications": {
+    "gecko": {
+      "id": "devtools-prototyper@nt1m.github.io",
+      "strict_min_version": "45.0"
+    }
+  }
+}
