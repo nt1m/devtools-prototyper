@@ -1,0 +1,51 @@
+/* Reset */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Theme */
+
+:root {
+  --background: #fff;
+  --text: #333;
+
+  --toolbar-background: #f1f1f1;
+  --toolbar-text: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111;
+    --text: #f1f1f1;
+
+    --toolbar-background: #444;
+    --toolbar-text: inherit;
+  }
+}
+
+/* Avoid flash by applying background on :root */
+
+:root {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Layout */
+
+.prototyper-container {
+  display: flex;
+}
+
+prototyper-toolbar {
+  background-color: var(--toolbar-background);
+}
+
+prototyper-editor {
+  flex-grow: 1;
+}
