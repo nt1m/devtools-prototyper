@@ -1,11 +1,21 @@
 import BaseElement from "../base.js";
 
 export default class Editor extends BaseElement {
-  stylesheets = ["./editor.css"]
-  connectedCallback() {
-    const editor = document.createElement("div");
-    editor.contentEditable = true;
-    this.append(editor);
+  stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
+  connected() {
+    CodeMirror(this.shadowRoot, {
+      value: "// js\n",
+      mode:  "javascript"
+    });
+    CodeMirror(this.shadowRoot, {
+      value: "/* css *\/\n",
+      mode:  "css"
+    });
+    CodeMirror(this.shadowRoot, {
+      value: "<!-- html -->\n",
+      mode:  "html"
+    });
+    this.shadowRoot.append(document.createElement('iframe'))
   }
 }
 

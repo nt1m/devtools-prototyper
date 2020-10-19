@@ -1,8 +1,10 @@
+"use strict";
+
 chrome.devtools.panels.create(
   "Prototyper",
   "skin/images/icon.svg",
-  "ui/index.html",
+  "ui/panel.html",
   function (panel) {
-
+    console.log(panel)
   }
 );

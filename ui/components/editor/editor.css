@@ -1,4 +1,11 @@
-:host > div {
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: var(--iframe-display, initial);
+}
+.CodeMirror {
   width: 100%;
   height: 100%;
 }

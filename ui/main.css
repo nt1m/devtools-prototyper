@@ -9,6 +9,7 @@ body {
   min-height: 100%;
 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
 }
 
 /* Theme */
@@ -49,11 +50,15 @@ prototyper-toolbar {
   background-color: var(--toolbar-background);
   border-right: solid 1px var(--toolbar-border);
   min-width: 12em;
-  height: 100vh;
   resize: horizontal;
   overflow: hidden;
 }
 
 prototyper-editor {
   flex-grow: 1;
+  display: grid;
+  grid-template-columns: var(--editor-grid-c, 1fr 1fr);
+  grid-template-rows: var(--editor-grid-r, 1fr 1fr);
+  grid-gap: 1px;
+  background-color: #ccc;
 }
