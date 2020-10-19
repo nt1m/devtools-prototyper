@@ -1,4 +1,5 @@
 import Editor from "./components/editor/editor.js";
+import Toolbar from "./components/toolbar/toolbar.js";
 
 class Main {
   constructor({

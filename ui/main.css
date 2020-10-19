@@ -7,6 +7,8 @@ body {
 
   min-width: 100%;
   min-height: 100%;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Theme */
@@ -14,8 +16,9 @@ body {
 :root {
   --background: #fff;
   --text: #333;
-
+  --main-color: #0074e8;
   --toolbar-background: #f1f1f1;
+  --toolbar-border: #ddd;
   --toolbar-text: inherit;
 }
 
@@ -44,6 +47,11 @@ body {
 
 prototyper-toolbar {
   background-color: var(--toolbar-background);
+  border-right: solid 1px var(--toolbar-border);
+  min-width: 12em;
+  height: 100vh;
+  resize: horizontal;
+  overflow: hidden;
 }
 
 prototyper-editor {

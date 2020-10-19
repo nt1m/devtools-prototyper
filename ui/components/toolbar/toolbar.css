@@ -1,0 +1,48 @@
+.btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+    border-bottom: solid 1px #fff;
+    padding: .5em;
+    line-height: .9em;
+    font-size: .9em;
+}
+
+.btn::after {
+    content: "";
+    width: 2px;
+    height: 0%;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    position: absolute;
+    transition: all .2s;
+    background-color: var(--text);
+}
+.btn:hover::before {
+    content: '';
+    background-color: #999;
+    opacity: 0.1;
+    /*z-index: -1;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    
+}
+.btn:hover::after {
+    height: 100%;
+    opacity: .5;
+}
+.btn.active::after, .btn:active::after {
+    height: 100%;
+    background-color: var(--main-color);
+    opacity: 1;
+}
+/*
+[type=button]:hover {
+    background-color: ;
+}*/
