@@ -3,7 +3,7 @@ import BaseElement from "../base.js";
 
 let isExt = false;
 try {
-  isExt = chrome ? true : false
+  isExt = chrome && chrome.extension ? true : false
 } catch (error) {}
 export default class Editor extends BaseElement {
   stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
@@ -36,7 +36,7 @@ export default class Editor extends BaseElement {
       [html, css, js].forEach(e=>{
         shadowRoot.append(e.display.wrapper.parentElement);
         e.refresh();
-    }))
+    }), 40)
     const iframe = document.createElement('iframe');
     if (!isExt) {
       shadowRoot.append(iframe)
@@ -46,7 +46,7 @@ export default class Editor extends BaseElement {
       <html>
         <head>
           <title>Prototyper</title>
-          <link rel="icon" href="${isExt?chrome.extension.getURL("ui/images/icon.svg"):""}" sizes="any" type="image/svg+xml">
+          <link rel="icon" href="${isExt?chrome.runtime.getURL("./ui/images/icon.svg"):""}" sizes="any" type="image/svg+xml">
           <style>
             ${css.getValue()}
           </style>
