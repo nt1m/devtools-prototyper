@@ -7,6 +7,7 @@ iframe {
 }
 .code-container {
   position: relative;
+  overflow: auto;
 }
 .code-container, .code-container > div {
   width: 100%;
@@ -15,11 +16,18 @@ iframe {
 
 .code-container::after {
   content: attr(lang);
+  text-transform: uppercase;
   position: absolute;
   bottom: 1em;
   right: 1em;
+  line-height: 150%;
   padding: .2em;
+  padding-bottom: 0;
   background-color: var(--main-color);
   border-radius: .2em;
   color: white;
+}
+
+.CodeMirror-linenumber {
+  text-align: center;
 }
