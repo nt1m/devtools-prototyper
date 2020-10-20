@@ -5,7 +5,7 @@
   "description": "JSFiddle style prototyping.",
   "author": "Tim Nguyen",
   "devtools_page": "devtools_page.html",
-  "permissions": ["devtools", "tabs"],
+  "permissions": ["tabs"],
   "background": {
     "scripts": ["background.js"]
   },
