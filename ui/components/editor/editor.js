@@ -8,18 +8,38 @@ try {
 export default class Editor extends BaseElement {
   stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
   connected() {
-    const js = CodeMirror(this.shadowRoot, {
-      value: "// js\n",
-      mode:  "javascript"
+
+    const options = {
+      lineNumbers: true,
+    };
+
+    const [divhtml, divcss, divjs] = ["html", "css", "js"].map(lang => {
+      const div = document.createElement('div');
+      div.setAttribute("lang", lang);
+      div.classList.add('code-container');
+      return div
     });
-    const css = CodeMirror(this.shadowRoot, {
-      value: "/* css *\/\n",
-      mode:  "css"
-    });
-    const html = CodeMirror(this.shadowRoot, {
+
+    const html = CodeMirror(divhtml, {
+      ...options,
       value: "<!-- html -->\n",
       mode:  "html"
     });
+    const css = CodeMirror(divcss, {
+      ...options,
+      value: "/* css *\/\n",
+      mode:  "css"
+    });
+    const js = CodeMirror(divjs, {
+      ...options,
+      value: "// js\n",
+      mode:  "javascript"
+    });
+
+    this.shadowRoot.append(divhtml)
+    this.shadowRoot.append(divcss)
+    this.shadowRoot.append(divjs)
+
     const iframe = document.createElement('iframe');
     if (!isExt) {
       this.shadowRoot.append(iframe)

@@ -5,7 +5,21 @@ iframe {
   border: none;
   display: var(--iframe-display, initial);
 }
-.CodeMirror {
+.code-container {
+  position: relative;
+}
+.code-container, .code-container > div {
   width: 100%;
   height: 100%;
+}
+
+.code-container::after {
+  content: attr(lang);
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  padding: .2em;
+  background-color: var(--main-color);
+  border-radius: .2em;
+  color: white;
 }
