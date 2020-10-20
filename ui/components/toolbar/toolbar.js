@@ -10,7 +10,7 @@ export default class Toolbar extends BaseElement {
   stylesheets = ["components/toolbar/toolbar.css"]
   buttons = []
   connected() {
-    this.addButton({name: "Launch"});
+    this.addButton({name: "Launch", action: () => document.dispatchEvent(new Event('launch'))});
   }
   addButton({icon, name, alt, position, action} = {}) {
     name = name || "";

@@ -5,6 +5,6 @@ chrome.devtools.panels.create(
   "ui/images/icon.svg",
   "ui/panel.html",
   function (panel) {
-    console.log(panel)
+
   }
 );

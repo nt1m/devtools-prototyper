@@ -1,21 +1,55 @@
 import BaseElement from "../base.js";
 
+
+let isExt = false;
+try {
+  isExt = chrome ? true : false
+} catch (error) {}
 export default class Editor extends BaseElement {
   stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
   connected() {
-    CodeMirror(this.shadowRoot, {
+    const js = CodeMirror(this.shadowRoot, {
       value: "// js\n",
       mode:  "javascript"
     });
-    CodeMirror(this.shadowRoot, {
+    const css = CodeMirror(this.shadowRoot, {
       value: "/* css *\/\n",
       mode:  "css"
     });
-    CodeMirror(this.shadowRoot, {
+    const html = CodeMirror(this.shadowRoot, {
       value: "<!-- html -->\n",
       mode:  "html"
     });
-    this.shadowRoot.append(document.createElement('iframe'))
+    const iframe = document.createElement('iframe');
+    if (!isExt) {
+      this.shadowRoot.append(iframe)
+    }
+    document.addEventListener('launch', () => {
+      const doc = `
+      <html>
+        <head>
+          <title>Prototyper</title>
+          <link rel="icon" href="${isExt?chrome.extension.getURL("ui/images/icon.svg"):""}" sizes="any" type="image/svg+xml">
+          <style>
+            ${css.getValue()}
+          </style>
+        </head>
+        <body>
+          ${html.getValue()}
+          <script>
+            (function(){${js.getValue()}})();
+          </script>
+        </body>
+      </html>
+      `
+      document.dispatchEvent(new Event('launched', {doc}));
+      if (isExt) {
+        const connexion = chrome.runtime.connect();
+        connexion.postMessage({doc, js: js.getValue()});
+      } else {
+        iframe.src = "data:text/html;base64,"+btoa(doc);
+      }
+    });
   }
 }
 
