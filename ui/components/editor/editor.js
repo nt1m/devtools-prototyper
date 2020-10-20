@@ -8,41 +8,38 @@ try {
 export default class Editor extends BaseElement {
   stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
   connected() {
-
+    const {shadowRoot} = this;
     const options = {
       lineNumbers: true,
+      autoRefresh:true,
     };
 
-    const [divhtml, divcss, divjs] = ["html", "css", "js"].map(lang => {
+    const placeholder = {
+      html: "<!-- html -->",
+      css: "/* css */",
+      js: "// js"
+    };
+
+    const [html, css, js] = ["html", "css", "js"].map(lang => {
       const div = document.createElement('div');
       div.setAttribute("lang", lang);
       div.classList.add('code-container');
-      return div
+      const code = CodeMirror(div, {
+          ...options,
+          value: placeholder[lang]+"\n",
+          mode:  lang
+        });
+      return code
     });
-
-    const html = CodeMirror(divhtml, {
-      ...options,
-      value: "<!-- html -->\n",
-      mode:  "html"
-    });
-    const css = CodeMirror(divcss, {
-      ...options,
-      value: "/* css *\/\n",
-      mode:  "css"
-    });
-    const js = CodeMirror(divjs, {
-      ...options,
-      value: "// js\n",
-      mode:  "javascript"
-    });
-
-    this.shadowRoot.append(divhtml)
-    this.shadowRoot.append(divcss)
-    this.shadowRoot.append(divjs)
-
+    // Workaroud...
+    setTimeout(() => 
+      [html, css, js].forEach(e=>{
+        shadowRoot.append(e.display.wrapper.parentElement);
+        e.refresh();
+    }))
     const iframe = document.createElement('iframe');
     if (!isExt) {
-      this.shadowRoot.append(iframe)
+      shadowRoot.append(iframe)
     }
     document.addEventListener('launch', () => {
       const doc = `
