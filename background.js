@@ -4,8 +4,12 @@ const data = {doc: "", js: ""};
 chrome.tabs.onRemoved.addListener(id => {
     if (tab && tab.id === id) tab = null;
 });
-const update = id => {
+const update = (id, info) => {
   if (tab && tab.id === id) {
+    if (info.status === "loading" && info.url.startsWith("http")) {
+      tab = null;
+    }
+    if (info.status !== "complete") return;
     const {doc, js} = data;
     chrome.tabs.executeScript(tab.id,
       {
