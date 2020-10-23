@@ -11,6 +11,7 @@ export default class Toolbar extends BaseElement {
   buttons = []
   connected() {
     const launch = this.addButton({name: "Launch", action: () => document.dispatchEvent(new Event('launch'))});
+    const beautify = this.addButton({name: "Beautify", action: () => document.dispatchEvent(new Event('beautify'))});
     document.addEventListener('keydown', e => {
       const ctrl_s = e.ctrlKey && e.code === "KeyS";
       const ctrl_enter = e.ctrlKey && e.code === "Enter";

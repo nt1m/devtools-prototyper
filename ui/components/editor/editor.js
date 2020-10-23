@@ -32,11 +32,11 @@ export default class Editor extends BaseElement {
       return code
     });
     // Workaroud...
-    setTimeout(() => 
+    window.onload = () => 
       [html, css, js].forEach(e=>{
         shadowRoot.append(e.display.wrapper.parentElement);
         e.refresh();
-    }), 40)
+    });
     const iframe = document.createElement('iframe');
     if (!isExt) {
       shadowRoot.append(iframe)
@@ -66,6 +66,11 @@ export default class Editor extends BaseElement {
       } else {
         iframe.src = "data:text/html;base64,"+btoa(doc);
       }
+    });
+    document.addEventListener('beautify', () => {
+      js.getDoc().setValue(beautifier.js(js.getValue()));
+      html.getDoc().setValue(beautifier.html(html.getValue()));
+      css.getDoc().setValue(beautifier.css(css.getValue()));
     });
   }
 }
