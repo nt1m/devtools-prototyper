@@ -12,12 +12,24 @@ export default class Editor extends BaseElement {
     const options = {
       lineNumbers: true,
       autoRefresh:true,
+      autoCloseBrackets: true,
+      matchBrackets: true,
     };
-
-    const placeholder = {
-      html: "<!-- html -->",
-      css: "/* css */",
-      js: "// js"
+    const opt = {
+      html: {
+        value:"<!-- html -->\n",
+        mode: "htmlmixed"
+      },
+      css: {
+        autoCloseBrackets: true,
+        value: "/* css */\n",
+        mode: "css"
+      },
+      js: {
+        value: "// js\n",
+        autoCloseBrackets: true,
+        mode: "javascript"
+      }
     };
 
     const [html, css, js] = ["html", "css", "js"].map(lang => {
@@ -26,17 +38,21 @@ export default class Editor extends BaseElement {
       div.classList.add('code-container');
       const code = CodeMirror(div, {
           ...options,
-          value: placeholder[lang]+"\n",
-          mode:  lang
+          ...opt[lang]
         });
       return code
     });
+    console.log(emmetCodeMirror(html, {
+      ...emmetCodeMirror.defaultKeymap,
+      'Tab': 'emmet.expand_abbreviation'
+    }));
     // Workaroud...
-    window.onload = () => 
+    window.onload = () => {
       [html, css, js].forEach(e=>{
         shadowRoot.append(e.display.wrapper.parentElement);
         e.refresh();
-    });
+      });
+    };
     const iframe = document.createElement('iframe');
     if (!isExt) {
       shadowRoot.append(iframe)
