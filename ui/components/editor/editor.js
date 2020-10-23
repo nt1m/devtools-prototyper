@@ -6,7 +6,7 @@ try {
   isExt = chrome && chrome.extension ? true : false
 } catch (error) {}
 export default class Editor extends BaseElement {
-  stylesheets = ["ext/codemirror.min.css", "components/editor/editor.css"]
+  stylesheets = ["lib/codemirror.min.css", "components/editor/editor.css"]
   connected() {
     const {shadowRoot} = this;
     const options = {
