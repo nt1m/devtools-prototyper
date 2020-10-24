@@ -8,7 +8,7 @@ body {
   width: 100%;
   height: 100%;
 
-  font: message-box;
+  font: caption;
   font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -41,6 +41,10 @@ body {
   color: var(--text);
 }
 
+.prototyper-container:not(.loaded) {
+  visibility: hidden;
+}
+
 /* Layout */
 
 .prototyper-container {
@@ -50,8 +54,6 @@ body {
 prototyper-toolbar {
   background-color: var(--toolbar-background);
   border-right: solid 1px var(--toolbar-border);
-  min-width: 12em;
-  overflow: hidden;
 }
 
 prototyper-editor {

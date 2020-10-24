@@ -80,6 +80,10 @@ class Main {
       this.previewIframe.classList.add("prototyper-preview");
       container.append(this.previewIframe);
     }
+
+    window.addEventListener("load", () => {
+      container.classList.add("loaded");
+    });
   }
 
   launch(html, css, js) {

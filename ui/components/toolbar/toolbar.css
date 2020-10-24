@@ -1,48 +1,47 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-width: 12em;
+}
+
 .btn {
-    width: 100%;
-    border: none;
-    background: transparent;
-    position: relative;
-    cursor: pointer;
-    border-bottom: solid 1px #fff;
-    padding: .5em;
-    line-height: .9em;
-    font-size: .9em;
+  all: unset;
+  border-bottom: 1px solid var(--toolbar-border);
+  color: inherit;
+  position: relative;
+  padding: .5em 0.75em;
 }
 
 .btn::after {
-    content: "";
-    width: 2px;
-    height: 0%;
-    opacity: 0;
-    top: 0;
-    left: 0;
-    position: absolute;
-    transition: all .2s;
-    background-color: var(--text);
+  content: "";
+  width: 2px;
+  height: 0;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  position: absolute;
+  transition: all .2s;
+  background-color: currentColor;
 }
+
 .btn:hover::before {
-    content: '';
-    background-color: #999;
-    opacity: 0.1;
-    /*z-index: -1;*/
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    
+  content: "";
+  background-color: #999;
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
+
 .btn:hover::after {
-    height: 100%;
-    opacity: .5;
+  height: 100%;
+  opacity: .5;
 }
+
 .btn.active::after, .btn:active::after {
-    height: 100%;
-    background-color: var(--main-color);
-    opacity: 1;
+  height: 100%;
+  background-color: var(--primary-color);
+  opacity: 1;
 }
-/*
-[type=button]:hover {
-    background-color: ;
-}*/
