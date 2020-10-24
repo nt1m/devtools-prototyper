@@ -48,23 +48,49 @@ body {
 /* Layout */
 
 .prototyper-container {
-  display: flex;
+  display: grid;
+  place-items: stretch;
+
+  grid-template-areas: "toolbar html css js";
+  grid-template-columns: auto 1fr 1fr 1fr;
+}
+
+.prototyper-container:not(.extension) {
+  grid-template-areas: "toolbar html css"
+                       "toolbar js   preview";
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr;
 }
 
 prototyper-toolbar {
+  grid-area: toolbar;
   background-color: var(--toolbar-background);
   border-right: solid 1px var(--toolbar-border);
 }
 
 prototyper-editor {
-  flex-grow: 1;
+  border: 1px solid var(--toolbar-border);
+  box-sizing: border-box;
 }
 
-prototyper-editor:not(:last-child) {
-  border-right: 1px solid var(--toolbar-border);
+prototyper-editor[language="html"] {
+  grid-area: html;
+}
+
+prototyper-editor[language="css"] {
+  grid-area: css;
+}
+
+prototyper-editor[language="js"] {
+  grid-area: js;
 }
 
 .prototyper-preview {
+  grid-area: preview;
   border: none;
   border-left: 1px solid var(--toolbar-border);
+}
+
+.prototyper-container.extension .prototyper-preview {
+  display: none;
 }

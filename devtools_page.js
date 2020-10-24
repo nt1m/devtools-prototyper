@@ -3,7 +3,7 @@
 chrome.devtools.panels.create(
   "Prototyper",
   "ui/images/icon.svg",
-  "ui/panel.html",
+  "ui/index.html",
   function (panel) {
 
   }

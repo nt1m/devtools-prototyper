@@ -25,7 +25,7 @@ let getPrototype = (html, css, js) =>
 class Main {
   constructor({
     container = document.body,
-    mode = window.chrome?.extension ? "extension" : "web",
+    mode = globalThis.chrome?.extension ? "extension" : "web",
   } = {}) {
     this.mode = mode;
     container.classList.add("prototyper-container", mode);
