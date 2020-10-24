@@ -1,33 +1,23 @@
-
-iframe {
+:host {
   width: 100%;
   height: 100%;
-  border: none;
-  display: var(--iframe-display, initial);
-}
-.code-container {
   position: relative;
-  overflow: auto;
-}
-.code-container, .code-container > div {
-  width: 100%;
-  height: 100%;
 }
 
-.code-container::after {
-  content: attr(lang);
+:host::after {
+  content: attr(language);
   text-transform: uppercase;
   position: absolute;
   bottom: 1em;
   right: 1em;
   line-height: 150%;
-  padding: .2em;
-  padding-bottom: 0;
-  background-color: var(--main-color);
+  padding: .1em .2em;
+  background-color: var(--primary-color);
   border-radius: .2em;
   color: white;
 }
 
-.CodeMirror-linenumber {
-  text-align: center;
+.CodeMirror {
+  width: 100%;
+  height: 100%;
 }
