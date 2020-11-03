@@ -52,14 +52,14 @@ body {
   place-items: stretch;
 
   grid-template-areas: "toolbar html css js";
-  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
 }
 
 .prototyper-container:not(.extension) {
   grid-template-areas: "toolbar html css"
                        "toolbar js   preview";
   grid-template-rows: 1fr 1fr;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: auto repeat(2, minmax(0, 1fr));
 }
 
 prototyper-toolbar {
