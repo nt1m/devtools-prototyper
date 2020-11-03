@@ -6,7 +6,7 @@ chrome.tabs.onRemoved.addListener(id => {
 });
 const update = (id, info) => {
   if (tab && tab.id === id) {
-    if (info.status === "loading" && info.url.startsWith("http")) {
+    if (info.status === "loading" && info.url?.startsWith("http")) {
       tab = null;
     }
     if (info.status !== "complete") return;
@@ -17,7 +17,7 @@ const update = (id, info) => {
           document.documentElement.innerHTML = 
               \`${doc.split('`').join('\\`')}\`;
           try {
-            ${js}
+            eval(\`${js.split('`').join('\\`')}\`);
           } catch (e) {
             console.error(e);
           }`

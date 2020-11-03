@@ -17,10 +17,10 @@ export default class Toolbar extends BaseElement {
     el.textContent = name;
     el.alt = alt;
     this.shadowRoot.append(el);
-
+    let isMac = window.navigator.platform.startsWith("Mac");
     if (shortcuts && shortcuts.length) {
       document.addEventListener("keydown", e => {
-        if (e.metaKey && shortcuts.includes(e.code)) {
+        if ((isMac ? e.metaKey : e.ctrlKey) && shortcuts.includes(e.code)) {
           e.stopPropagation();
           e.preventDefault();
           action();
