@@ -6,10 +6,17 @@
 
 .btn {
   all: unset;
-  border-bottom: 1px solid var(--toolbar-border);
   color: inherit;
   position: relative;
-  padding: .5em 0.75em;
+  overflow: hidden;
+  transition: .5s scale, .5s height, .5s opacity;
+  padding-left: .25em;
+}
+
+.btn > span {
+  display: block;
+  padding: .25em 0.75em;
+  border-bottom: 1px solid var(--toolbar-border);
 }
 
 .btn::after {
@@ -44,4 +51,15 @@
   height: 100%;
   background-color: var(--primary-color);
   opacity: 1;
+}
+
+.folder:not(.active) > .btn {
+  scale: 0;
+  opacity: 0;
+  height: 0;
+}
+
+.folder {
+  display: flex;
+  flex-direction: column;
 }

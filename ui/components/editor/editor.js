@@ -49,7 +49,11 @@ export default class Editor extends BaseElement {
   stylesheetsLoadedCallback() {
     const { language, _options } = this;
 
-    this._codeMirror = CodeMirror(this.shadowRoot, {
+    const container = document.createElement('div');
+    container.classList.add("container");
+
+    this.shadowRoot.appendChild(container);
+    this._codeMirror = CodeMirror(container, {
       ..._options,
       mode: MODE_MAPPING[language] ?? language,
     });

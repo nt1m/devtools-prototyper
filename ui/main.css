@@ -58,7 +58,7 @@ body {
 .prototyper-container:not(.extension) {
   grid-template-areas: "toolbar html css"
                        "toolbar js   preview";
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   grid-template-columns: auto repeat(2, minmax(0, 1fr));
 }
 
@@ -85,12 +85,54 @@ prototyper-editor[language="js"] {
   grid-area: js;
 }
 
+prototyper-editor::after, .prototyper-preview::after {
+  content: attr(language);
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  line-height: 150%;
+  padding: .2em .4em;
+  background-color: var(--primary-color);
+  border-radius: .2em;
+  color: white;
+}
+.prototyper-preview::after {
+  content: "Preview";
+}
 .prototyper-preview {
   grid-area: preview;
+  overflow: hidden;
+}
+.prototyper-preview > iframe {
   border: none;
   border-left: 1px solid var(--toolbar-border);
+  width: 100%;
+  height: 100%;
 }
 
 .prototyper-container.extension .prototyper-preview {
   display: none;
+}
+
+message-success, message-error {
+  position: fixed;
+  bottom: 1em; right: 1em;
+  width: min(100%, 24em);
+  background-color: green;
+  opacity: .75;
+  z-index: 199;
+  padding: 1em;
+  border-radius: .2em;
+}
+message-error {
+  background-color: red;
+}
+message-success::after, message-error::after {
+  content: attr(text);
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  font-size: large;
+  color: white;
 }

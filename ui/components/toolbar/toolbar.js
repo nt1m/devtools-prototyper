@@ -2,8 +2,9 @@ import BaseElement from "../base.js";
 
 export default class Toolbar extends BaseElement {
   stylesheets = ["components/toolbar/toolbar.css"]
-
+  isFolder = false
   addButton({
+    parent = this.shadowRoot,
     icon,
     name = "",
     alt = name,
@@ -12,11 +13,18 @@ export default class Toolbar extends BaseElement {
     shortcuts,
   } = {}) {
     const el = document.createElement('div');
+    const span = document.createElement('span');
     el.classList.add('btn');
-    if (action) el.addEventListener('click', action);
-    el.textContent = name;
+    el.addEventListener('click', e => {
+      if (el.classList.contains('folder')) el.classList.toggle('active');
+      if (action) action(...arguments);
+      e.stopPropagation();
+    });
+    span.textContent = name;
     el.alt = alt;
-    this.shadowRoot.append(el);
+    el.append(span)
+    parent.classList?.add('folder');
+    parent.append(el);
     let isMac = window.navigator.platform.startsWith("Mac");
     if (shortcuts && shortcuts.length) {
       document.addEventListener("keydown", e => {
