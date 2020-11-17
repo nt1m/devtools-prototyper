@@ -96,13 +96,20 @@ prototyper-editor::after, .prototyper-preview::after {
   background-color: var(--primary-color);
   border-radius: .2em;
   color: white;
+  transition: .2s opacity;
 }
+
+prototyper-editor:focus-within::after, .prototyper-preview:hover::after {
+  opacity: 0;
+}
+
 .prototyper-preview::after {
   content: "Preview";
 }
 .prototyper-preview {
   grid-area: preview;
   overflow: hidden;
+  position: relative;
 }
 .prototyper-preview > iframe {
   border: none;

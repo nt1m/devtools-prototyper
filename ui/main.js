@@ -129,6 +129,7 @@ class Main {
     if (this.mode != "extension") {
       this.previewIframe = document.createElement("iframe");
       const iframecontainer = document.createElement("div");
+      iframecontainer.setAttribute("tabindex", -1);
       iframecontainer.classList.add("prototyper-preview");
       iframecontainer.append(this.previewIframe);
       container.append(iframecontainer);
