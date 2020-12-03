@@ -80,7 +80,7 @@ class Main {
     });
     toolbar.addButton({
       parent: exportBtn,
-      name: "Jsfiddle",
+      name: "JSFiddle",
       action: () => {
         const [html, css, js] = elements.map(e => e.value);
         const params = {html, css, js};
@@ -110,7 +110,7 @@ class Main {
     });
     toolbar.addButton({
       parent: exportBtn,
-      name: "Base64 url",
+      name: "Base64 URL",
       action: () => {
         const data = "data:text/html;base64," + btoa(getPrototype(...elements.map(e => e.value)));
         navigator.clipboard?.writeText(data).then(() => {
@@ -129,11 +129,8 @@ class Main {
     // Setup preview iframe for non-extension mode
     if (this.mode != "extension") {
       this.previewIframe = document.createElement("iframe");
-      const iframecontainer = document.createElement("div");
-      iframecontainer.setAttribute("tabindex", -1);
-      iframecontainer.classList.add("prototyper-preview");
-      iframecontainer.append(this.previewIframe);
-      this.container.append(iframecontainer);
+      this.previewIframe.classList.add("prototyper-preview");
+      this.container.append(this.previewIframe);
     }
 
     window.addEventListener("load", () => {

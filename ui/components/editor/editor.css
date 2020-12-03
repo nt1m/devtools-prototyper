@@ -4,6 +4,28 @@
   position: relative;
 }
 
+/* Label */
+
+:host::after {
+  content: attr(language);
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  line-height: 150%;
+  padding: .2em .4em;
+  background-color: var(--toolbar-background);
+  border: 1px solid var(--toolbar-border);
+  border-radius: .2em;
+  transition: .2s opacity;
+}
+
+:host:focus-within::after {
+  opacity: 0;
+}
+
+/* Codemirror */
+
 .container {
   width: 100%;
   height: 100%;
@@ -12,7 +34,8 @@
 .CodeMirror {
   width: 100%;
   height: 100%;
-}
-.CodeMirror {
   filter: var(--editor-filter);
+
+  font-family: SF Mono, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
 }
