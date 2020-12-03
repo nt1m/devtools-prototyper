@@ -2,6 +2,7 @@ import Editor from "./components/editor/editor.js";
 import Toolbar from "./components/toolbar/toolbar.js";
 import Messages from "./components/messages.js";
 
+
 let getPrototype = (html, css, js) =>
   `<!DOCTYPE html>
 <html>
@@ -30,7 +31,14 @@ class Main {
   } = {}) {
     this.mode = mode;
     container.classList.add("prototyper-container", mode);
-
+    const updatetheme = () => {
+      document.documentElement.classList.toggle(
+        "dark",
+        globalThis.chrome?.devtools.panels.themeName === "dark"
+      );
+    };
+    globalThis.chrome?.devtools.panels.onThemeChanged.addListener(updatetheme);
+    updatetheme();
     // Setup editors
     const editors = [
       {

@@ -22,17 +22,20 @@ body {
   --toolbar-text: inherit;
 
   --primary-color: #0074e8;
+
+  --editor-filter: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #111;
-    --text: #f1f1f1;
+:root.dark {
+  --background: #111;
+  --text: #f1f1f1;
+  --toolbar-border: rgb(50, 50, 50);
 
-    --toolbar-background: #444;
-    --toolbar-text: inherit;
-  }
+  --toolbar-background: #444;
+  --toolbar-text: inherit;
+  --editor-filter: invert(0.9);
 }
+
 
 /* Avoid flash by applying background on :root */
 
