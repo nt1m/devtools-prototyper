@@ -1,8 +1,15 @@
 import BaseElement from "../base.js";
+import Storage from "../../helpers/storage.js";
 
 const MODE_MAPPING = {
   html: "htmlmixed",
   js: "javascript",
+};
+
+const PLACEHOLDER_MAPPING = {
+  html: "<!-- HTML -->\n",
+  css: "/* CSS */\n",
+  js: "// JS\n",
 };
 
 export default class Editor extends BaseElement {
@@ -46,13 +53,14 @@ export default class Editor extends BaseElement {
     }
   }
 
-  stylesheetsLoadedCallback() {
+  async stylesheetsLoadedCallback() {
     const { language, _options } = this;
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     container.classList.add("container");
-
     this.shadowRoot.appendChild(container);
+
+    // Setup codemirror
     this._codeMirror = CodeMirror(container, {
       ..._options,
       mode: MODE_MAPPING[language] ?? language,
@@ -64,6 +72,15 @@ export default class Editor extends BaseElement {
         Tab: "emmet.expand_abbreviation"
       });
     }
+
+    // Restore stored code or show placeholder code
+    const storageKey = "editor." + language + ".value";
+    this.value = await Storage.get(storageKey, PLACEHOLDER_MAPPING[language]);
+
+    // Store code when changed
+    this._codeMirror.on("change", () => {
+      Storage.set(storageKey, this.value);
+    });
   }
 }
 

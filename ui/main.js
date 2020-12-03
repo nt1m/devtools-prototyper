@@ -2,7 +2,6 @@ import Editor from "./components/editor/editor.js";
 import Toolbar from "./components/toolbar/toolbar.js";
 import Messages from "./components/messages.js";
 
-
 let getPrototype = (html, css, js) =>
   `<!DOCTYPE html>
 <html>
@@ -30,36 +29,30 @@ class Main {
     mode = globalThis.chrome?.extension ? "extension" : "web",
   } = {}) {
     this.mode = mode;
-    container.classList.add("prototyper-container", mode);
-    const updatetheme = () => {
-      document.documentElement.classList.toggle(
-        "dark",
-        globalThis.chrome?.devtools.panels.themeName === "dark"
-      );
-    };
-    globalThis.chrome?.devtools.panels.onThemeChanged.addListener(updatetheme);
-    updatetheme();
-    // Setup editors
-    const editors = [
-      {
-        language: "html",
-        value: "<!-- html -->\n",
-      },
-      {
-        language: "css",
-        value: "/* css */\n",
-      },
-      {
-        language: "js",
-        value: "// js\n",
-      }
-    ];
+    this.container = container;
 
-    const elements = editors.map(({ language, value }) => {
+    // Setup container
+    container.classList.add("prototyper-container", mode);
+
+    this.setupTheme();
+    globalThis.chrome?.devtools.panels.onThemeChanged.addListener(this.setupTheme);
+
+    this.setupChildren();
+  }
+
+  setupTheme() {
+    document.documentElement.classList.toggle(
+      "dark",
+      globalThis.chrome?.devtools.panels.themeName === "dark"
+    );
+  }
+
+  setupChildren() {
+    // Setup editors
+    const elements = ["html", "css", "js"].map(language => {
       const element = document.createElement("prototyper-editor");
       element.language = language;
-      element.value = value;
-      container.append(element);
+      this.container.append(element);
       return element;
     });
 
@@ -131,7 +124,7 @@ class Main {
         });
       }
     });
-    container.prepend(toolbar);
+    this.container.prepend(toolbar);
 
     // Setup preview iframe for non-extension mode
     if (this.mode != "extension") {
@@ -140,11 +133,11 @@ class Main {
       iframecontainer.setAttribute("tabindex", -1);
       iframecontainer.classList.add("prototyper-preview");
       iframecontainer.append(this.previewIframe);
-      container.append(iframecontainer);
+      this.container.append(iframecontainer);
     }
 
     window.addEventListener("load", () => {
-      container.classList.add("loaded");
+      this.container.classList.add("loaded");
     });
   }
 
