@@ -1,8 +1,12 @@
 import BaseElement from "../base.js";
 
 export default class Toolbar extends BaseElement {
-  stylesheets = ["components/toolbar/toolbar.css"]
-  isFolder = false
+  constructor() {
+    super();
+    // JS class fields not supported by addons-linter
+    this.stylesheets = ["components/toolbar/toolbar.css"];
+  }
+
   addButton({
     parent = this.shadowRoot,
     icon,

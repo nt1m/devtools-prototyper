@@ -1,7 +1,7 @@
 export default class BaseElement extends HTMLElement {
-  stylesheets = []
   constructor() {
     super();
+    this.stylesheets = [];
     this.attachShadow({ mode: "open" });
   }
   connectedCallback() {

@@ -12,13 +12,19 @@ const PLACEHOLDER_MAPPING = {
   js: "// JS\n",
 };
 
+
+
 export default class Editor extends BaseElement {
-  stylesheets = ["lib/codemirror.min.css", "components/editor/editor.css"]
-  _options = {
-    lineNumbers: true,
-    autoRefresh: true,
-    autoCloseBrackets: true,
-    matchBrackets: true,
+  constructor() {
+    super();
+    // JS class fields not supported by addons-linter
+    this.stylesheets = ["lib/codemirror.min.css", "components/editor/editor.css"];
+    this._options = {
+      lineNumbers: true,
+      autoRefresh: true,
+      autoCloseBrackets: true,
+      matchBrackets: true,
+    };
   }
 
   get language() {

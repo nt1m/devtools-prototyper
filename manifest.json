@@ -8,11 +8,5 @@
   "permissions": ["<all_urls>", "tabs", "storage", "unlimitedStorage"],
   "background": {
     "scripts": ["background.js"]
-  },
-  "applications": {
-    "gecko": {
-      "id": "devtools-prototyper@nt1m.github.io",
-      "strict_min_version": "45.0"
-    }
   }
 }
