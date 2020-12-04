@@ -148,6 +148,7 @@ export default class Cdn {
     set visible(visible) {
         this._visible = visible;
         this._container.classList.toggle("visible", this._visible);
+        if (visible) this._input.focus();
     }
     add(lib) {
         if (!Object.keys(this._libraries).includes(lib)) {
@@ -183,10 +184,10 @@ export default class Cdn {
             const el = document.createElement("search-result");
 
             el.name = result.name;
-            el.description = result.description;
+            el.description = result.description || "";
             el.version = result.version;
-            el.license = result.license;
-            el.href = el.homepage;
+            if (result.license) el.license = result.license;
+            if (el.homepage) el.href = el.homepage;
             el.url = result.latest;
             if (this._libraries[result.latest]) el.added = true;
             el.append(name);

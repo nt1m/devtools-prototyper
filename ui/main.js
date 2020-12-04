@@ -128,6 +128,7 @@ class Main {
 
     window.addEventListener("load", () => {
       this.container.classList.add("loaded");
+      if (this.mode === "web") this.launch(...elements.map(e => e.value));
     });
   }
   getPrototype(html, css, js) {
