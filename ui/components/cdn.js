@@ -126,12 +126,13 @@ export default class Cdn {
         this._searchBox.classList.add("searchBox");
         this._searchBoxResults = document.createElement('div');
         this._librariesBox = document.createElement('div');
+        this._librariesBox.innerHTML = "<h2 style=\"padding-left: 1em\">Added libraries:</h2>"
         this.visible = false;
         container.append(this._container);
         this._container.classList.add('cdn-container');
         this._input = document.createElement('input');
         this._input.setAttribute('type', 'text');
-        this._input.setAttribute('placeholder', 'Search');
+        this._input.setAttribute('placeholder', 'Search for a library');
         this._container.append(this._searchBox);
         this._container.append(this._librariesBox);
         this._searchBox.append(this._input);
