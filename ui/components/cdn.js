@@ -188,6 +188,7 @@ export default class Cdn {
             el.license = result.license;
             el.href = el.homepage;
             el.url = result.latest;
+            if (this._libraries[result.latest]) el.added = true;
             el.append(name);
             el.onClick(toggle => {
                 if (toggle) this.add(result.latest);
