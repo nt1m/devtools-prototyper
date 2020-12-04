@@ -10,12 +10,15 @@ body {
 
   font: caption;
   font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  overflow: hidden;
 }
 
 /* Theme */
 
 :root {
   --background: #fff;
+  --settings-background: rgb(243, 243, 243);
   --text: #333;
   --toolbar-background: #f1f1f1;
   --toolbar-border: #ddd;
@@ -28,6 +31,7 @@ body {
 
 :root.dark {
   --background: #111;
+  --settings-background: rgb(86, 86, 86);
   --text: #f1f1f1;
   --toolbar-border: rgb(50, 50, 50);
 
@@ -97,6 +101,12 @@ prototyper-editor[language="js"] {
   height: 100%;
 }
 
+.prototyper-preview > iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 .prototyper-container.extension .prototyper-preview {
   display: none;
 }
@@ -123,4 +133,37 @@ message-success::after, message-error::after {
   width: 100%;
   font-size: large;
   color: white;
+}
+
+.cdn-container {
+  grid-area: html / html / preview / preview;
+  transition: .3s opacity;
+  background-color: var( --settings-background);
+  z-index: 199;
+  display: flex;
+  flex-direction: row;
+}
+.cdn-container input {
+  padding: .2em;
+}
+.cdn-container div {
+  width: 100%;
+}
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70%;
+  border: 1px solid var(--toolbar-border);
+  overflow: auto;
+}
+.cdn-container:not(.visible) {
+  display: none;
+}
+
+.searchBox > input[type="text"] {
+  width: 80%;
+  padding: 1em;
+  position: sticky;
+  top: 0;
 }

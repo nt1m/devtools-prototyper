@@ -12,5 +12,96 @@
   <script type="module" src="./main.js"></script>
 </head>
 <body>
+  <template id="search_result_template">
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        .search_result_template {
+            background: #fff;
+            padding: 1em;
+            user-select: none;
+        }
+
+        hr {
+            margin: 0;
+            background: linear-gradient(to right, transparent, grey, transparent);
+            border: none;
+            height: 1px;
+        }
+
+        h3 a:link {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h3 span {
+            font-weight: initial;
+        }
+    </style>
+    <hr>
+    <div class="search_result_template">
+        <div style="display: flex; flex-direction: row; align-items: center">
+            <div style="width:100%">
+
+                <h3>
+                    <a href="#" id="link">
+                        <slot name="name">Package.
+                        </slot></a><span>@<slot name="version">version</slot></span>
+                </h3>
+                <slot name="url"><a href="">http://google.com</a></slot>
+            </div>
+            <style>
+              .license {
+                background: #08f;
+                color:#fff;
+                border-radius: .1em;
+              }
+              .no-license {
+                margin: 0 !important;
+              }
+            </style>
+            <div class="license">
+              <div style="margin: .2em .5em;" class="no-license"><slot name="license"></slot></div>
+
+            </div>
+        </div>
+        <p>
+            <slot name="description"></slot>
+        </p>
+        <div style="display: flex; flex-direction: row">
+            <div style="width: 100%"></div>
+            <slot name="add-remove"></slot>
+        </div>
+    </div>
+</template>
+<template id="template_add_remove">
+  <style>
+    input[type="button"] {
+        border: 1px solid #08f;
+        border-radius: 2px;
+        color: #08f;
+        padding: .3em .6em;
+        background: #f0f0f0;
+        cursor: pointer;
+        transition: .1s background, .1s filter;
+    }
+
+    input[type="button"]:active {
+        background: #08f;
+    }
+
+    input[type="button"]:hover {
+        background: white;
+    }
+
+    .remove {
+        filter: hue-rotate(180deg);
+    }
+</style>
+<input type="button" value="Add">
+
+</template>
 </body>
 </html>

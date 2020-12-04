@@ -1,27 +1,8 @@
 import Editor from "./components/editor/editor.js";
 import Toolbar from "./components/toolbar/toolbar.js";
 import Messages from "./components/messages.js";
+import Cdn from "./components/cdn.js";
 
-let getPrototype = (html, css, js) =>
-  `<!DOCTYPE html>
-<html>
-<head>
-  <title>Prototype</title>
-  <meta charset="utf-8">
-  <style>
-    ${css}
-  </style>
-</head>
-<body>
-  ${html}
-  <script>
-    (function(){
-      ${js}
-    })();
-  </script>
-</body>
-</html>
-`;
 
 class Main {
   constructor({
@@ -56,6 +37,15 @@ class Main {
       return element;
     });
 
+    // Setup preview iframe for non-extension mode
+    if (this.mode != "extension") {
+      this.previewIframe = document.createElement("iframe");
+      const iframecontainer = document.createElement("div");
+      iframecontainer.setAttribute("tabindex", -1);
+      iframecontainer.classList.add("prototyper-preview");
+      iframecontainer.append(this.previewIframe);
+      this.container.append(iframecontainer);
+    }
     // Setup toolbar
     const toolbar = document.createElement("prototyper-toolbar");
     toolbar.addButton({
@@ -75,6 +65,15 @@ class Main {
       },
       shortcuts: ["KeyB"]
     });
+
+    this.cdn = new Cdn(this.container);
+
+    toolbar.addButton({
+      name: "Libraries",
+      action: (e, el) => {
+        this.cdn.visible = el.classList.contains('active');
+      }
+    }).classList.add('folder');
     const exportBtn = toolbar.addButton({
       name: "Export",
     });
@@ -112,7 +111,7 @@ class Main {
       parent: exportBtn,
       name: "Base64 URL",
       action: () => {
-        const data = "data:text/html;base64," + btoa(getPrototype(...elements.map(e => e.value)));
+        const data = "data:text/html;base64," + btoa(this.getPrototype(...elements.map(e => e.value)));
         navigator.clipboard?.writeText(data).then(() => {
           const success = document.createElement("message-success");
           success.setAttribute("text", "Copied !");
@@ -126,20 +125,35 @@ class Main {
     });
     this.container.prepend(toolbar);
 
-    // Setup preview iframe for non-extension mode
-    if (this.mode != "extension") {
-      this.previewIframe = document.createElement("iframe");
-      this.previewIframe.classList.add("prototyper-preview");
-      this.container.append(this.previewIframe);
-    }
 
     window.addEventListener("load", () => {
       this.container.classList.add("loaded");
     });
   }
-
+  getPrototype(html, css, js) {
+    return  `<!DOCTYPE html>
+    <html>
+    <head>
+      <title>Prototype</title>
+      <meta charset="utf-8">
+      <style>
+        ${css}
+      </style>
+      ${this.cdn.scripts}
+    </head>
+    <body>
+      ${html}
+      <script>
+        (function(){
+          ${js}
+        })();
+      </script>
+    </body>
+    </html>
+    `
+  }
   launch(html, css, js) {
-    const doc = getPrototype(html, css, js);
+    const doc = this.getPrototype(html, css, js);
     if (this.mode == "extension") {
       const connexion = chrome.runtime.connect();
       connexion.postMessage({

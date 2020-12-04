@@ -19,9 +19,9 @@ export default class Toolbar extends BaseElement {
     const el = document.createElement('div');
     const span = document.createElement('span');
     el.classList.add('btn');
-    el.addEventListener('click', e => {
+    el.addEventListener('click', function(e) {
       if (el.classList.contains('folder')) el.classList.toggle('active');
-      if (action) action(...arguments);
+      if (action) action(e, el);
       e.stopPropagation();
     });
     span.textContent = name;
