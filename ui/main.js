@@ -82,7 +82,7 @@ class Main {
       name: "JSFiddle",
       action: () => {
         const [html, css, js] = elements.map(e => e.value);
-        const params = {html, css, js};
+        const params = {html, css, js, resources: this.cdn.resources};
         const action = function(params) {
           const form = document.createElement("form");
           form.method = "POST";

@@ -151,7 +151,7 @@ export default class Cdn {
         if (visible) this._input.focus();
     }
     add(lib) {
-        if (!Object.keys(this._libraries).includes(lib)) {
+        if (!this.resources.includes(lib)) {
             const el = document.createElement("search-result");
             const [name, version] = lib.split("/").slice(lib.split("/").indexOf("libs")+1);
             el.url = lib;
@@ -164,17 +164,20 @@ export default class Cdn {
             this._libraries[lib] = el;
             this._librariesBox.append(el);
         }
-        Storage.set("libraries", Object.keys(this._libraries));
+        Storage.set("libraries", this.resources);
     }
     remove(lib) {
         const resultEl = this._searchBoxResults.querySelector(`[url="${lib}"]`);
         if (resultEl) resultEl.added = false;
         this._libraries[lib]?.remove();
         delete this._libraries[lib];
-        Storage.set("libraries", Object.keys(this._libraries));
+        Storage.set("libraries", this.resources);
+    }
+    get resources() {
+        return Object.keys(this._libraries);
     }
     get scripts() {
-        return Object.keys(this._libraries).map(url => `<script src="${url}"></script>`).join();
+        return this.resources.map(url => `<script src="${url}"></script>`).join();
     }
     async search (name) {
         this._searchBoxResults.innerHTML = "";
