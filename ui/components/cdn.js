@@ -177,20 +177,20 @@ export default class Cdn {
         return Object.keys(this._libraries);
     }
     get scripts() {
-        return this.resources.map(url => `<script src="${url}"></script>`).join();
+        return this.resources.map(url => `<script src="${url}"></script>`).join("\n");
     }
     async search (name) {
         this._searchBoxResults.innerHTML = "";
         if (name.length < 2) return;
-        const {results, total, available} = (await (await fetch("https://api.cdnjs.com/libraries?search="+name+"&fields=description,version,license,homepage&limit=20")).json());
+        const {results} = (await (await fetch("https://api.cdnjs.com/libraries?search="+name+"&fields=description,version,license,homepage,repository&limit=20")).json());
         results.forEach(result => {
             const el = document.createElement("search-result");
-
             el.name = result.name;
             el.description = result.description || "";
             el.version = result.version;
             if (result.license) el.license = result.license;
-            if (el.homepage) el.href = el.homepage;
+            if (result.homepage || result.repository?.url)
+                el.href = result.homepage || result.repository?.url;
             el.url = result.latest;
             if (this._libraries[result.latest]) el.added = true;
             el.append(name);

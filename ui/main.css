@@ -168,3 +168,7 @@ message-success::after, message-error::after {
   position: sticky;
   top: 0;
 }
+
+.searchBox > div, search-result {
+  width: 100%;
+}
