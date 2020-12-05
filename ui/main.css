@@ -142,12 +142,14 @@ message-success::after, message-error::after {
   z-index: 199;
   display: flex;
   flex-direction: row;
+  max-height: 100vh;
 }
 .cdn-container input {
   padding: .2em;
 }
-.cdn-container div {
+.cdn-container > div {
   width: 100%;
+  overflow: auto;
 }
 .searchBox {
   display: flex;
@@ -155,7 +157,6 @@ message-success::after, message-error::after {
   align-items: center;
   min-width: 70%;
   border: 1px solid var(--toolbar-border);
-  overflow: auto;
 }
 .cdn-container:not(.visible) {
   display: none;
